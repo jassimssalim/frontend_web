@@ -13,16 +13,18 @@ export interface FormUserData {
   email: string;
   password: string;
   confirmPassword: string;
+  image: File | null; // Added field for image upload
 }
 
 const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
   // State to hold form input values
   const [formData, setFormData] = useState<FormUserData>({
-    name: "", // Initial value for name
-    username: "", // Initial value for username
-    email: "", // Initial value for email
-    password: "", // Initial value for password
-    confirmPassword: "", // Initial value for confirmPassword
+    name: "",
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    image: null, // Initial value for image
   });
 
   // State for validation errors
@@ -30,8 +32,14 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
 
   // Handle input changes in the form
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target; // Get the name and value of the changed input
-    setFormData({ ...formData, [name]: value }); // Update the corresponding form field in the state
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  // Handle image file input change
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    setFormData({ ...formData, image: file });
   };
 
   // Joi validation schema
@@ -47,34 +55,35 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
       .messages({
         "any.only": "Passwords must match",
       }),
+    image: Joi.any().required().label("Profile Image"), // Added image validation
   });
 
-  // Handle form submission when the Sign-Up button is clicked
+  // Handle form submission
   const handleSubmit = async () => {
     const { error } = validationSchema.validate(formData, { abortEarly: false });
     if (error) {
-      // If validation fails, set errors to show validation messages
       const newErrors: any = {};
       error.details.forEach((detail) => {
         newErrors[detail.path[0]] = detail.message;
       });
       setErrors(newErrors);
-      return; // Don't proceed with the API call if validation fails
+      return;
     }
 
     try {
-      await registerUser(formData); // Call the API to register the user with formData
-      alert("User registered successfully!"); // Show a success message
+      await registerUser(formData); // Call API to register user
+      alert("User registered successfully!");
       setFormData({
         name: "",
         username: "",
         email: "",
         password: "",
         confirmPassword: "",
-      }); // Reset the form fields only after successful registration
-      setErrors({}); // Clear any previous errors
+        image: null, // Reset image field
+      });
+      setErrors({});
     } catch (error) {
-      alert("Error registering user. Please try again."); // Show an error message if the API call fails
+      alert("Error registering user. Please try again.");
     }
   };
 
@@ -83,30 +92,30 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
       <h1 className="text-4xl font-semibold">Create Account</h1>
       <p className="font-medium text-lg text-gray-500 mt-4">Please fill in your details to create an account.</p>
       <div className="mt-8">
-        {/* Name input field */}
-        <div>
-          <label className="text-lg font-medium">Name</label>
-          <input
-            className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-            placeholder="Enter your name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-        </div>
-
-        {/* Username input field */}
-        <div>
-          <label className="text-lg font-medium">Username</label>
-          <input
-            className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-            placeholder="Enter your username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-          />
-          {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username}</p>}
+        {/* Name and Username on the same row */}
+        <div className="flex gap-6">
+          <div className="w-full">
+            <label className="text-lg font-medium">Name</label>
+            <input
+              className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
+              placeholder="Enter your name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
+            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+          </div>
+          <div className="w-full">
+            <label className="text-lg font-medium">Username</label>
+            <input
+              className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
+              placeholder="Enter your username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+            />
+            {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username}</p>}
+          </div>
         </div>
 
         {/* Email input field */}
@@ -122,34 +131,44 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
           {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
         </div>
 
-        {/* Password input field */}
-        <div>
-          <label className="text-lg font-medium">Password</label>
-          <input
-            className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-            placeholder="Enter your password"
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-          {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+        {/* Password and Confirm Password on the same row */}
+        <div className="flex gap-6 mt-4">
+          <div className="w-full">
+            <label className="text-lg font-medium">Password</label>
+            <input
+              className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
+              placeholder="Enter your password"
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+          </div>
+          <div className="w-full">
+            <label className="text-lg font-medium">Confirm Password</label>
+            <input
+              className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
+              placeholder="Confirm your password"
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+            />
+            {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
+          </div>
         </div>
 
-        {/* Confirm Password input field */}
+        {/* Image Upload */}
         <div>
-          <label className="text-lg font-medium">Confirm Password</label>
+          <label className="text-lg font-medium">Profile Image</label>
           <input
             className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-            placeholder="Confirm your password"
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
           />
-          {errors.confirmPassword && (
-            <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
-          )}
+          {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}
         </div>
 
         {/* Submit button */}
