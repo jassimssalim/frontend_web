@@ -98,48 +98,52 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onBackToLogin }) => {
           />
         </div>
 
-        <div>
-          <label className="text-lg font-medium">Username</label>
-          <input
-            type="text"
-            className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-            placeholder="Enter your username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+        {/* Username and Previous Password on the same row */}
+        <div className="flex gap-6 mt-4">
+          <div className="w-full">
+            <label className="text-lg font-medium">Username</label>
+            <input
+              type="text"
+              className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div className="w-full">
+            <label className="text-lg font-medium">Previous Password</label>
+            <input
+              type="password"
+              className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
+              placeholder="Enter your previous password"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+            />
+          </div>
         </div>
 
-        <div>
-          <label className="text-lg font-medium">Previous Password</label>
-          <input
-            type="password"
-            className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-            placeholder="Enter your previous password"
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label className="text-lg font-medium">New Password</label>
-          <input
-            type="password"
-            className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-            placeholder="Enter a new password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label className="text-lg font-medium">Confirm New Password</label>
-          <input
-            type="password"
-            className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-            placeholder="Confirm the new password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
+        {/* New Password and Confirm New Password on the same row */}
+        <div className="flex gap-6 mt-4">
+          <div className="w-full">
+            <label className="text-lg font-medium">New Password</label>
+            <input
+              type="password"
+              className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
+              placeholder="Enter a new password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </div>
+          <div className="w-full">
+            <label className="text-lg font-medium">Confirm New Password</label>
+            <input
+              type="password"
+              className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
+              placeholder="Confirm the new password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
         </div>
 
         {error && <div className="mt-4 text-red-500 text-sm">{error}</div>}
