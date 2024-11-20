@@ -31,6 +31,9 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSignUp, onForgotPassword }) => 
 
       if (message === "Login successful") {
         alert("Login successful!");
+        console.log("Navigating to /home");  // Log here to confirm navigation
+        localStorage.setItem("userLoggedIn", "true");  // Set ko lang sa true for mean time 
+
         navigate("/home");  // Redirect to the home page upon successful login
       } else {
         setError(message);  // Show error message if login fails
