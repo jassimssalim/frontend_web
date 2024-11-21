@@ -9,6 +9,7 @@ export interface UserData {
   username: string;
   email: string;
   password: string;
+  file: File | null; // Use 'file' instead of 'image'
 }
 
 // Define the FormUserData interface that includes confirmPassword
@@ -16,16 +17,28 @@ export interface FormUserData extends UserData {
   confirmPassword: string;
 }
 
-// API function to register a user
-export const registerUser = async (userData: UserData): Promise<void> => {
+// API function to register a user with an image upload
+export const registerUser = async (userData: FormUserData) => {
+  const formData = new FormData();
+  formData.append("name", userData.name);
+  formData.append("username", userData.username);
+  formData.append("email", userData.email);
+  formData.append("password", userData.password);
+  formData.append("file", userData.file as Blob); // Ensure file is appended
+
   try {
-    const response = await axios.post(`${BASE_URL}/user`, userData);
-    console.log("User registered successfully:", response.data);
+    const response = await axios.post(`${BASE_URL}/user`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // Important for file uploads
+      },
+    });
+    return response.data;
   } catch (error) {
-    console.error("Error registering user:", error);
-    throw error;
+    throw new Error("Error registering user.");
   }
 };
+
+
 
 // Define the LoginDTO interface for login data
 export interface LoginDTO {
@@ -68,3 +81,47 @@ export const resetPassword = async (resetPasswordDTO: ResetPasswordDTO): Promise
     throw new Error("Password reset failed. Please try again.");
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+//old code
+
+
+// import axios from "axios";
+
+// // Backend base URL
+// const BASE_URL = "http://localhost:8080"; 
+
+// // Define TypeScript types for user data
+// export interface UserData {
+//   name: string;
+//   username: string;
+//   email: string;
+//   password: string;
+// }
+
+// // Define the FormUserData interface that includes confirmPassword
+// export interface FormUserData extends UserData {
+//   confirmPassword: string;
+// }
+
+// // API function to register a user
+// export const registerUser = async (userData: UserData): Promise<void> => {
+//   try {
+//     const response = await axios.post(`${BASE_URL}/user`, userData);
+//     console.log("User registered successfully:", response.data);
+//   } catch (error) {
+//     console.error("Error registering user:", error);
+//     throw error;
+//   }
+// };
+
+

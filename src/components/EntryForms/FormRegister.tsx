@@ -13,7 +13,7 @@ export interface FormUserData {
   email: string;
   password: string;
   confirmPassword: string;
-  image: File | null; // Added field for image upload
+  file: File | null; // Changed 'image' to 'file' to match the API
 }
 
 const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
@@ -24,7 +24,7 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
     email: "",
     password: "",
     confirmPassword: "",
-    image: null, // Initial value for image
+    file: null, // Changed 'image' to 'file'
   });
 
   // State for validation errors
@@ -39,7 +39,7 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
   // Handle image file input change
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
-    setFormData({ ...formData, image: file });
+    setFormData({ ...formData, file: file }); // Changed 'image' to 'file'
   };
 
   // Joi validation schema
@@ -55,7 +55,7 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
       .messages({
         "any.only": "Passwords must match",
       }),
-    image: Joi.any().required().label("Profile Image"), // Added image validation
+    file: Joi.any().required().label("Profile Image"), // Changed 'image' to 'file'
   });
 
   // Handle form submission
@@ -71,17 +71,27 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
     }
 
     try {
-      await registerUser(formData); // Call API to register user
-      alert("User registered successfully!");
-      setFormData({
-        name: "",
-        username: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        image: null, // Reset image field
-      });
-      setErrors({});
+      if (formData.file) {
+        await registerUser(formData); // Call the API with formData including the file
+        alert("User registered successfully!");
+        setFormData({
+          name: "",
+          username: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          file: null
+        });
+
+        const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+        if (fileInput) {
+          fileInput.value = ""; 
+        }
+
+        setErrors({});
+      } else {
+        alert("Please upload a profile image.");
+      }
     } catch (error) {
       alert("Error registering user. Please try again.");
     }
@@ -168,7 +178,7 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
             accept="image/*"
             onChange={handleImageChange}
           />
-          {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}
+          {errors.file && <p className="text-red-500 text-sm mt-1">{errors.file}</p>} {/* Changed 'image' to 'file' */}
         </div>
 
         {/* Submit button */}
