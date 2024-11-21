@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Joi from 'joi';  // Import Joi for validation
-import { resetPassword, ResetPasswordDTO } from '../../API Services/userAPIs';  // Import the resetPassword function from the API module
+import { resetPassword, ResetPasswordDTO } from '../../api_service/userAPIs';  // Import the resetPassword function from the API module
 
 interface ResetPasswordProps {
   onBackToLogin: () => void; // Function to go back to the login form

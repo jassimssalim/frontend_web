@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Joi from "joi"; // Import Joi for validation
-import { registerUser } from "../../API Services/userAPIs"; // Import the registerUser API function
+import { registerUser } from "../../api_service/userAPIs"; // Import the registerUser API function
 
 interface FormRegisterProps {
   onSignIn: () => void; // Function to switch to login form
