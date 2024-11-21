@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Use useNavigate instead of useHistory
 import { loginUser, LoginDTO } from '../../api_service/userAPIs';  // Import the loginUser API function
+import Success from '../../toaster_utitliy/Success';  // Import the Success component
 
 interface FormLoginProps {
   onSignUp: () => void;
@@ -13,6 +14,8 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSignUp, onForgotPassword }) => 
     password: ''
   });
   const [error, setError] = useState<string | null>(null);
+  const [toastVisible, setToastVisible] = useState(false);  // State for toast visibility
+  const [toastMessage, setToastMessage] = useState('');  // State for toast message
   const navigate = useNavigate();  // Use useNavigate for redirection
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,11 +33,19 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSignUp, onForgotPassword }) => 
       const message = await loginUser(loginData);  // Call the login API function
 
       if (message === "Login successful") {
-        alert("Login successful!");
-        console.log("Navigating to /home");  // Log here to confirm navigation
-        localStorage.setItem("userLoggedIn", "true");  // Set ko lang sa true for mean time 
+        // Trigger success toast on successful login
+        setToastMessage("Login successful!");
+        setToastVisible(true);
 
-        navigate("/home");  // Redirect to the home page upon successful login
+        // Hide toast after 3 seconds
+        setTimeout(() => {
+          setToastVisible(false);
+
+          // After toast closes, navigate to home page
+          console.log("Navigating to /home");
+          localStorage.setItem("userLoggedIn", "true");  // Set ko lang sa true for mean time 
+          navigate("/home");  // Redirect to the home page upon successful login
+        }, 3000);
       } else {
         setError(message);  // Show error message if login fails
 
@@ -85,6 +96,7 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSignUp, onForgotPassword }) => 
 
         {error && <div style={{ color: 'red' }}>{error}</div>}  {/* Error message */}
 
+
         <div className="mt-8 flex">
           <div></div>
           <button
@@ -113,6 +125,14 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSignUp, onForgotPassword }) => 
           </p>
         </div>
       </div>
+
+      {/* Render Success Toast if toastVisible is true */}
+      {toastVisible && (
+        <Success
+          message={toastMessage}
+          onClose={() => setToastVisible(false)}
+        />
+      )}
     </div>
   );
 };

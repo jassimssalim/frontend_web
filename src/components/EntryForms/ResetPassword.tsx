@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import Joi from 'joi';  // Import Joi for validation
-import { resetPassword, ResetPasswordDTO } from '../../api_service/userAPIs';  // Import the resetPassword function from the API module
+import Joi from 'joi'; // Import Joi for validation
+import { resetPassword, ResetPasswordDTO } from '../../api_service/userAPIs'; // Import the resetPassword function from the API module
+import Success from '../../toaster_utitliy/Success';  // Import the Success component
 
 interface ResetPasswordProps {
   onBackToLogin: () => void; // Function to go back to the login form
@@ -13,8 +14,8 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onBackToLogin }) => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);  // Error message state
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);  // Success message state
+  const [error, setError] = useState<string | null>(null); // Error message state
+  const [successMessage, setSuccessMessage] = useState<string | null>(null); // Success message state
 
   // Joi validation schema with only newPassword validation
   const schema = Joi.object({
@@ -34,11 +35,11 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onBackToLogin }) => {
     });
 
     if (error) {
-      setError(error.details[0].message);  // Set error message
+      setError(error.details[0].message); // Set error message
       return;
     }
 
-    setError(null);  // Clear previous errors
+    setError(null); // Clear previous errors
 
     // Check if the new password is the same as the old password
     if (oldPassword === newPassword) {
@@ -56,12 +57,12 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onBackToLogin }) => {
 
     try {
       const response = await resetPassword(resetPasswordData); // Call API to reset password
-      setSuccessMessage(response);  // Set success message
+      setSuccessMessage("Password successfully updated!"); // Set success message
       setEmail('');
       setUsername('');
       setOldPassword('');
       setNewPassword('');
-      setConfirmPassword('');  // Clear form fields
+      setConfirmPassword(''); // Clear form fields
 
       // Remove success message after 3 seconds
       setTimeout(() => {
@@ -69,11 +70,11 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onBackToLogin }) => {
       }, 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setError(err.message);  // Set error message if API call fails
+        setError(err.message); // Set error message if API call fails
       } else {
         setError('An unexpected error occurred.');
       }
-      setSuccessMessage(null);  // Clear success message
+      setSuccessMessage(null); // Clear success message
 
       // Remove error message after 3 seconds
       setTimeout(() => {
@@ -147,7 +148,14 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onBackToLogin }) => {
         </div>
 
         {error && <div className="mt-4 text-red-500 text-sm">{error}</div>}
-        {successMessage && <div className="mt-4 text-green-500 text-sm">{successMessage}</div>}
+
+        {/* Render Success Toaster */}
+        {successMessage && (
+          <Success
+            message={successMessage}
+            onClose={() => setSuccessMessage(null)} // Close success message after 3 seconds
+          />
+        )}
 
         <div className="mt-8 flex flex-col gap-y-4">
           <button type="submit" className="py-4 bg-violet-500 text-white text-lg font-bold">

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Joi from "joi"; // Import Joi for validation
 import { registerUser } from "../../api_service/userAPIs"; // Import the registerUser API function
+import Success from '../../toaster_utitliy/Success';  // Import the Success component
 
 interface FormRegisterProps {
   onSignIn: () => void; // Function to switch to login form
@@ -30,6 +31,10 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
   // State for validation errors
   const [errors, setErrors] = useState<any>({});
 
+  // State for showing success message
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+
   // Handle input changes in the form
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -55,7 +60,9 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
       .messages({
         "any.only": "Passwords must match",
       }),
-    file: Joi.any().required().label("Profile Image"), // Changed 'image' to 'file'
+    file: Joi.any().required().label("Profile Image").messages({
+      "any.required": "Please upload a profile image",
+    }), // Changed 'image' to 'file'
   });
 
   // Handle form submission
@@ -67,13 +74,15 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
         newErrors[detail.path[0]] = detail.message;
       });
       setErrors(newErrors);
+      console.log(newErrors); // Debugging: log errors to see if 'file' is present
       return;
     }
 
     try {
       if (formData.file) {
         await registerUser(formData); // Call the API with formData including the file
-        alert("User registered successfully!");
+        setSuccessMessage("User registered successfully!"); // Set the success message
+        setShowSuccess(true); // Show the success message
         setFormData({
           name: "",
           username: "",
@@ -89,12 +98,23 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
         }
 
         setErrors({});
+
+        // Set a timeout to close the success message after 3000ms (3 seconds)
+        setTimeout(() => {
+          handleCloseSuccess(); // Close the success message after 3 seconds
+        }, 3000);
       } else {
-        alert("Please upload a profile image.");
+        setErrors({ file: "Please upload a profile image." }); // Set error for missing file
       }
     } catch (error) {
-      alert("Error registering user. Please try again.");
+      setErrors({ general: "Error registering user. Please try again." }); // Set general error message
     }
+  };
+
+  // Close the success message
+  const handleCloseSuccess = () => {
+    setShowSuccess(false);
+    setSuccessMessage(""); // Clear the success message when closed
   };
 
   return (
@@ -178,32 +198,37 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
             accept="image/*"
             onChange={handleImageChange}
           />
-          {errors.file && <p className="text-red-500 text-sm mt-1">{errors.file}</p>} {/* Changed 'image' to 'file' */}
+          {errors.file && <p className="text-red-500 text-sm mt-1">{errors.file}</p>} {/* Error for missing file */}
         </div>
 
         {/* Submit button */}
-        <div className="mt-8 flex flex-col gap-y-4">
+        <div className="mt-6">
           <button
             onClick={handleSubmit}
-            className="py-4 bg-violet-500 text-white text-lg font-bold"
+            className="w-full py-4 text-lg font-medium text-white bg-violet-500 rounded-xl"
           >
-            Sign Up
+            Register
           </button>
         </div>
 
-        {/* Link to switch to the login form */}
-        <div className="mt-4">
-          <p className="font-medium text-base">
+        {/* Sign In Link */}
+        <div className="mt-6 text-center">
+          <p>
             Already have an account?{" "}
             <button
               onClick={onSignIn}
-              className="ml-2 text-violet-500 text-base font-medium"
+              className="font-medium text-violet-500"
             >
               Sign In
             </button>
           </p>
         </div>
       </div>
+
+      {/* Success Message */}
+      {showSuccess && (
+        <Success message={successMessage} onClose={handleCloseSuccess} />
+      )}
     </div>
   );
 };
