@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Use useNavigate instead of useHistory
-import { loginUser, LoginDTO } from '../../api_service/userAPIs';  // Import the loginUser API function
-import Success from '../../toaster_utitliy/Success';  // Import the Success component
+import { loginUser, LoginDTO } from '../../api_service/user';  // Import the loginUser API function
+import Success from '../../toaster_utility/Success';  // Import the Success component
 
 interface FormLoginProps {
   onSignUp: () => void;
@@ -10,7 +10,7 @@ interface FormLoginProps {
 
 const FormLogin: React.FC<FormLoginProps> = ({ onSignUp, onForgotPassword }) => {
   const [loginData, setLoginData] = useState<LoginDTO>({
-    email: '',
+    username: '',
     password: ''
   });
   const [error, setError] = useState<string | null>(null);
@@ -30,36 +30,28 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSignUp, onForgotPassword }) => 
     e.preventDefault();
 
     try {
-      const message = await loginUser(loginData);  // Call the login API function
+      const message = await loginUser(loginData); // Call the login API function
 
-      if (message === "Login successful") {
-        // Trigger success toast on successful login
+      if (message === 200) {
         setToastMessage("Login successful!");
         setToastVisible(true);
 
-        // Hide toast after 3 seconds
         setTimeout(() => {
           setToastVisible(false);
-
-          // After toast closes, navigate to home page
-          console.log("Navigating to /home");
-          localStorage.setItem("userLoggedIn", "true");  // Set ko lang sa true for mean time 
-          navigate("/home");  // Redirect to the home page upon successful login
+          navigate("/home");
         }, 3000);
-      } else {
-        setError(message);  // Show error message if login fails
 
-        // Hide the error message after 3 seconds
+      } else {
+        setError("Login failed!");
         setTimeout(() => {
-          setError(null);  // Clear error after 3 seconds
+          setError(null);
         }, 3000);
       }
     } catch (err) {
       setError("Login failed. Please try again.");
 
-      // Hide the error message after 3 seconds
       setTimeout(() => {
-        setError(null);  // Clear error after 3 seconds
+        setError(null);
       }, 3000);
     }
   };
@@ -70,12 +62,12 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSignUp, onForgotPassword }) => 
       <p className="font-medium text-lg text-gray-500 mt-4">Please enter your details.</p>
       <div className="mt-8">
         <div>
-          <label className="text-lg font-medium">Email</label>
+          <label className="text-lg font-medium">Username</label>
           <input
-            name="email"
+            name="username"
             className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-            placeholder="Enter your email"
-            value={loginData.email}
+            placeholder="Enter your username"
+            value={loginData.username}
             onChange={handleChange}
             required
           />
