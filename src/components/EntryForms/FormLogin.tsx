@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Use useNavigate instead of useHistory
 import { loginUser, LoginDTO } from '../../api_service/user';  // Import the loginUser API function
-import Success from '../../toaster_utility/Success';  // Import the Success component
+import Success from '../../utility/Success';  // Import the Success component
 
 interface FormLoginProps {
   onSignUp: () => void;

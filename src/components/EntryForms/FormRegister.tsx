@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Joi from "joi"; // Import Joi for validation
 import { registerUser } from "../../api_service/user"; // Import the registerUser API function
-import Success from '../../toaster_utility/Success';  // Import the Success component
+import Success from '../../utility/Success';  // Import the Success component
 
 interface FormRegisterProps {
   onSignIn: () => void; // Function to switch to login form
