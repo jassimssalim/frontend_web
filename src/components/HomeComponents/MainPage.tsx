@@ -10,6 +10,8 @@ const MainPage = () => {
     console.log("Logging out...");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("userLoggedIn");
+    localStorage.removeItem("username");
+
     navigate("/Entry");
   };
 
@@ -26,7 +28,7 @@ const MainPage = () => {
       {/* Navbar Section */}
       <header className="bg-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-lg font-bold">MySocial</h1>
+          <h1 className="text-lg font-bold">ConnectEveryone</h1>
           <nav>
             <ul className="flex space-x-6">
               <li>

@@ -38,9 +38,8 @@ const Path: React.FC = () => {
 
 
 
- {/* Wrong path testing */} 
-
-    <Route path="/test" element={<WrongPath />} />
+ {/* Wrong path  */} 
+ <Route path="*" element={<WrongPath />} />
 
 
     </Routes>
