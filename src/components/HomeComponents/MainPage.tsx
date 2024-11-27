@@ -26,9 +26,9 @@ const MainPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navbar Section */}
-      <header className="bg-blue-600 text-white">
+      <header className="bg-gradient-to-r from-purple-600 to-pink-800 text-white">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-lg font-bold">ConnectEveryone</h1>
+          <h1 className="text-lg font-bold">MoodSnap.</h1>
           <nav>
             <ul className="flex space-x-6">
               <li>

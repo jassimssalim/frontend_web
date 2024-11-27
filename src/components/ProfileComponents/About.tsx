@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import { UserProfile, getProfileByUsername } from "../../api_service/user"; // Adjust the import path
+import { updateProfile } from "../../api_service/user"; // Import the updateProfile function
 
 const About: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -25,9 +26,17 @@ const About: React.FC = () => {
 
   const handleEdit = () => setIsEditing(true);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (tempProfile) {
-      setProfile(tempProfile);  // Save the temp profile data
+      const username = localStorage.getItem("username");  // Retrieve the username from local storage
+      if (username) {
+        try {
+          await updateProfile(username, tempProfile);  // Update the profile using the API call
+          setProfile(tempProfile);  // Save the updated profile
+        } catch (error) {
+          console.error("Failed to update profile", error);
+        }
+      }
     }
     setIsEditing(false);
   };

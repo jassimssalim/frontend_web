@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FormLogin from '../components/EntryForms/FormLogin';
 import FormRegister from '../components/EntryForms/FormRegister';
 import ResetPassword from '../components/EntryForms/ResetPassword'; // Import ResetPassword component
@@ -6,6 +6,8 @@ import ResetPassword from '../components/EntryForms/ResetPassword'; // Import Re
 const Login: React.FC = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [isResettingPassword, setIsResettingPassword] = useState(false); // New state for password reset
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0); // State to track the current message
+ 
 
   // Function to toggle between login and register forms
   const toggleForm = () => {
@@ -37,24 +39,28 @@ const Login: React.FC = () => {
       </div>
 
       {/* Right side - Social Media Style Design */}
-      <div className="hidden relative lg:flex h-full w-1/2 items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500">
+      <div className="hidden relative lg:flex h-full w-1/2 items-center justify-center bg-gradient-to-r from-purple-600 to-pink-900">
         {/* Hero Image or Illustration */}
         <div className="absolute inset-0 overflow-hidden">
           <img
-            src="https://images.pexels.com/photos/3184323/pexels-photo-3184323.jpeg?cs=srgb&dl=group-of-people-seated-around-table-discussing-3184323.jpg&fm=jpg" // Replace with your desired image URL
+            src="https://img.freepik.com/premium-photo/breathtaking-realistic-image-featuring-lone-adventurer-standing-atop-mountain-peak_818261-12708.jpg" // Replace with your desired image URL
             alt="Hero Image"
             className="object-cover w-full h-full opacity-60"
           />
         </div>
         
         {/* Optional Overlay for the Hero Section */}
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/50 to-pink-600/50"></div>
+        <div className="absolute inset-0 "></div>
 
         {/* Content inside the right section */}
         <div className="relative z-10 text-center text-white px-6 md:px-12">
-          <h1 className="text-4xl font-bold mb-6">HEY THERE!</h1>
-          <p className="text-xl font-medium mb-4">Connect with people you care about</p>
-          <p className="text-lg mb-6">Log in to continue your journey...</p>
+        <h1 className="text-4xl font-bold mb-6 text-white drop-shadow-lg">
+               HEY THERE MOODSNAP!
+      </h1>
+        <p className="text-xl font-medium mb-4 text-white opacity-80 drop-shadow-md">
+          Post about how you feel...
+      </p>
+
         </div>
 
         {/* Subtle Background Blur */}
