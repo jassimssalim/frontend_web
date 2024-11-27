@@ -134,7 +134,7 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
         {/* Name and Username on the same row */}
         <div className="flex gap-5">
           <div className="w-full">
-            <label className="text-lg font-medium">Name</label>
+            <label className="text-lg font-medium">Full Name</label>
             <input
               className="w-full border-2 border-gray-100 rounded-xl p-3 mt-1 bg-transparent"
               placeholder="Enter your name"

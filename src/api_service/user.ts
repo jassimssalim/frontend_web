@@ -1,7 +1,9 @@
 import http from "./http";
 
 
-//test 
+
+
+//get user profile  by username
 export interface UserProfile {
   id: number;
   username: string;
@@ -14,7 +16,6 @@ export interface UserProfile {
   };
 }
 
-// test
 export const getProfileByUsername = async (username: string): Promise<UserProfile> => {
   try {
     const response = await http.get(`/profiles/${username}`);
@@ -24,34 +25,32 @@ export const getProfileByUsername = async (username: string): Promise<UserProfil
     throw new Error("Failed to fetch user profile. Please try again.");
   }
 };
+// end
 
 
 
 
 
-
-// Define TypeScript types for user data
+// register user
 export interface UserData {
   name: string;
   username: string;
   email: string;
   password: string;
-  file: File | null; // Use 'file' instead of 'image'
+  file: File | null; 
 }
 
-// Define the FormUserData interface that includes confirmPassword
 export interface FormUserData extends UserData {
   confirmPassword: string;
 }
 
-// API function to register a user with an image upload
 export const registerUser = async (userData: FormUserData) => {
   const formData = new FormData();
   formData.append("name", userData.name);
   formData.append("username", userData.username);
   formData.append("email", userData.email);
   formData.append("password", userData.password);
-  formData.append("file", userData.file as Blob); // Ensure file is appended
+  formData.append("file", userData.file as Blob); 
 
   try {
     const response = await http.post(`/register`, formData);
@@ -61,13 +60,13 @@ export const registerUser = async (userData: FormUserData) => {
   }
 };
 
-// Define the LoginDTO interface for login data
+//end register user
+
+// logi n user
 export interface LoginDTO {
   username: string;
   password: string;
 }
-
-// API function to log in a user
 export const loginUser = async (loginDTO: LoginDTO): Promise<number> => {
   try {
     const response = await http.post(`/login`, loginDTO);
@@ -84,8 +83,9 @@ export const loginUser = async (loginDTO: LoginDTO): Promise<number> => {
     throw new Error("Login failed. Please try again.");
   }
 };
+//end login user
 
-// Define the ResetPasswordDTO interface for password reset data
+// reset password start
 export interface ResetPasswordDTO {
   email: string;
   username: string;
@@ -94,25 +94,18 @@ export interface ResetPasswordDTO {
   confirmPassword: string;
 }
 
-// API function to reset password
 export const resetPassword = async (resetPasswordDTO: ResetPasswordDTO): Promise<string> => {
   try {
-    // Ensure passwords match before sending the request
     if (resetPasswordDTO.newPassword !== resetPasswordDTO.confirmPassword) {
       throw new Error("New password and confirm password do not match.");
     }
 
     const response = await http.post(`/reset-password`, resetPasswordDTO);
-    return response.data;  // Response message from the backend
+    return response.data;  
   } catch (error) {
     console.error("Error resetting password:", error);
     throw new Error("Password reset failed. Please try again.");
   }
-
-
-
-  
-
-
 };
 
+//reset end

@@ -17,7 +17,7 @@ const Profile = () => {
       const username = localStorage.getItem("username");
 
       if (!username) {
-        navigate("/Entry"); // Redirect to the /Entry page if no username is found
+        navigate("/Entry"); 
         setLoading(false);
         return;
       }
