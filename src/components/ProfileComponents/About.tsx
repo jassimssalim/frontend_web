@@ -1,45 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
-
-interface AboutInfo {
-  name: string;
-  bio: string;
-  graduateSchool: string;
-  age: number;
-  sex: string;
-  links: string;
-  email: string;
-  address: string;
-}
+import { UserProfile, getProfileByUsername } from "../../api_service/user"; // Adjust the import path
 
 const About: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [aboutInfo, setAboutInfo] = useState<AboutInfo>({
-    name: "John Doe",
-    bio: "I’m a passionate software developer, building intuitive web and mobile experiences.",
-    graduateSchool: "Stanford University",
-    age: 29,
-    sex: "Male",
-    links: "https://johndoe.dev",
-    email: "johndoe@example.com",
-    address: "123 Tech Street, Innovation City, USA",
-  });
-  const [tempInfo, setTempInfo] = useState<AboutInfo>({ ...aboutInfo });
+  const [tempProfile, setTempProfile] = useState<UserProfile | null>(null);  // Use UserProfile type
+  const [profile, setProfile] = useState<UserProfile | null>(null);  // Use UserProfile type
+
+  // Fetch the profile information on component mount
+  useEffect(() => {
+    const username = localStorage.getItem("username");  // Retrieve the username from local storage
+    if (username) {
+      const fetchProfile = async () => {
+        const profileData = await getProfileByUsername(username);  // Use your existing method
+        if (profileData) {
+          setProfile(profileData);
+          setTempProfile(profileData);  // Set tempProfile with the fetched data
+        }
+      };
+
+      fetchProfile();
+    }
+  }, []);
 
   const handleEdit = () => setIsEditing(true);
+
   const handleSave = () => {
-    setAboutInfo(tempInfo);
+    if (tempProfile) {
+      setProfile(tempProfile);  // Save the temp profile data
+    }
     setIsEditing(false);
   };
+
   const handleCancel = () => {
-    setTempInfo(aboutInfo);
+    setTempProfile(profile);  // Reset tempProfile to the current profile data
     setIsEditing(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setTempInfo((prev) => ({ ...prev, [name]: value }));
+    setTempProfile((prev) => prev ? { ...prev, [name]: value } : prev);  // Safely update tempProfile
   };
+
+  if (!profile) {
+    return <div>Loading...</div>;  // Show loading state until profile data is available
+  }
 
   return (
     <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-xl shadow-lg">
@@ -66,7 +71,7 @@ const About: React.FC = () => {
               type="text"
               id="name"
               name="name"
-              value={tempInfo.name}
+              value={tempProfile?.name || ""}
               onChange={handleChange}
               className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
             />
@@ -79,7 +84,7 @@ const About: React.FC = () => {
               id="bio"
               name="bio"
               rows={3}
-              value={tempInfo.bio}
+              value={tempProfile?.bio || ""}
               onChange={handleChange}
               className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
             ></textarea>
@@ -93,7 +98,7 @@ const About: React.FC = () => {
                 type="text"
                 id="graduateSchool"
                 name="graduateSchool"
-                value={tempInfo.graduateSchool}
+                value={tempProfile?.graduateSchool || ""}
                 onChange={handleChange}
                 className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
@@ -106,7 +111,7 @@ const About: React.FC = () => {
                 type="number"
                 id="age"
                 name="age"
-                value={tempInfo.age}
+                value={tempProfile?.age || ""}
                 onChange={handleChange}
                 className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
@@ -121,7 +126,7 @@ const About: React.FC = () => {
                 type="text"
                 id="sex"
                 name="sex"
-                value={tempInfo.sex}
+                value={tempProfile?.sex || ""}
                 onChange={handleChange}
                 className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
@@ -134,7 +139,7 @@ const About: React.FC = () => {
                 type="url"
                 id="links"
                 name="links"
-                value={tempInfo.links}
+                value={tempProfile?.links || ""}
                 onChange={handleChange}
                 className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
@@ -148,7 +153,7 @@ const About: React.FC = () => {
               type="email"
               id="email"
               name="email"
-              value={tempInfo.email}
+              value={tempProfile?.email || ""}
               onChange={handleChange}
               className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
             />
@@ -161,7 +166,7 @@ const About: React.FC = () => {
               type="text"
               id="address"
               name="address"
-              value={tempInfo.address}
+              value={tempProfile?.address || ""}
               onChange={handleChange}
               className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
             />
@@ -185,24 +190,26 @@ const About: React.FC = () => {
         </div>
       ) : (
         <div className="space-y-4 text-gray-700">
-          <p><strong>Name:</strong> {aboutInfo.name}</p>
-          <p><strong>Bio:</strong> {aboutInfo.bio}</p>
-          <p><strong>Graduate School:</strong> {aboutInfo.graduateSchool}</p>
-          <p><strong>Age:</strong> {aboutInfo.age}</p>
-          <p><strong>Sex:</strong> {aboutInfo.sex}</p>
+          <p><strong>Name:</strong> {profile.name}</p>
+          <p><strong>Bio:</strong> {profile.bio}</p>
+          <p><strong>Email:</strong> {profile.email}</p>
+          <p><strong>Age:</strong> {profile.age}</p>
+          <p><strong>Sex:</strong> {profile.sex}</p>
+          <p><strong>Graduate School:</strong> {profile.graduateSchool}</p>
+
           <p>
             <strong>Links:</strong>{" "}
             <a
-              href={aboutInfo.links}
+              href={profile.links}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 underline"
             >
-              {aboutInfo.links}
+              {profile.links}
             </a>
           </p>
-          <p><strong>Email:</strong> {aboutInfo.email}</p>
-          <p><strong>Address:</strong> {aboutInfo.address}</p>
+          <p><strong>Graduate School:</strong> {profile.graduateSchool}</p>
+          <p><strong>Address:</strong> {profile.address}</p>
         </div>
       )}
     </div>

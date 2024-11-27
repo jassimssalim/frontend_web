@@ -14,6 +14,12 @@ export interface UserProfile {
     fileName: string;
     fileData: string; // Base64-encoded image data
   };
+  graduateSchool?: string; 
+  age?: number;             
+  sex?: string;             
+  links?: string;           
+  address?: string;         
+  bio?: string;            
 }
 
 export const getProfileByUsername = async (username: string): Promise<UserProfile> => {
@@ -109,3 +115,44 @@ export const resetPassword = async (resetPasswordDTO: ResetPasswordDTO): Promise
 };
 
 //reset end
+
+//update user
+export interface UpdatedUserData {
+  name: string;
+  email: string;
+  graduateSchool?: string;
+  age?: number;
+  sex?: string;
+  links?: string;
+  address?: string;
+  bio?: string;
+
+}
+
+// Create the API call for updating the profile
+export const updateProfile = async (
+  username: string,
+  updatedUserData: UpdatedUserData
+): Promise<any> => {
+  const formData = new FormData();
+  
+  formData.append("name", updatedUserData.name);
+  formData.append("email", updatedUserData.email);
+  
+  if (updatedUserData.graduateSchool) formData.append("graduateSchool", updatedUserData.graduateSchool);
+  if (updatedUserData.age) formData.append("age", updatedUserData.age.toString());
+  if (updatedUserData.sex) formData.append("sex", updatedUserData.sex);
+  if (updatedUserData.links) formData.append("links", updatedUserData.links);
+  if (updatedUserData.address) formData.append("address", updatedUserData.address);
+  if (updatedUserData.bio) formData.append("bio", updatedUserData.bio);
+  
+
+  try {
+    const response = await http.put(`/update/${username}`, formData, {
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    throw new Error("Failed to update user profile. Please try again.");
+  }
+};

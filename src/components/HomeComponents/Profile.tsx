@@ -72,6 +72,8 @@ const Profile = () => {
           />
           <h1 className="text-3xl font-semibold text-gray-900">{profile.name}</h1>
           <p className="text-sm text-gray-600">{profile.email}</p>
+          <p className="text-sm text-gray-600">{profile.bio}</p>
+
         </div>
 
         {/* Navigation Tabs */}
