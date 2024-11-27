@@ -1,5 +1,35 @@
 import http from "./http";
 
+
+//test 
+export interface UserProfile {
+  id: number;
+  username: string;
+  name: string;
+  email: string;
+  registeredDate: string;
+  image: {
+    fileName: string;
+    fileData: string; // Base64-encoded image data
+  };
+}
+
+// test
+export const getProfileByUsername = async (username: string): Promise<UserProfile> => {
+  try {
+    const response = await http.get(`/profiles/${username}`);
+    return response.data; // The backend response containing user profile data
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    throw new Error("Failed to fetch user profile. Please try again.");
+  }
+};
+
+
+
+
+
+
 // Define TypeScript types for user data
 export interface UserData {
   name: string;
@@ -78,5 +108,11 @@ export const resetPassword = async (resetPasswordDTO: ResetPasswordDTO): Promise
     console.error("Error resetting password:", error);
     throw new Error("Password reset failed. Please try again.");
   }
+
+
+
+  
+
+
 };
 
