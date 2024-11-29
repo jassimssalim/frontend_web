@@ -156,3 +156,30 @@ export const updateProfile = async (
     throw new Error("Failed to update user profile. Please try again.");
   }
 };
+
+
+//update profile
+export interface UpdateUserProfile {
+  name?: string;
+  email?: string;
+  graduateSchool?: string;
+  age?: number;
+  sex?: string;
+  links?: string;
+  address?: string;
+  bio?: string;
+}
+
+export const updateProfileByUsername = async (
+  username: string,
+  updatedUser: UpdateUserProfile
+): Promise<{ message: string }> => {
+  try {
+    const response = await http.put(`/update/${username}`, updatedUser);
+    return response.data; // Backend response, expected to contain a success message
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    throw new Error("Failed to update profile. Please try again.");
+  }
+};
+

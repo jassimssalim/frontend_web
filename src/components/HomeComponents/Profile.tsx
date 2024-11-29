@@ -37,7 +37,7 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-gray-100">
+      <div className="min-h-screen flex justify-center items-center bg-gray-50">
         <p className="text-gray-600">Loading profile...</p>
       </div>
     );
@@ -45,7 +45,7 @@ const Profile = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-gray-100">
+      <div className="min-h-screen flex justify-center items-center bg-gray-50">
         <p className="text-red-500">{error}</p>
       </div>
     );
@@ -53,7 +53,7 @@ const Profile = () => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-gray-100">
+      <div className="min-h-screen flex justify-center items-center bg-gray-50">
         <p className="text-gray-600">No profile found.</p>
       </div>
     );
@@ -61,37 +61,52 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Profile Header */}
-      <div className="bg-white shadow-md rounded-lg p-8">
-        <div className="flex flex-col items-center space-y-4">
-          {/* Profile Picture */}
-          <img
-            className="w-32 h-32 rounded-full border-4 border-indigo-500 shadow-md"
-            src={`data:image/png;base64,${profile.image.fileData}`}
-            alt="Profile"
-          />
-          <h1 className="text-3xl font-semibold text-gray-900">{profile.name}</h1>
-          <p className="text-sm text-gray-600">{profile.email}</p>
-          <p className="text-sm text-gray-600">{profile.bio}</p>
+      {/* Back to Home Button */}
+      <div className="flex justify-end p-4">
+        <button
+          onClick={() => navigate("/home")}
+          className="text-white bg-indigo-600 hover:bg-indigo-700 px-6 py-2 rounded-lg"
+        >
+          Back to Home
+        </button>
+      </div>
 
+      {/* Profile Header */}
+      <div className="bg-white shadow-lg rounded-xl p-6 mx-auto max-w-7xl">
+        <div className="flex items-center space-x-8">
+          {/* Profile Picture */}
+          <div className="flex-shrink-0">
+            <img
+              className="w-32 h-32 rounded-full border-4 border-indigo-500 shadow-lg"
+              src={`data:image/png;base64,${profile.image.fileData}`}
+              alt="Profile"
+            />
+          </div>
+
+          {/* Profile Info */}
+          <div className="flex flex-col justify-center space-y-2">
+            <h1 className="text-4xl font-semibold text-gray-900">{profile.name}</h1>
+            <p className="text-sm text-gray-600">{profile.email}</p>
+            <p className="text-sm text-gray-600">{profile.bio}</p>
+          </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex justify-center mt-6 space-x-10 border-t border-gray-200 pt-4">
+        <div className="flex justify-center mt-6 space-x-12 border-t border-gray-200 pt-4">
           <button
-            className={`py-2 px-6 text-lg font-medium ${activeTab === "posts" ? "border-b-4 border-indigo-500 text-indigo-600" : "text-gray-600 hover:text-indigo-600"}`}
+            className={`py-3 px-8 text-lg font-medium ${activeTab === "posts" ? "border-b-4 border-indigo-500 text-indigo-600" : "text-gray-600 hover:text-indigo-600"}`}
             onClick={() => setActiveTab("posts")}
           >
             Posts
           </button>
           <button
-            className={`py-2 px-6 text-lg font-medium ${activeTab === "about" ? "border-b-4 border-indigo-500 text-indigo-600" : "text-gray-600 hover:text-indigo-600"}`}
+            className={`py-3 px-8 text-lg font-medium ${activeTab === "about" ? "border-b-4 border-indigo-500 text-indigo-600" : "text-gray-600 hover:text-indigo-600"}`}
             onClick={() => setActiveTab("about")}
           >
             About
           </button>
           <button
-            className={`py-2 px-6 text-lg font-medium ${activeTab === "settings" ? "border-b-4 border-indigo-500 text-indigo-600" : "text-gray-600 hover:text-indigo-600"}`}
+            className={`py-3 px-8 text-lg font-medium ${activeTab === "settings" ? "border-b-4 border-indigo-500 text-indigo-600" : "text-gray-600 hover:text-indigo-600"}`}
             onClick={() => setActiveTab("settings")}
           >
             Settings
@@ -99,11 +114,24 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Render Active Tab Content */}
-      <div className="px-8 py-6">
-        {activeTab === "posts" && <Posts />}
-        {activeTab === "about" && <About />}
-        {activeTab === "settings" && <Settings />}
+      {/* Profile Content */}
+      <div className="flex justify-center mt-8">
+        <div className="flex flex-row space-x-12 max-w-7xl w-full px-6">
+          {/* Sidebar (Optional) */}
+          <div className="w-1/4 bg-white shadow-md rounded-xl p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Friends</h2>
+            {/* Add friend list or other sections here */}
+          </div>
+
+          {/* Main Content */}
+          <div className="w-3/4">
+            <div className="bg-white shadow-md rounded-xl p-6">
+              {activeTab === "posts" && <Posts />}
+              {activeTab === "about" && <About />}
+              {activeTab === "settings" && <Settings />}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
