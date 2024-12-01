@@ -7,7 +7,7 @@ const MyPost = () => {
 
   return (
     <>
-    <div><NewPost/></div>
+    <div className='mb-2'><NewPost/></div>
     <div><PostList isAllPost={false}/></div>
     
     </>
