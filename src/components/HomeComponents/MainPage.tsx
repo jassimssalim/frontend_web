@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ConfirmationModal from '../../utility/ConfirmationModal';  // Import the Success component
+import PostList from "../PostComponents/PostList";
+import NewPost from "../PostComponents/NewPost";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -72,41 +74,10 @@ const MainPage = () => {
         {/* Middle: Posts Section */}
         <section className="flex-1 bg-white rounded-lg shadow-md p-6 space-y-6">
           {/* New Post */}
-          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-              <input
-                type="text"
-                placeholder="What's on your mind?"
-                className="flex-1 p-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="flex space-x-4 mt-3">
-              <button className="text-blue-500 hover:underline">
-                Photo/Video
-              </button>
-              <button className="text-green-500 hover:underline">
-                Feeling/Activity
-              </button>
-            </div>
-          </div>
+         <NewPost/>
 
-          {/* Example Post */}
-          <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-            <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-              <div>
-                <h3 className="text-sm font-bold">John Doe</h3>
-                <p className="text-xs text-gray-500">2 hours ago</p>
-              </div>
-            </div>
-            <p className="mt-4 text-gray-800">Feeling great today!</p>
-            <div className="flex justify-between mt-4 text-sm text-gray-500">
-              <button className="hover:text-blue-500">Like</button>
-              <button className="hover:text-blue-500">Comment</button>
-              <button className="hover:text-blue-500">Share</button>
-            </div>
-          </div>
+          {/* Post */}
+          <PostList isAllPost={true}/>
         </section>
 
         {/* Right Side: Suggestions */}

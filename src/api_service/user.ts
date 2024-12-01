@@ -1,8 +1,6 @@
 import http from "./http";
 
 
-
-
 //get user profile  by username
 export interface UserProfile {
   id: number;
@@ -32,10 +30,6 @@ export const getProfileByUsername = async (username: string): Promise<UserProfil
   }
 };
 // end
-
-
-
-
 
 // register user
 export interface UserData {
@@ -68,7 +62,7 @@ export const registerUser = async (userData: FormUserData) => {
 
 //end register user
 
-// logi n user
+// login user
 export interface LoginDTO {
   username: string;
   password: string;
@@ -79,9 +73,9 @@ export const loginUser = async (loginDTO: LoginDTO): Promise<number> => {
 
     if(response.status === 200){
       localStorage.setItem("accessToken", response.data.accessToken)
+      localStorage.setItem("userId", response.data.userId)
       localStorage.setItem("userLoggedIn", "true")
       localStorage.setItem("username", loginDTO.username)
-
     }
     return response.status
 
@@ -183,3 +177,6 @@ export const updateProfileByUsername = async (
   }
 };
 
+export function getUserByUserId(userId: number) {
+  return http.get(`/profiles/userId/${userId}`)
+};

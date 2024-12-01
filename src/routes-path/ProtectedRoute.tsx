@@ -11,7 +11,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ component: Component })
 
   console.log(isAuthenticated);
   
-  return isAuthenticated ? <Component /> : <Navigate to="/Entry" />;
+  return isAuthenticated ? <Component /> : <Navigate to="/entry" />;
 };
 
 export default ProtectedRoute;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getProfileByUsername, UserProfile } from "../../api_service/user"; 
 import { useNavigate } from "react-router-dom"; 
-import Posts from "../ProfileComponents/Post"; 
+import MyPost from "../ProfileComponents/MyPost"; 
 import About from "../ProfileComponents/About"; 
 import Settings from "../ProfileComponents/Settings"; 
 
@@ -126,7 +126,7 @@ const Profile = () => {
           {/* Main Content */}
           <div className="w-3/4">
             <div className="bg-white shadow-md rounded-xl p-6">
-              {activeTab === "posts" && <Posts />}
+              {activeTab === "posts" && <MyPost />}
               {activeTab === "about" && <About />}
               {activeTab === "settings" && <Settings />}
             </div>
