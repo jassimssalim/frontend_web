@@ -20,12 +20,17 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile }) => {
         try {
           await updateProfileByUsername(username, tempProfile);  // Call your update function
           updateProfile(tempProfile);  // Update the profile in the parent component immediately
+
         } catch (error) {
           console.error("Failed to update profile", error);
         }
       }
+
+
     }
     setIsEditing(false);
+    localStorage.getItem("username");
+
   };
 
   const handleCancel = () => {
@@ -68,6 +73,19 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile }) => {
               id="name"
               name="name"
               value={tempProfile?.name || ""}
+              onChange={handleChange}
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={tempProfile?.username || ""}
               onChange={handleChange}
               className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
             />
@@ -176,7 +194,7 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile }) => {
               className="flex items-center px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600"
             >
               <FaSave className="mr-2" />
-              Save
+              Update
             </button>
             <button
               onClick={handleCancel}
