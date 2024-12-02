@@ -140,7 +140,7 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
 
   return (
     <div className="bg-white px-8 py-12 rounded-3xl border-2 border-gray-200 max-w-2xl mx-auto mt-8">
-      <h1 className="text-4xl font-semibold">Create Account</h1>
+      <h1 className="text-4xl font-semibold ">Create Account</h1>
       <p className="font-medium text-lg text-gray-500 mt-4">Please fill in your details to create an account.</p>
       <div className="mt-6">
         {/* Name and Username on the same row */}
@@ -225,7 +225,7 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
         {/* Submit Button */}
         <div className="mt-8">
           <button
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg"
+            className="w-full bg-violet-500 hover:bg-blue-600 text-white py-3 rounded-lg"
             onClick={handleSubmit}
           >
             Register
@@ -233,7 +233,7 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
         </div>
 
         <div className="mt-4 text-center">
-          <p className="text-gray-500">Already have an account? <span className="font-semibold cursor-pointer" onClick={onSignIn}>Sign In</span></p>
+          <p className="text-gray-500">Already have an account? <span className="font-semibold cursor-pointer text-violet-500 " onClick={onSignIn}>Sign In</span></p>
         </div>
       </div>
 

@@ -141,7 +141,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onBackToLogin }) => {
         {error && <div className="mt-4 text-red-500 text-sm">{error}</div>}
 
         <div className="mt-8 flex flex-col gap-y-4">
-          <button type="submit" className="py-4 bg-violet-500 text-white text-lg font-bold">
+          <button type="submit" className="py-4 bg-violet-500 hover:bg-blue-600 text-white text-lg font-bold">
             Reset Password
           </button>
         </div>

@@ -99,7 +99,7 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSignUp, onForgotPassword }) => 
         <div className="mt-8 flex flex-col gap-y-4">
           <button
             onClick={handleSubmit}  // Trigger login API call
-            className="py-4 bg-violet-500 text-white text-lg font-bold"
+            className="py-4 bg-violet-500 hover:bg-blue-600 text-white text-lg font-bold"
           >
             Sign In
           </button>
