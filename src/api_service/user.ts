@@ -56,15 +56,37 @@ export const registerUser = async (userData: FormUserData) => {
   formData.append("username", userData.username);
   formData.append("email", userData.email);
   formData.append("password", userData.password);
-  formData.append("file", userData.file as Blob); 
+  formData.append("file", userData.file as Blob);
 
   try {
     const response = await http.post(`/register`, formData);
     return response.data;
-  } catch (error) {
-    throw new Error("Error registering user.");
+  } catch (error: any) {
+    // Handle specific error messages for email or username
+    if (error.response && error.response.status === 409) {
+      const errorData = error.response.data;
+      const emailError = errorData.emailError;
+      const usernameError = errorData.usernameError;
+      const bothError = errorData.bothError;
+
+
+      // Return a more detailed error message
+      if (bothError) {
+        throw new Error(bothError);
+      } else if (usernameError) {
+        throw new Error(usernameError);
+
+      } else if(emailError){
+        throw new Error (emailError);
+      } else {
+        throw new Error("Error registering user.");
+      }
+    } else {
+      throw new Error("Error registering user.");
+    }
   }
 };
+
 
 //end register user
 

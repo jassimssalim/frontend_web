@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Use useNavigate instead of useHistory
 import { loginUser, LoginDTO } from '../../api_service/user';  // Import the loginUser API function
-import Success from '../../utility/Success';  // Import the Success component
+import { toast, ToastContainer } from 'react-toastify'; // Import toast and ToastContainer from react-toastify
+import 'react-toastify/dist/ReactToastify.css'; // Import the default CSS for react-toastify
 
 interface FormLoginProps {
   onSignUp: () => void;
@@ -14,8 +15,6 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSignUp, onForgotPassword }) => 
     password: ''
   });
   const [error, setError] = useState<string | null>(null);
-  const [toastVisible, setToastVisible] = useState(false);  // State for toast visibility
-  const [toastMessage, setToastMessage] = useState('');  // State for toast message
   const navigate = useNavigate();  // Use useNavigate for redirection
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,26 +32,25 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSignUp, onForgotPassword }) => 
       const message = await loginUser(loginData); // Call the login API function
 
       if (message === 200) {
-        setToastMessage("Login successful!");
-        setToastVisible(true);
+        toast.success('Login successful!', {
+          position: 'top-right', // Use string value for position
+          autoClose: 3000,
+        });
 
         setTimeout(() => {
-          setToastVisible(false);
           navigate("/home");
         }, 3000);
-
       } else {
-        setError("Login failed!");
-        setTimeout(() => {
-          setError(null);
-        }, 3000);
+        toast.error('Login failed!', {
+          position: 'top-right', // Use string value for position
+          autoClose: 3000,
+        });
       }
     } catch (err) {
-      setError("Login failed. Please try again.");
-
-      setTimeout(() => {
-        setError(null);
-      }, 3000);
+      toast.error('Username or Password is wrong.', {
+        position: 'top-right', // Use string value for position
+        autoClose: 3000,
+      });
     }
   };
 
@@ -88,7 +86,6 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSignUp, onForgotPassword }) => 
 
         {error && <div style={{ color: 'red' }}>{error}</div>}  {/* Error message */}
 
-
         <div className="mt-8 flex">
           <div></div>
           <button
@@ -118,13 +115,8 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSignUp, onForgotPassword }) => 
         </div>
       </div>
 
-      {/* Render Success Toast if toastVisible is true */}
-      {toastVisible && (
-        <Success
-          message={toastMessage}
-          onClose={() => setToastVisible(false)}
-        />
-      )}
+      {/* ToastContainer for displaying toasts */}
+      <ToastContainer />
     </div>
   );
 };
