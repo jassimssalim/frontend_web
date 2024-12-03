@@ -28,6 +28,14 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onBackToLogin }) => {
   const handlePasswordReset = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Check if the form is filled out
+    if (!email || !username || !oldPassword || !newPassword || !confirmPassword) {
+      toast.error('You must fill up the form', {
+        autoClose: 3000, // Set the timeout for the error message (3 seconds)
+      });
+      return; // Prevent form submission if fields are empty
+    }
+
     // Validate using Joi schema
     const { error } = schema.validate({
       newPassword,
@@ -35,6 +43,9 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onBackToLogin }) => {
 
     if (error) {
       setError(error.details[0].message);
+      toast.error(error.details[0].message, {
+        autoClose: 3000, // Set the timeout for the error message (3 seconds)
+      });
       return; // Only show validation message without triggering a toast
     }
 
@@ -43,6 +54,9 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onBackToLogin }) => {
     // Prevent reset if old password is the same as the new password
     if (oldPassword === newPassword) {
       setError('New password cannot be the same as the old password');
+      toast.error('New password cannot be the same as the old password', {
+        autoClose: 3000, // Set the timeout for the error message (3 seconds)
+      });
       return; // No toast, just set the error message
     }
 
@@ -62,14 +76,20 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onBackToLogin }) => {
       setNewPassword('');
       setConfirmPassword(''); // Clear the form fields
 
-      toast.success('Password successfully updated!'); // Show toaster with success message
+      toast.success('Password successfully updated!', {
+        autoClose: 3000, // Set the timeout for the success message (3 seconds)
+      }); // Show toaster with success message
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
-        toast.error(err.message); // Show toaster with error
+        toast.error(err.message, {
+          autoClose: 3000, // Set the timeout for the error message (3 seconds)
+        }); // Show toaster with error
       } else {
         setError('An unexpected error occurred.');
-        toast.error('An unexpected error occurred.');
+        toast.error('An unexpected error occurred.', {
+          autoClose: 3000, // Set the timeout for the error message (3 seconds)
+        });
       }
     }
   };
@@ -138,7 +158,6 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onBackToLogin }) => {
           </div>
         </div>
 
-        {error && <div className="mt-4 text-red-500 text-sm">{error}</div>}
 
         <div className="mt-8 flex flex-col gap-y-4">
           <button type="submit" className="py-4 bg-violet-500 hover:bg-blue-600 text-white text-lg font-bold">
