@@ -16,6 +16,12 @@ export interface PostModel {
 export interface CommentModel {
   id: number;
   userId: number;
+  name: string;
+  photo: {
+    fileName: string;
+    fileData: string
+  }
+  datePosted: any;
   content: any;
   postId: number;
 }
@@ -61,6 +67,30 @@ export function updatedPost(post: any, postId: number) {
   return http.put(`/posts/${postId}/edit`, requestParam);
 
 }
+
+
+export function addCommentToPost(comment: any) {
+  //request Param userId, content
+
+  const requestParam = new FormData();
+  requestParam.append("userId", comment.userId);
+  requestParam.append("content", comment.content);
+  return http.post(`/posts/${comment.postId}/comments`, requestParam);
+}
+
+export function editComment(commentId:number, content:any) {
+  const requestParam = new FormData();
+  requestParam.append("content", content);
+
+  return http.put(`/posts/comments/${commentId}/edit`, requestParam);
+
+}
+
+export function deleteComment(commentId:number, postId:number) {
+  return http.delete(`/posts/${postId}/comments/${commentId}`);
+
+}
+
 
 export function getLikesByCommentOrPostId(id: number) {
   //request param: commentId OR postId

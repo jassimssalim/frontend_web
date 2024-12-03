@@ -5,9 +5,10 @@ import * as postService from "../../api_service/post";
 import { Dropdown, Modal, Button } from "flowbite-react";
 import NewPost, { PostData } from "./NewPost";
 import EditPost from "./EditPost";
+import { useNavigate } from "react-router-dom";
 
 
-const PostItem = ({ post, onDelete }: { post: PostModel, onDelete: any }) => {
+const PostItem = ({ post, onDelete, fromDetails }: { post: PostModel, onDelete: any, fromDetails?:boolean }) => {
   const [postUser, setPostUser] = useState({
     id: 1,
     image: { fileName: "", fileData: "" },
@@ -20,12 +21,15 @@ const PostItem = ({ post, onDelete }: { post: PostModel, onDelete: any }) => {
   const [comments, setComments] = useState<CommentModel[]>([]);
   const [likes, setLikes] = useState([]);
   const[currentPost, setCurrentPost] = useState(post); 
+  const navigate = useNavigate()
 
   useEffect(() => {
     //get user info
     userService
       .getUserByUserId(+post.userId)
       .then((response) => {
+        console.log("post user id", post.userId)
+        console.log("user", response)
         setPostUser(response.data);
       })
       .catch((error) => {
@@ -67,8 +71,8 @@ const PostItem = ({ post, onDelete }: { post: PostModel, onDelete: any }) => {
     postService
       .updatedPost(postData, +currentPost.id)
       .then((response) => {
-        console.log("response from edit", response);
         setCurrentPost(response.data);
+        setOpenEditModal(false);
       })
       .catch((error) => {
         console.log("Error", error);
@@ -88,7 +92,7 @@ const PostItem = ({ post, onDelete }: { post: PostModel, onDelete: any }) => {
               {properCase(postUser.name)}{" "}
               <i className="text-gray-500">@{postUser.username}</i>
             </p>
-            <p className="text-gray-500 text-sm">Posted 2 hours ago</p>
+            <p className="text-gray-500 text-sm">{new Date (currentPost.datePosted).toLocaleString("en-PH").replace(',' ,'')}</p>
           </div>
         </div>
         {canBeEditedOrDeleted() &&
@@ -96,7 +100,6 @@ const PostItem = ({ post, onDelete }: { post: PostModel, onDelete: any }) => {
           {/* <!-- Three-dot menu icon --> */}  
           <Dropdown
             label=""
-            dismissOnClick={false}
             renderTrigger={() => (
               <button className="hover:bg-gray-50 rounded-full p-1">
                 <svg
@@ -151,7 +154,8 @@ const PostItem = ({ post, onDelete }: { post: PostModel, onDelete: any }) => {
             <span>42 Likes</span>
           </button>
         </div>
-        <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-50 rounded-full p-1">
+        {!fromDetails && (
+        <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-50 rounded-full p-1" onClick={() => navigate(`/post/details/${currentPost.id}`)}>
           <svg
             width="22px"
             height="22px"
@@ -179,7 +183,7 @@ const PostItem = ({ post, onDelete }: { post: PostModel, onDelete: any }) => {
               : comments.length +
                 (comments.length === 1 ? " Comment" : " Comments")}
           </span>
-        </button>
+        </button>)}
       </div>
     </div>
     
@@ -191,6 +195,7 @@ const PostItem = ({ post, onDelete }: { post: PostModel, onDelete: any }) => {
           <EditPost initialPost={currentPost} onEdit={handleEditPost} />
         </Modal.Body>
       </Modal></>
+
 
   );
 };

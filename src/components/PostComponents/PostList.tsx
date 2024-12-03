@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import * as postService from "../../api_service/post";
 import { PostModel } from "../../api_service/post";
 import PostItem from "./PostItem";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const PostList = ({ isAllPost }: { isAllPost: boolean }) => {
   const [posts, setPosts] = useState<PostModel[]>([]);
@@ -34,8 +34,8 @@ const PostList = ({ isAllPost }: { isAllPost: boolean }) => {
   const handleDelete = (postId: number) => {
     postService
       .deletePost(+postId)
-      .then(() => {setPosts(posts.filter((post) => +post.id !== +postId))
-        console.log("posts", posts)
+      .then(() => {
+        navigate(0)
       })
       .catch((error) => {
         console.log("Error", error);

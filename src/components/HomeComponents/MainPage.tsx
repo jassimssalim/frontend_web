@@ -3,59 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import ConfirmationModal from '../../utility/ConfirmationModal';  // Import the Success component
 import PostList from "../PostComponents/PostList";
 import NewPost from "../PostComponents/NewPost";
+import NavBar from "../../utility/NavBar";
 
 const MainPage = () => {
   const navigate = useNavigate();
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
-
-  const handleLogout = () => {
-    console.log("Logging out...");
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("userLoggedIn");
-    localStorage.removeItem("username");
-
-    navigate("/Entry");
-  };
-
-  const handleLogoutClick = () => {
-    setShowLogoutModal(true); // Show the modal
-  };
-
-  const handleCancelLogout = () => {
-    setShowLogoutModal(false); // Close the modal
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar Section */}
-      <header className="bg-gradient-to-r from-purple-600 to-pink-800 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-lg font-bold">MoodSnap.</h1>
-          <nav>
-            <ul className="flex space-x-6">
-              <li>
-                <Link to="/home" className="hover:underline">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link to="/profile" className="hover:underline">
-                  Profile
-                </Link>
-              </li>
-              <li>
-                <button
-                  onClick={handleLogoutClick}
-                  className="hover:underline"
-                >
-                  Logout
-                </button>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
-
+      <NavBar/>
       {/* Main Content Section */}
       <main className="max-w-7xl mx-auto px-6 py-8 flex space-x-6">
         {/* Left Side: Profile Info */}
@@ -103,14 +57,6 @@ const MainPage = () => {
           </div>
         </aside>
       </main>
-
-      {/* Reusable Confirmation Modal */}
-      <ConfirmationModal
-        isVisible={showLogoutModal}
-        message="Are you sure you want to logout?"
-        onConfirm={handleLogout}
-        onCancel={handleCancelLogout}
-      />
     </div>
   );
 };

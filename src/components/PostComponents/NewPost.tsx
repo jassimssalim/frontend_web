@@ -3,6 +3,7 @@ import * as postService from "../../api_service/post";
 import * as userService from "../../api_service/user";
 import { UserProfile } from "../../api_service/user";
 import Joi from "joi";
+import { useNavigate } from "react-router-dom";
 
 export interface PostData {
   userId: number;
@@ -27,6 +28,7 @@ const NewPost = ({initialPost, onEdit, photoData}:{initialPost?: PostData, onEdi
   const [postButtonStyle, setPostButtonStyle] = useState("");
   const [imageData, setImageData] = useState("")
   const [uploadIdHTML, setUploadIdHTML] = useState("icon-button-file")
+  const navigate = useNavigate()
 
   useEffect(() => {
     //get user info
@@ -101,8 +103,7 @@ const NewPost = ({initialPost, onEdit, photoData}:{initialPost?: PostData, onEdi
     try {
       if (postData.content) {
         await postService.addPost(postData);
-        setSuccessMessage("Posted Successfully!");
-        setShowSuccess(true);
+        navigate(0)
 
         // Clear form data
         setPostData({
