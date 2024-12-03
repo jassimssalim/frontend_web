@@ -1,44 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
-import { UserProfile, getProfileByUsername } from "../../api_service/user"; // Adjust the import path
-import { updateProfile } from "../../api_service/user"; // Import the updateProfile function
+import { UserProfile, updateProfileByUsername } from "../../api_service/user"; // Import your API service
 
-const About: React.FC = () => {
+interface AboutProps {
+  profile: UserProfile | null;
+  updateProfile: (updatedProfile: UserProfile) => void;
+}
+
+const About: React.FC<AboutProps> = ({ profile, updateProfile }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [tempProfile, setTempProfile] = useState<UserProfile | null>(null);  // Use UserProfile type
-  const [profile, setProfile] = useState<UserProfile | null>(null);  // Use UserProfile type
-
-  // Fetch the profile information on component mount
-  useEffect(() => {
-    const username = localStorage.getItem("username");  // Retrieve the username from local storage
-    if (username) {
-      const fetchProfile = async () => {
-        const profileData = await getProfileByUsername(username);  // Use your existing method
-        if (profileData) {
-          setProfile(profileData);
-          setTempProfile(profileData);  // Set tempProfile with the fetched data
-        }
-      };
-
-      fetchProfile();
-    }
-  }, []);
+  const [tempProfile, setTempProfile] = useState<UserProfile | null>(profile);
 
   const handleEdit = () => setIsEditing(true);
 
   const handleSave = async () => {
     if (tempProfile) {
-      const username = localStorage.getItem("username");  // Retrieve the username from local storage
+      const username = localStorage.getItem("username");
       if (username) {
         try {
-          await updateProfile(username, tempProfile);  // Update the profile using the API call
-          setProfile(tempProfile);  // Save the updated profile
+          await updateProfileByUsername(username, tempProfile);  // Call your update function
+          updateProfile(tempProfile);  // Update the profile in the parent component immediately
+
         } catch (error) {
           console.error("Failed to update profile", error);
         }
       }
+
+
     }
     setIsEditing(false);
+    localStorage.getItem("username");
+
   };
 
   const handleCancel = () => {
@@ -71,7 +63,7 @@ const About: React.FC = () => {
       </div>
       {isEditing ? (
         <div className="space-y-4">
-          {/** Form Fields */}
+          {/* Name Field */}
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">
               Name
@@ -86,6 +78,20 @@ const About: React.FC = () => {
             />
           </div>
           <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={tempProfile?.username || ""}
+              onChange={handleChange}
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          {/* Bio Field */}
+          <div>
             <label htmlFor="bio" className="block text-sm font-medium text-gray-700">
               Bio
             </label>
@@ -98,62 +104,63 @@ const About: React.FC = () => {
               className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
             ></textarea>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="graduateSchool" className="block text-sm font-medium text-gray-700">
-                Graduate School
-              </label>
-              <input
-                type="text"
-                id="graduateSchool"
-                name="graduateSchool"
-                value={tempProfile?.graduateSchool || ""}
-                onChange={handleChange}
-                className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="age" className="block text-sm font-medium text-gray-700">
-                Age
-              </label>
-              <input
-                type="number"
-                id="age"
-                name="age"
-                value={tempProfile?.age || ""}
-                onChange={handleChange}
-                className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+          {/* Graduate School Field */}
+          <div>
+            <label htmlFor="graduateSchool" className="block text-sm font-medium text-gray-700">
+              Graduate School
+            </label>
+            <input
+              type="text"
+              id="graduateSchool"
+              name="graduateSchool"
+              value={tempProfile?.graduateSchool || ""}
+              onChange={handleChange}
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="sex" className="block text-sm font-medium text-gray-700">
-                Sex
-              </label>
-              <input
-                type="text"
-                id="sex"
-                name="sex"
-                value={tempProfile?.sex || ""}
-                onChange={handleChange}
-                className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="links" className="block text-sm font-medium text-gray-700">
-                Links
-              </label>
-              <input
-                type="url"
-                id="links"
-                name="links"
-                value={tempProfile?.links || ""}
-                onChange={handleChange}
-                className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+          {/* Age Field */}
+          <div>
+            <label htmlFor="age" className="block text-sm font-medium text-gray-700">
+              Age
+            </label>
+            <input
+              type="number"
+              id="age"
+              name="age"
+              value={tempProfile?.age || ""}
+              onChange={handleChange}
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
           </div>
+          {/* Sex Field */}
+          <div>
+            <label htmlFor="sex" className="block text-sm font-medium text-gray-700">
+              Sex
+            </label>
+            <input
+              type="text"
+              id="sex"
+              name="sex"
+              value={tempProfile?.sex || ""}
+              onChange={handleChange}
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          {/* Links Field */}
+          <div>
+            <label htmlFor="links" className="block text-sm font-medium text-gray-700">
+              Links
+            </label>
+            <input
+              type="url"
+              id="links"
+              name="links"
+              value={tempProfile?.links || ""}
+              onChange={handleChange}
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          {/* Email Field */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email
@@ -167,6 +174,7 @@ const About: React.FC = () => {
               className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
+          {/* Address Field */}
           <div>
             <label htmlFor="address" className="block text-sm font-medium text-gray-700">
               Address
@@ -186,7 +194,7 @@ const About: React.FC = () => {
               className="flex items-center px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600"
             >
               <FaSave className="mr-2" />
-              Save
+              Update
             </button>
             <button
               onClick={handleCancel}
@@ -201,13 +209,10 @@ const About: React.FC = () => {
         <div className="space-y-4 text-gray-700">
           <p><strong>Name:</strong> {profile.name}</p>
           <p><strong>Bio:</strong> {profile.bio}</p>
-          <p><strong>Email:</strong> {profile.email}</p>
+          <p><strong>Graduate School:</strong> {profile.graduateSchool}</p>
           <p><strong>Age:</strong> {profile.age}</p>
           <p><strong>Sex:</strong> {profile.sex}</p>
-          <p><strong>Graduate School:</strong> {profile.graduateSchool}</p>
-
-          <p>
-            <strong>Links:</strong>{" "}
+          <p><strong>Links:</strong>{" "}
             <a
               href={profile.links}
               target="_blank"
@@ -217,7 +222,7 @@ const About: React.FC = () => {
               {profile.links}
             </a>
           </p>
-          <p><strong>Graduate School:</strong> {profile.graduateSchool}</p>
+          <p><strong>Email:</strong> {profile.email}</p>
           <p><strong>Address:</strong> {profile.address}</p>
         </div>
       )}
