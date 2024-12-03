@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { getProfileByUsername, UserProfile } from "../../api_service/user"; 
-import { useNavigate } from "react-router-dom"; 
-import Posts from "../ProfileComponents/Post"; 
-import About from "../ProfileComponents/About"; 
-import Settings from "../ProfileComponents/Settings"; 
+import { getProfileByUsername, UserProfile } from "../../api_service/user";
+import { useNavigate } from "react-router-dom";
+import { FaHome } from "react-icons/fa"; // Import the Home icon from React Icons
+import Posts from "../ProfileComponents/Post";
+import About from "../ProfileComponents/About";
+import Settings from "../ProfileComponents/Settings";
 
 const Profile = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -17,7 +18,7 @@ const Profile = () => {
       const username = localStorage.getItem("username");
 
       if (!username) {
-        navigate("/Entry"); 
+        navigate("/Entry");
         setLoading(false);
         return;
       }
@@ -65,16 +66,6 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Back to Home Button */}
-      <div className="flex justify-end p-4">
-        <button
-          onClick={() => navigate("/home")}
-          className="text-white bg-indigo-600 hover:bg-indigo-700 px-6 py-2 rounded-lg"
-        >
-          Back to Home
-        </button>
-      </div>
-
       {/* Profile Header */}
       <div className="bg-white shadow-lg rounded-xl p-6 mx-auto max-w-7xl">
         <div className="flex items-center space-x-8">
@@ -134,6 +125,22 @@ const Profile = () => {
               {activeTab === "settings" && <Settings />}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Back to Home Button (Floating at Bottom-Right) */}
+      <div className="fixed bottom-6 right-6 z-50 group">
+        <button
+          onClick={() => navigate("/home")}
+          className="text-white  bg-violet-800 hover:bg-blue-600 p-8 rounded-full shadow-lg transform hover:scale-110 transition-all"
+        >
+          {/* Home Icon */}
+          <FaHome className="text-4xl" />
+        </button>
+        
+        {/* Tooltip */}
+        <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 text-white bg-black rounded-md py-1 px-3 opacity-0 group-hover:opacity-100 transition-opacity">
+          Home
         </div>
       </div>
     </div>

@@ -20,7 +20,8 @@ export interface UserProfile {
   sex?: string;             
   links?: string;           
   address?: string;         
-  bio?: string;            
+  bio?: string;    
+  phone?:string;        
 }
 
 export const getProfileByUsername = async (username: string): Promise<UserProfile> => {
@@ -152,6 +153,7 @@ export interface UpdateUserProfile {
   links?: string;
   address?: string;
   bio?: string;
+  phone?:string;
 }
 
 export const updateProfileByUsername = async (

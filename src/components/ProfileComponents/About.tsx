@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
+import { FaEdit, FaSave, FaTimes, FaUser, FaCalendarAlt, FaVenusMars, FaUniversity, FaMapMarkerAlt, FaLink, FaPhone } from "react-icons/fa";
 import { UserProfile, updateProfileByUsername } from "../../api_service/user"; // Import your API service
 
 interface AboutProps {
@@ -20,17 +20,12 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile }) => {
         try {
           await updateProfileByUsername(username, tempProfile);  // Call your update function
           updateProfile(tempProfile);  // Update the profile in the parent component immediately
-
         } catch (error) {
           console.error("Failed to update profile", error);
         }
       }
-
-
     }
     setIsEditing(false);
-    localStorage.getItem("username");
-
   };
 
   const handleCancel = () => {
@@ -38,7 +33,7 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile }) => {
     setIsEditing(false);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setTempProfile((prev) => prev ? { ...prev, [name]: value } : prev);  // Safely update tempProfile
   };
@@ -48,157 +43,160 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile }) => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-xl shadow-lg">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">About Me</h2>
+    <div className="bg-gray-50 p-10 rounded-xl shadow-2xl max-w-4xl mx-auto transition-all duration-300 ease-in-out">
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-2xl font-semibold text-gray-900">
+          {isEditing ? "Edit your information" : "Additional Information About Me"}
+        </h2>
         {!isEditing && (
           <button
             onClick={handleEdit}
-            className="flex items-center space-x-2 text-blue-600 hover:text-blue-800"
+            className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-800 transition-all duration-300 ease-in-out"
           >
             <FaEdit />
             <span>Edit</span>
           </button>
         )}
       </div>
+
       {isEditing ? (
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Editable Fields */}
+
+
           {/* Name Field */}
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-              Name
-            </label>
+          <div className="space-y-2">
+            <label htmlFor="name" className="text-sm font-medium text-gray-700">Name</label>
             <input
               type="text"
               id="name"
               name="name"
               value={tempProfile?.name || ""}
               onChange={handleChange}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 ease-in-out"
             />
           </div>
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={tempProfile?.username || ""}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
+
+
           {/* Bio Field */}
-          <div>
-            <label htmlFor="bio" className="block text-sm font-medium text-gray-700">
-              Bio
-            </label>
+          <div className="space-y-2">
+            <label htmlFor="bio" className="text-sm font-medium text-gray-700">Bio</label>
             <textarea
               id="bio"
               name="bio"
-              rows={3}
+              rows={4}
               value={tempProfile?.bio || ""}
               onChange={handleChange}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            ></textarea>
-          </div>
-          {/* Graduate School Field */}
-          <div>
-            <label htmlFor="graduateSchool" className="block text-sm font-medium text-gray-700">
-              Graduate School
-            </label>
-            <input
-              type="text"
-              id="graduateSchool"
-              name="graduateSchool"
-              value={tempProfile?.graduateSchool || ""}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 ease-in-out"
             />
           </div>
-          {/* Age Field */}
-          <div>
-            <label htmlFor="age" className="block text-sm font-medium text-gray-700">
-              Age
-            </label>
-            <input
-              type="number"
-              id="age"
-              name="age"
-              value={tempProfile?.age || ""}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          {/* Sex Field */}
-          <div>
-            <label htmlFor="sex" className="block text-sm font-medium text-gray-700">
-              Sex
-            </label>
-            <input
-              type="text"
-              id="sex"
-              name="sex"
-              value={tempProfile?.sex || ""}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          {/* Links Field */}
-          <div>
-            <label htmlFor="links" className="block text-sm font-medium text-gray-700">
-              Links
-            </label>
-            <input
-              type="url"
-              id="links"
-              name="links"
-              value={tempProfile?.links || ""}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
+
           {/* Email Field */}
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
+          <div className="space-y-2">
+            <label htmlFor="email" className="text-sm font-medium text-gray-700">Email</label>
             <input
               type="email"
               id="email"
               name="email"
               value={tempProfile?.email || ""}
               onChange={handleChange}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 ease-in-out"
             />
           </div>
+
+         {/* Phone Field */}
+          <div className="space-y-2">
+          <label htmlFor="phone" className="text-sm font-medium text-gray-700">Phone</label>
+          <input
+           type="tel" // Changed to "tel" for phone number input
+            id="phone"  // Corrected to "phone"
+           name="phone"  // Corrected to "phone"
+           value={tempProfile?.phone || ""}  // Bind to "phone" property of tempProfile
+           onChange={handleChange}
+          placeholder="123-456-7890"  // Placeholder for format example
+           className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 ease-in-out"
+          />
+</div>
+
+          {/* Age Field */}
+          <div className="space-y-2">
+            <label htmlFor="age" className="text-sm font-medium text-gray-700">Age</label>
+            <input
+              type="number"
+              id="age"
+              name="age"
+              value={tempProfile?.age || ""}
+              onChange={handleChange}
+              className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 ease-in-out"
+            />
+          </div>
+
+          {/* Sex Field */}
+          <div className="space-y-2">
+            <label htmlFor="sex" className="text-sm font-medium text-gray-700">Sex</label>
+            <select
+              id="sex"
+              name="sex"
+              value={tempProfile?.sex || ""}
+              onChange={handleChange}
+              className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 ease-in-out"
+            >
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="LGBTQ">LGBTQ</option>
+            </select>
+          </div>
+
+          {/* Graduate School Field */}
+          <div className="space-y-2">
+            <label htmlFor="graduateSchool" className="text-sm font-medium text-gray-700">Graduate School</label>
+            <input
+              type="text"
+              id="graduateSchool"
+              name="graduateSchool"
+              value={tempProfile?.graduateSchool || ""}
+              onChange={handleChange}
+              className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 ease-in-out"
+            />
+          </div>
+
           {/* Address Field */}
-          <div>
-            <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-              Address
-            </label>
+          <div className="space-y-2">
+            <label htmlFor="address" className="text-sm font-medium text-gray-700">Address</label>
             <input
               type="text"
               id="address"
               name="address"
               value={tempProfile?.address || ""}
               onChange={handleChange}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 ease-in-out"
             />
           </div>
-          <div className="flex items-center space-x-4 mt-6">
+
+          {/* Links Field */}
+          <div className="space-y-2">
+            <label htmlFor="links" className="text-sm font-medium text-gray-700">Links</label>
+            <input
+              type="url"
+              id="links"
+              name="links"
+              value={tempProfile?.links || ""}
+              onChange={handleChange}
+              className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 ease-in-out"
+            />
+          </div>
+
+          <div className="flex items-center justify-between mt-6 space-x-4">
             <button
               onClick={handleSave}
-              className="flex items-center px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600"
+              className="flex items-center px-8 py-3 bg-green-500 text-white rounded-lg shadow-lg hover:bg-green-600 transition-all duration-300 ease-in-out"
             >
               <FaSave className="mr-2" />
-              Update
+              Save
             </button>
             <button
               onClick={handleCancel}
-              className="flex items-center px-4 py-2 bg-gray-500 text-white rounded-lg shadow hover:bg-gray-600"
+              className="flex items-center px-8 py-3 bg-gray-500 text-white rounded-lg shadow-lg hover:bg-gray-600 transition-all duration-300 ease-in-out"
             >
               <FaTimes className="mr-2" />
               Cancel
@@ -206,24 +204,68 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile }) => {
           </div>
         </div>
       ) : (
-        <div className="space-y-4 text-gray-700">
-          <p><strong>Name:</strong> {profile.name}</p>
-          <p><strong>Bio:</strong> {profile.bio}</p>
-          <p><strong>Graduate School:</strong> {profile.graduateSchool}</p>
-          <p><strong>Age:</strong> {profile.age}</p>
-          <p><strong>Sex:</strong> {profile.sex}</p>
-          <p><strong>Links:</strong>{" "}
-            <a
-              href={profile.links}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 underline"
-            >
-              {profile.links}
-            </a>
-          </p>
-          <p><strong>Email:</strong> {profile.email}</p>
-          <p><strong>Address:</strong> {profile.address}</p>
+        <div className="space-y-8 text-gray-800">
+          {/* Username Section */}
+          <div className="flex items-center space-x-4">
+            <FaUser className="text-gray-600" />
+            <div className="text-lg font-semibold text-gray-900">{profile.username}</div>
+          </div>
+
+          {/* Details Section */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* Age */}
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <FaCalendarAlt className="text-gray-600" />
+                <h3 className="text-lg font-medium text-gray-900">Age</h3>
+              </div>
+              <p className="text-gray-700">{profile.age}</p>
+            </div>
+             {/* Sex */}
+             <div className="space-y-2">
+               <div className="flex items-center space-x-2">
+                <FaPhone className="text-gray-600" />
+                <h3 className="text-lg font-medium text-gray-900">Phone Number</h3>
+              </div>
+              <p className="text-gray-700">{profile.phone}</p>
+            </div>
+
+            {/* Sex */}
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <FaVenusMars className="text-gray-600" />
+                <h3 className="text-lg font-medium text-gray-900">Sex</h3>
+              </div>
+              <p className="text-gray-700">{profile.sex}</p>
+            </div>
+
+            {/* Graduate School */}
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <FaUniversity className="text-gray-600" />
+                <h3 className="text-lg font-medium text-gray-900">Graduate School</h3>
+              </div>
+              <p className="text-gray-700">{profile.graduateSchool}</p>
+            </div>
+
+            {/* Address */}
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <FaMapMarkerAlt className="text-gray-600" />
+                <h3 className="text-lg font-medium text-gray-900">Address</h3>
+              </div>
+              <p className="text-gray-700">{profile.address}</p>
+            </div>
+
+            {/* Links */}
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <FaLink className="text-gray-600" />
+                <h3 className="text-lg font-medium text-gray-900">Links</h3>
+              </div>
+              <p className="text-gray-700">{profile.links}</p>
+            </div>
+          </div>
         </div>
       )}
     </div>
