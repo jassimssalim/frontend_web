@@ -167,3 +167,15 @@ export const updateProfileByUsername = async (
   }
 };
 
+
+
+// Delete user by username
+export const deleteUser = async (username: string): Promise<{ message: string }> => {
+  try {
+    const response = await http.delete(`/delete/${username}`);
+    return response.data; // Backend response containing the success message
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw new Error("Failed to delete user. Please try again.");
+  }
+};
