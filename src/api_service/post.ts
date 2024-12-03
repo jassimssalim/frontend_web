@@ -1,4 +1,3 @@
-import { number } from "joi";
 import http from "./http";
 
 //post model
@@ -49,6 +48,18 @@ export function addPost(post: any) {
 
 export function deletePost(id: number) {
   return http.delete(`/posts/delete/${id}`);
+}
+
+export function updatedPost(post: any, postId: number) {
+  const requestParam = new FormData();
+  requestParam.append("userId", post.userId);
+  requestParam.append("content", post.content);
+  requestParam.append("photo", post.photo as Blob);
+  requestParam.append("isPhotoDeleted", post.isPhotoDeleted);
+
+  console.log("requestParam",requestParam)
+  return http.put(`/posts/${postId}/edit`, requestParam);
+
 }
 
 export function getLikesByCommentOrPostId(id: number) {

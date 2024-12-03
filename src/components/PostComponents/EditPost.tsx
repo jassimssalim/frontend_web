@@ -1,9 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import * as postService from "../../api_service/post";
+import * as userService from "../../api_service/user";
+import { UserProfile } from "../../api_service/user";
+import Joi from "joi";
+import NewPost, { PostData } from "./NewPost";
+import { PostModel } from "../../api_service/post";
 
-const EditPost = () => {
+
+const EditPost = ({initialPost, onEdit} : {initialPost: PostModel, onEdit: any}) => {
+  
+  const {userId, content, postImage, ...post} = initialPost
+
   return (
-    <div>EditPost</div>
-  )
-}
+    <NewPost initialPost = {{userId: userId, content: content, photo: null, isPhotoDeleted:false}} onEdit={onEdit} photoData={postImage}></NewPost>
+  );
+};
 
-export default EditPost
+export default EditPost;

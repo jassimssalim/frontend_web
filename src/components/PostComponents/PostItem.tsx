@@ -2,26 +2,31 @@ import React, { useEffect, useState } from "react";
 import { PostModel, CommentModel } from "../../api_service/post";
 import * as userService from "../../api_service/user";
 import * as postService from "../../api_service/post";
-import { Dropdown } from "flowbite-react";
+import { Dropdown, Modal, Button } from "flowbite-react";
+import NewPost, { PostData } from "./NewPost";
+import EditPost from "./EditPost";
 
-const PostItem = ({ post }: { post: PostModel }) => {
-  const [postUser, setUser] = useState({
+
+const PostItem = ({ post, onDelete }: { post: PostModel, onDelete: any }) => {
+  const [postUser, setPostUser] = useState({
     id: 1,
     image: { fileName: "", fileData: "" },
     name: "",
-    username: "",
+    username: ""
   });
 
+  const [isEnabledForEditing, setCanBeEdited] = useState(false)
+  const [openEditModal, setOpenEditModal] = useState(false);
   const [comments, setComments] = useState<CommentModel[]>([]);
   const [likes, setLikes] = useState([]);
+  const[currentPost, setCurrentPost] = useState(post); 
 
   useEffect(() => {
     //get user info
     userService
       .getUserByUserId(+post.userId)
       .then((response) => {
-        console.log("user data", response.data);
-        setUser(response.data);
+        setPostUser(response.data);
       })
       .catch((error) => {
         console.log("Error", error);
@@ -30,8 +35,8 @@ const PostItem = ({ post }: { post: PostModel }) => {
     postService.getCommentsByPostId(+post.id).then((response) => {
       console.log("comments", response.data);
       setComments(response.data);
-    });
-  }, []);
+    })
+  }, [currentPost]);
 
   const properCase = (name: any) => {
     return (name as string)
@@ -41,8 +46,36 @@ const PostItem = ({ post }: { post: PostModel }) => {
       .join(" ");
   };
 
-  return (
-    <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+  const canBeEditedOrDeleted = () => {
+    const username = localStorage.getItem("username");
+    if (username) {
+      userService.getProfileByUsername(username).then((data) => {
+        if (+data.id === +postUser.id) {
+          setCanBeEdited(true)
+        }
+      });
+    }
+
+    return isEnabledForEditing;
+  };
+
+  const handleEditModal = (toShow: boolean) => {
+    setOpenEditModal(toShow);
+  }
+
+  const handleEditPost = (postData: PostData) => {
+    postService
+      .updatedPost(postData, +currentPost.id)
+      .then((response) => {
+        console.log("response from edit", response);
+        setCurrentPost(response.data);
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
+  };
+
+  return (<><div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2">
           <img
@@ -58,16 +91,14 @@ const PostItem = ({ post }: { post: PostModel }) => {
             <p className="text-gray-500 text-sm">Posted 2 hours ago</p>
           </div>
         </div>
+        {canBeEditedOrDeleted() &&
         <div className="text-gray-500 cursor-pointer">
-          {/* <!-- Three-dot menu icon --> */}
-
+          {/* <!-- Three-dot menu icon --> */}  
           <Dropdown
             label=""
             dismissOnClick={false}
             renderTrigger={() => (
-              <button
-                className="hover:bg-gray-50 rounded-full p-1"
-              >
+              <button className="hover:bg-gray-50 rounded-full p-1">
                 <svg
                   width="24"
                   height="24"
@@ -85,22 +116,24 @@ const PostItem = ({ post }: { post: PostModel }) => {
               </button>
             )}
           >
-            <Dropdown.Item>Edit</Dropdown.Item>
-            <Dropdown.Item>Delete</Dropdown.Item>
+            <Dropdown.Item  onClick={() => setOpenEditModal(true)}>Edit</Dropdown.Item>
+            <Dropdown.Item onClick={() => onDelete(+currentPost.id)}>Delete</Dropdown.Item>
           </Dropdown>
-        </div>
+          
+        </div>}
+
       </div>
       {/* <!-- Message --> */}
       <div className="mb-4">
-        <p className="text-gray-800">{post.content}</p>
+        <p className="text-gray-800">{currentPost.content}</p>
       </div>
       {/* <!-- Image --> */}
-      {post.postImage.fileData !== "" && (
-        <div className="mb-4">
+      {currentPost.postImage.fileData !== "" && (
+        <div className="mb-4 flex items-center justify-center">
           <img
-            src={`data:image/png;base64,${post.postImage.fileData}`}
+            src={`data:image/png;base64,${currentPost.postImage.fileData}`}
             alt="Post Image"
-            className="w-full h-full object-contain rounded-md"
+            className="w-50 h-50 object-contain rounded-md"
           />
         </div>
       )}
@@ -149,6 +182,16 @@ const PostItem = ({ post }: { post: PostModel }) => {
         </button>
       </div>
     </div>
+    
+        {/* <!-- Edit Modal--> */}  
+        <Modal className="bg-gray-600 bg-opacity-50" dismissible show={openEditModal} onClose= {() => setOpenEditModal(false)} position="center" theme={{
+          content:{base: "bg-transparent w-3/4", inner: "bg-transparent"}
+        }}>
+        <Modal.Body>
+          <EditPost initialPost={currentPost} onEdit={handleEditPost} />
+        </Modal.Body>
+      </Modal></>
+
   );
 };
 

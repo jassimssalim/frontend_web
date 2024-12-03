@@ -2,17 +2,18 @@ import React, { useEffect, useState } from "react";
 import * as postService from "../../api_service/post";
 import { PostModel } from "../../api_service/post";
 import PostItem from "./PostItem";
+import { useNavigate } from "react-router-dom";
 
 const PostList = ({ isAllPost }: { isAllPost: boolean }) => {
   const [posts, setPosts] = useState<PostModel[]>([]);
   const username = localStorage.getItem("username");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isAllPost) {
       postService
         .getAllPosts()
         .then((response) => {
-          console.log(response.data);
           setPosts(response.data);
         })
         .catch((error) => {
@@ -22,7 +23,6 @@ const PostList = ({ isAllPost }: { isAllPost: boolean }) => {
       postService
         .getPostByUsername(username)
         .then((response) => {
-          console.log(response.data);
           setPosts(response.data);
         })
         .catch((error) => {
@@ -31,11 +31,22 @@ const PostList = ({ isAllPost }: { isAllPost: boolean }) => {
     }
   }, []);
 
+  const handleDelete = (postId: number) => {
+    postService
+      .deletePost(+postId)
+      .then(() => {setPosts(posts.filter((post) => +post.id !== +postId))
+        console.log("posts", posts)
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
+  };
+
   return (
     <>
       {posts.map((post: PostModel, itemIndex: number) => (
         <div key={itemIndex} style={{marginBottom: "5px"}}>
-          <PostItem post={post} />
+          <PostItem post={post} onDelete ={handleDelete} />
         </div>
       ))}
     </>

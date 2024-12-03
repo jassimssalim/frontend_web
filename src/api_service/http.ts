@@ -1,10 +1,11 @@
 import axios, { AxiosHeaders } from "axios";
 
 const http = axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: "http://localhost:8080"
   });
   
   http.interceptors.response.use(
+  
     (success) => {
       return Promise.resolve(success);
     },
