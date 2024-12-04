@@ -25,7 +25,7 @@ const NavBar = () => {
     };
     
   return (
-    <div>
+    <div className="fixed top-0 left-0 right-0">
     <header className="bg-gradient-to-r from-purple-600 to-pink-800 text-white">
     <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
       <h1 className="text-lg font-bold">MoodSnap.</h1>

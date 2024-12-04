@@ -8,10 +8,10 @@ import NavBar from "../../utility/NavBar";
 const MainPage = () => {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="relative">
       <NavBar/>
       {/* Main Content Section */}
-      <main className="max-w-7xl mx-auto px-6 py-8 flex space-x-6">
+      <main className="mt-10 max-w-7xl mx-auto px-6 py-8 flex space-x-6">
         {/* Left Side: Profile Info */}
         <aside className="w-1/4 bg-white rounded-lg shadow-md p-6 space-y-6">
           <div className="flex flex-col items-center">
@@ -57,6 +57,7 @@ const MainPage = () => {
           </div>
         </aside>
       </main>
+      
     </div>
   );
 };

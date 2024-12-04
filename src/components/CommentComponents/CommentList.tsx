@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CommentModel } from "../../api_service/post";
+import { CommentModel, LikeModel } from "../../api_service/post";
 import * as postService from "../../api_service/post";
 import Joi from "joi";
 import { Dropdown, Modal } from "flowbite-react";
 import EditPost from "../PostComponents/EditPost";
 import EditComment from "./EditComment";
+import { flushSync } from "react-dom";
 
 export interface CommentData {
   postId: number;
@@ -13,23 +14,33 @@ export interface CommentData {
   userId: number;
 }
 
+export interface LikeData {
+  amount: number;
+  isLikedByUser: boolean;
+  commentId: number;
+}
+
 const CommentList = ({ postId }: { postId: number }) => {
   const userId = localStorage.getItem("userId") || 1;
   const [errors, setErrors] = useState<any>({});
   const [comments, setComments] = useState<CommentModel[]>([]);
+  const [likes, setLikes] = useState<LikeData[]>([]);
+  const [commentsLikedByUser, setCommentsLikedByUser] = useState<number[]>([]);
   const [commentToAdd, setCommentToAdd] = useState<CommentData>({
     postId: postId,
     content: "",
     userId: +userId,
   });
-
   const [openEditModal, setOpenEditModal] = useState(false);
 
   useEffect(() => {
     //get comments info
     postService.getCommentsByPostId(postId).then((response) => {
-      console.log("comments", response.data);
       setComments(response.data);
+      const commentsFromResponse: CommentModel[] = response.data;
+      if (commentsFromResponse) {
+        const likesData = getDataOfLikesPerCommentId(commentsFromResponse.map((com) => com.id));
+      }
     });
   }, []);
 
@@ -63,9 +74,11 @@ const CommentList = ({ postId }: { postId: number }) => {
     try {
       if (commentToAdd.content) {
         postService.addCommentToPost(commentToAdd).then((response) => {
-          const newComment = response.data
-          const newCommentList = [...comments,newComment]
-          setComments(newCommentList)
+          const newComment: CommentModel = response.data;
+          const newCommentList = [...comments, newComment];
+          setComments(newCommentList);
+
+          getDataOfLikesPerCommentId([+newComment.id]);
         });
 
         // Clear form data
@@ -115,6 +128,74 @@ const CommentList = ({ postId }: { postId: number }) => {
       });
   };
 
+  const getDataOfLikesPerCommentId = (commentIds: number[]) => {
+    let newLikeDataListToAdd: LikeData[] = [];
+
+    for (let i = 0; i < commentIds.length; i++) {
+      postService
+        .getLikesOfCommentById(commentIds[i])
+        .then((response) => {
+          if (response.data !== null) {
+            const newLikeList: LikeModel[] = response.data;
+            const likeIndex = newLikeList.findIndex(
+              (like) => +like.userId === +userId
+            );
+            const isLiked = likeIndex === -1 ? false : true;
+            const newLikeData: LikeData = {
+              amount: newLikeList.length,
+              isLikedByUser: isLiked,
+              commentId: commentIds[i],
+            };
+            newLikeDataListToAdd.push(newLikeData);
+
+            if (i === commentIds.length - 1) {
+              setLikes([...likes, ...newLikeDataListToAdd])
+            }
+          }
+        })
+        .catch((error) => {
+          console.log("Error", error);
+        });
+    }
+  };
+
+  const getLikesLength = (commentId: number) => {
+    const likeData = likes.find((like) => +like.commentId === +commentId);
+    return likeData ? likeData.amount : 0;
+  };
+
+  const isLikedByUser = (commentId: number) => {
+    const likeData = likes.find((like) => +like.commentId === +commentId);
+    return likeData ? likeData.isLikedByUser : false;
+  };
+
+  const handleLike = (commentId: number) => {
+    postService
+      .unlikeOrLikeComment(+userId, +commentId)
+      .then((response) => {
+        console.log("unlike or like comment", response.data);
+        const likeData = likes.find((like) => +like.commentId === +commentId);
+
+        if (likeData) {
+          const isLiked = likeData.isLikedByUser;
+          setLikes((prevLikes) =>
+            prevLikes.map((data) => {
+              if (+data.commentId === +commentId) {
+                return {
+                  ...data,
+                  isLikedByUser: !isLiked,
+                  amount: isLiked ? data.amount - 1 : data.amount + 1,
+                };
+              } else return data;
+            })
+          );
+        }
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
+  };
+
   return (
     <>
       <section className="bg-white dark:bg-gray-900 py-8 lg:py-16 antialiased">
@@ -133,10 +214,11 @@ const CommentList = ({ postId }: { postId: number }) => {
             placeholder="Write a comment..."
             className="p-2 h-20 w-full text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-800"
           />
-          <div className="relative">
+          <div className="flex items-center justify-between">
+            <div></div>
             <button
               onClick={() => handleSubmit()}
-              className="absolute right-0 mt-2 w-20 h-6 text-white bg-violet-500 rounded-xl"
+              className="mt-2 w-20 h-6 text-white bg-violet-500 rounded-xl"
             >
               Post
             </button>
@@ -230,15 +312,26 @@ const CommentList = ({ postId }: { postId: number }) => {
                   {comment.content}
                 </p>
                 <div className="flex items-center mt-4 space-x-4 text-gray-500 text-sm">
-                  <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-50 rounded-full p-1">
+                  <button
+                    className="flex justify-center items-center gap-2 px-2 hover:bg-blue-50 rounded-full p-1"
+                    onClick={() => handleLike(+comment.id)}
+                  >
                     <svg
-                      className="w-3 h-3 fill-current"
+                      className={
+                        isLikedByUser(comment.id)
+                          ? "w-4 h-4 fill-purple-500"
+                          : "w-4 h-4 fill-current"
+                      }
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                     >
                       <path d="M12 21.35l-1.45-1.32C6.11 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-4.11 6.86-8.55 11.54L12 21.35z" />
                     </svg>
-                    <span>42 Likes</span>
+                    <span>
+                      {getLikesLength(+comment.id) === 0
+                        ? ""
+                        : getLikesLength(+comment.id)}
+                    </span>
                   </button>
                 </div>
               </article>
