@@ -39,7 +39,7 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSignUp, onForgotPassword }) => 
 
         setTimeout(() => {
           navigate("/home");
-        }, 3000);
+        }, 2000);
       } else {
         toast.error('Login failed!', {
           position: 'top-right', // Use string value for position
