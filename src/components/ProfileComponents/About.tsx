@@ -3,6 +3,11 @@ import { FaEdit, FaSave, FaTimes, FaUser, FaCalendarAlt, FaVenusMars, FaUniversi
 import { UserProfile, updateProfileByUsername } from "../../api_service/user";
 import ConfirmationModal from '../../utility/ConfirmationModal'; 
 
+
+import { toast, ToastContainer } from "react-toastify"; 
+import "react-toastify/dist/ReactToastify.css"; 
+
+
 interface AboutProps {
   profile: UserProfile | null;
   updateProfile: (updatedProfile: UserProfile) => void;
@@ -26,14 +31,30 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile }) => {
       if (username) {
         try {
           await updateProfileByUsername(username, tempProfile); // Call your update function
-          updateProfile(tempProfile); // Update the profile in the parent component
-        } catch (error) {
+          updateProfile(tempProfile); // Update the profile
+  
+          toast.success("Profile updated successfully!", {
+            position: "top-right",
+          });
+        } catch (error: any) {
           console.error("Failed to update profile", error);
+  
+          // Check if the error contains an email error message
+          if (error.message.includes("Email already taken")) {
+            toast.error(error.message, {
+              position: "top-right",
+            });
+          } else {
+            toast.error("Failed to update the profile. Please try again.", {
+              position: "top-right",
+            });
+          }
         }
       }
     }
     setIsEditing(false);
   };
+  
 
   const handleCancel = () => {
     setTempProfile(profile); // Reset tempProfile to the current profile data
@@ -272,6 +293,19 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile }) => {
           </div>
         </div>
       )}
+        {/* Confirmation Modal */}
+
+        <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       {/* Confirmation Modal */}
       <ConfirmationModal
         isVisible={isModalVisible}

@@ -155,7 +155,6 @@ export interface UpdateUserProfile {
   bio?: string;
   phone?:string;
 }
-
 export const updateProfileByUsername = async (
   username: string,
   updatedUser: UpdateUserProfile
@@ -163,11 +162,25 @@ export const updateProfileByUsername = async (
   try {
     const response = await http.put(`/update/${username}`, updatedUser);
     return response.data; // Backend response, expected to contain a success message
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error updating profile:", error);
-    throw new Error("Failed to update profile. Please try again.");
+
+    if (error.response && error.response.status === 409) {
+      const errorData = error.response.data;
+      const emailError = errorData.emailError;
+
+      // Handle specific email error
+      if (emailError) {
+        throw new Error(emailError);
+      } else {
+        throw new Error("Error updating profile. Please try again.");
+      }
+    } else {
+      throw new Error("Failed to update profile. Please try again.");
+    }
   }
 };
+
 
 
 
