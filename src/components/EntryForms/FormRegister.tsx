@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Joi from "joi"; // Import Joi for validation
 import { registerUser } from "../../api_service/user"; // Import the registerUser API function
-import Success from '../../utility/Success';  // Import the Success component
+import { toast, ToastContainer } from "react-toastify";  // Import ToastContainer
+import 'react-toastify/dist/ReactToastify.css';  // Import Toast CSS
 
 interface FormRegisterProps {
   onSignIn: () => void; // Function to switch to login form
@@ -30,10 +31,6 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
 
   // State for validation errors
   const [errors, setErrors] = useState<any>({});
-
-  // State for showing success message
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
 
   // Handle input changes in the form
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +65,7 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
   // Handle form submission
   const handleSubmit = async () => {
     const { error } = validationSchema.validate(formData, { abortEarly: false });
-    
+
     if (error) {
       const newErrors: any = {};
       error.details.forEach((detail) => {
@@ -86,9 +83,29 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
 
     try {
       if (formData.file) {
-        await registerUser(formData); // Call the API with formData including the file
-        setSuccessMessage("User registered successfully!"); // Set the success message
-        setShowSuccess(true); // Show the success message
+        const response = await registerUser(formData); // Call the API with formData including the file
+
+        // Log the response for debugging
+        console.log('Response from API:', response);
+
+        // Check for username or email errors in the response
+        const usernameError = response.usernameError;
+        const emailError = response.emailError;
+        const bothError = response.bothError;
+
+        if (bothError) {
+          toast.error("Username and Email already taken!"); // Show toast if both username and email are taken
+          throw new Error("Both username and email already taken."); // Throw error to prevent further processing
+        } else if (usernameError) {
+          toast.error("Username already taken!"); // Show toast if username exists
+          throw new Error("Username already taken."); // Throw error to prevent further processing
+        } else if (emailError) {
+          toast.error("Email already taken!"); // Show toast if email exists
+          throw new Error("Email already taken."); // Throw error to prevent further processing
+        }
+
+        // Show success toast notification
+        toast.success("User registered successfully!");
 
         // Clear form data
         setFormData({
@@ -103,32 +120,27 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
         // Reset the file input
         const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
         if (fileInput) {
-          fileInput.value = ""; 
+          fileInput.value = "";
         }
 
         setErrors({});
-
-        // Set a timeout to close the success message after 3000ms (3 seconds)
-        setTimeout(() => {
-          handleCloseSuccess(); // Close the success message after 3 seconds
-        }, 3000);
       } else {
         setErrors({ file: "Please upload a profile image." }); // Set error for missing file
       }
-    } catch (error) {
-      setErrors({ general: "Error registering user. Please try again." }); // Set general error message
-    }
-  };
+    } catch (error: any) {
+      // Log the error to ensure we're catching the right error
+      console.error('Error during registration:', error.message);
 
-  // Close the success message
-  const handleCloseSuccess = () => {
-    setShowSuccess(false);
-    setSuccessMessage(""); // Clear the success message when closed
+      setErrors({ general: "Error registering user. Please try again." }); // Set general error message
+
+      // Show toast for general errors
+      toast.error(error.message || "Error registering user. Please try again.");
+    }
   };
 
   return (
     <div className="bg-white px-8 py-12 rounded-3xl border-2 border-gray-200 max-w-2xl mx-auto mt-8">
-      <h1 className="text-4xl font-semibold">Create Account</h1>
+      <h1 className="text-4xl font-semibold ">Create Account</h1>
       <p className="font-medium text-lg text-gray-500 mt-4">Please fill in your details to create an account.</p>
       <div className="mt-6">
         {/* Name and Username on the same row */}
@@ -198,46 +210,35 @@ const FormRegister: React.FC<FormRegisterProps> = ({ onSignIn }) => {
           </div>
         </div>
 
-        {/* Image Upload */}
-        <div>
+        {/* Profile Image */}
+        <div className="mt-6">
           <label className="text-lg font-medium">Profile Image</label>
           <input
-            className="w-full border-2 border-gray-100 rounded-xl p-3 mt-1 bg-transparent"
             type="file"
             accept="image/*"
             onChange={handleImageChange}
+            className="w-full mt-2"
           />
-          {errors.file && <p className="text-red-500 text-sm mt-1">{errors.file}</p>} {/* Error for missing file */}
+          {errors.file && <p className="text-red-500 text-sm mt-1">{errors.file}</p>}
         </div>
 
-        {/* Submit button */}
-        <div className="mt-6">
+        {/* Submit Button */}
+        <div className="mt-8">
           <button
+            className="w-full bg-violet-500 hover:bg-blue-600 text-white py-3 rounded-lg"
             onClick={handleSubmit}
-            className="w-full py-3 text-lg font-medium text-white bg-violet-500 rounded-xl"
           >
             Register
           </button>
         </div>
 
-        {/* Sign In Link */}
-        <div className="mt-6 text-center">
-          <p>
-            Already have an account?{" "}
-            <button
-              onClick={onSignIn}
-              className="font-medium text-violet-500"
-            >
-              Sign In
-            </button>
-          </p>
+        <div className="mt-4 text-center">
+          <p className="text-gray-500">Already have an account? <span className="font-semibold cursor-pointer text-violet-500 " onClick={onSignIn}>Sign In</span></p>
         </div>
       </div>
 
-      {/* Success Message */}
-      {showSuccess && (
-        <Success message={successMessage} onClose={handleCloseSuccess} />
-      )}
+      {/* Toast Notification Container */}
+      <ToastContainer />
     </div>
   );
 };

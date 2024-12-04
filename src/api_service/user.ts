@@ -1,4 +1,7 @@
+import { StringLiteral } from "typescript";
 import http from "./http";
+
+
 
 
 //get user profile  by username
@@ -31,6 +34,10 @@ export const getProfileByUsername = async (username: string): Promise<UserProfil
 };
 // end
 
+
+
+
+
 // register user
 export interface UserData {
   name: string;
@@ -50,19 +57,41 @@ export const registerUser = async (userData: FormUserData) => {
   formData.append("username", userData.username);
   formData.append("email", userData.email);
   formData.append("password", userData.password);
-  formData.append("file", userData.file as Blob); 
+  formData.append("file", userData.file as Blob);
 
   try {
     const response = await http.post(`/register`, formData);
     return response.data;
-  } catch (error) {
-    throw new Error("Error registering user.");
+  } catch (error: any) {
+    // Handle specific error messages for email or username
+    if (error.response && error.response.status === 409) {
+      const errorData = error.response.data;
+      const emailError = errorData.emailError;
+      const usernameError = errorData.usernameError;
+      const bothError = errorData.bothError;
+
+
+      // Return a more detailed error message
+      if (bothError) {
+        throw new Error(bothError);
+      } else if (usernameError) {
+        throw new Error(usernameError);
+
+      } else if(emailError){
+        throw new Error (emailError);
+      } else {
+        throw new Error("Error registering user.");
+      }
+    } else {
+      throw new Error("Error registering user.");
+    }
   }
 };
 
+
 //end register user
 
-// login user
+// logi n user
 export interface LoginDTO {
   username: string;
   password: string;
@@ -73,9 +102,9 @@ export const loginUser = async (loginDTO: LoginDTO): Promise<number> => {
 
     if(response.status === 200){
       localStorage.setItem("accessToken", response.data.accessToken)
-      localStorage.setItem("userId", response.data.userId)
       localStorage.setItem("userLoggedIn", "true")
       localStorage.setItem("username", loginDTO.username)
+
     }
     return response.status
 
@@ -110,51 +139,12 @@ export const resetPassword = async (resetPasswordDTO: ResetPasswordDTO): Promise
 
 //reset end
 
-//update user
-export interface UpdatedUserData {
-  name: string;
-  email: string;
-  graduateSchool?: string;
-  age?: number;
-  sex?: string;
-  links?: string;
-  address?: string;
-  bio?: string;
-
-}
-
-// Create the API call for updating the profile
-export const updateProfile = async (
-  username: string,
-  updatedUserData: UpdatedUserData
-): Promise<any> => {
-  const formData = new FormData();
-  
-  formData.append("name", updatedUserData.name);
-  formData.append("email", updatedUserData.email);
-  
-  if (updatedUserData.graduateSchool) formData.append("graduateSchool", updatedUserData.graduateSchool);
-  if (updatedUserData.age) formData.append("age", updatedUserData.age.toString());
-  if (updatedUserData.sex) formData.append("sex", updatedUserData.sex);
-  if (updatedUserData.links) formData.append("links", updatedUserData.links);
-  if (updatedUserData.address) formData.append("address", updatedUserData.address);
-  if (updatedUserData.bio) formData.append("bio", updatedUserData.bio);
-  
-
-  try {
-    const response = await http.put(`/update/${username}`, formData, {
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error updating profile:", error);
-    throw new Error("Failed to update user profile. Please try again.");
-  }
-};
 
 
 //update profile
 export interface UpdateUserProfile {
   name?: string;
+  username?:string;
   email?: string;
   graduateSchool?: string;
   age?: number;
@@ -177,6 +167,15 @@ export const updateProfileByUsername = async (
   }
 };
 
-export function getUserByUserId(userId: number) {
-  return http.get(`/profiles/userId/${userId}`)
+
+
+// Delete user by username
+export const deleteUser = async (username: string): Promise<{ message: string }> => {
+  try {
+    const response = await http.delete(`/delete/${username}`);
+    return response.data; // Backend response containing the success message
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw new Error("Failed to delete user. Please try again.");
+  }
 };

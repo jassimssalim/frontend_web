@@ -10,7 +10,7 @@ const Profile = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<string>("posts"); // State to track active tab
+  const [activeTab, setActiveTab] = useState<string>("posts");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,6 +35,10 @@ const Profile = () => {
 
     fetchUserProfile();
   }, [navigate]);
+
+  const updateProfile = (updatedProfile: UserProfile) => {
+    setProfile(updatedProfile); // Update the profile immediately after editing
+  };
 
   if (loading) {
     return (
@@ -122,14 +126,13 @@ const Profile = () => {
           {/* Sidebar (Optional) */}
           <div className="w-1/4 bg-white shadow-md rounded-xl p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Friends</h2>
-            {/* Add friend list or other sections here */}
           </div>
 
           {/* Main Content */}
           <div className="w-3/4">
             <div className="bg-white shadow-md rounded-xl p-6">
               {activeTab === "posts" && <MyPost/>}
-              {activeTab === "about" && <About />}
+              {activeTab === "about" && <About profile={profile} updateProfile={updateProfile} />}
               {activeTab === "settings" && <Settings />}
             </div>
           </div>
