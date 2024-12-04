@@ -104,6 +104,7 @@ export const loginUser = async (loginDTO: LoginDTO): Promise<number> => {
       localStorage.setItem("accessToken", response.data.accessToken)
       localStorage.setItem("userLoggedIn", "true")
       localStorage.setItem("username", loginDTO.username)
+      localStorage.setItem("userId", response.data.userId)
 
     }
     return response.status
