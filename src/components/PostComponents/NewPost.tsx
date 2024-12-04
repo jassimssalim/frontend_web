@@ -43,7 +43,7 @@ const NewPost = ({initialPost, onEdit, photoData}:{initialPost?: PostData, onEdi
           console.log("Error", error);
         });
     }
-    setPostButtonStyle("absolute right-0 -mt-5 w-20 h-6 text-white bg-violet-500 rounded-xl")
+    setPostButtonStyle("w-20 h-6 text-white bg-violet-500 rounded-xl")
     
     if(photoData){setImageData(photoData.fileData)}
     if(initialPost){setUploadIdHTML("icon-button-for-edit")}
@@ -133,9 +133,9 @@ const NewPost = ({initialPost, onEdit, photoData}:{initialPost?: PostData, onEdi
 
   const changeStyleWithImage = (withPhotoImage : boolean) => {
     if(withPhotoImage){
-      setPostButtonStyle("absolute right-0 -mt-6 w-20 h-6 text-white bg-violet-500 rounded-xl")
+      setPostButtonStyle("w-20 h-6 text-white bg-violet-500 rounded-xl")
     } else {
-      setPostButtonStyle("absolute right-0 -mt-5 w-20 h-6 text-white bg-violet-500 rounded-xl")
+      setPostButtonStyle("w-20 h-6 text-white bg-violet-500 rounded-xl")
     }
   }
 
@@ -170,27 +170,27 @@ const NewPost = ({initialPost, onEdit, photoData}:{initialPost?: PostData, onEdi
             <img
               src={`data:image/png;base64,${imageData}`}
               alt="Image Data"
-              className="w-full h-full max-h-100 max-w-100 object-contain rounded-md"
+              className="mb-2 w-full h-full max-h-100 max-w-100 object-contain rounded-md"
             />
           )}   
           {photoImage && (
             <img
               src={photoImage}
               alt="Post Image"
-              className="w-full h-full max-h-100 max-w-100 object-contain rounded-md"
+              className="mb-2 w-full h-full max-h-100 max-w-100 object-contain rounded-md"
             />
           )}
         </div>
-        <div className="relative">
+        <div className="flex -mt-4 items-center justify-between">
           {(photoImage || imageData) && (
             <>
               <button
-                className="w-full border-2 border-gray-100 rounded-xl p-3 mt-1 bg-transparent"
+                className="w-full border-2 border-gray-100 rounded-xl p-3 bg-transparent"
                 onClick={handleRemoveImage}
                 id="remove-image-file"
                 style={{ display: "none" }}
               ></button>
-              <label htmlFor="remove-image-file" className="flex mt-2">
+              <label htmlFor="remove-image-file" className="flex">
                 <p className="flex text-gray-500 text-sm">
                   <svg
                     className="w-5 h-5 text-gray-800 dark:text-white"
@@ -223,7 +223,7 @@ const NewPost = ({initialPost, onEdit, photoData}:{initialPost?: PostData, onEdi
             onChange={handleImageChange}
           />
           {!photoImage && !imageData && (
-            <label htmlFor={uploadIdHTML} className="flex ml-10 -mt-4">
+            <label htmlFor={uploadIdHTML} className="flex ml-10">
               <p className="flex text-gray-500 text-sm">
                 <svg
                   className="w-5 h-5 text-gray-800 dark:text-white"

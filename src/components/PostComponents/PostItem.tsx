@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { PostModel, CommentModel } from "../../api_service/post";
+import { PostModel, CommentModel, LikeModel } from "../../api_service/post";
 import * as userService from "../../api_service/user";
 import * as postService from "../../api_service/post";
 import { Dropdown, Modal, Button } from "flowbite-react";
@@ -19,27 +19,44 @@ const PostItem = ({ post, onDelete, fromDetails }: { post: PostModel, onDelete: 
   const [isEnabledForEditing, setCanBeEdited] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false);
   const [comments, setComments] = useState<CommentModel[]>([]);
-  const [likes, setLikes] = useState([]);
+  const [likes, setLikes] = useState<LikeModel[]>([]);
   const[currentPost, setCurrentPost] = useState(post); 
   const navigate = useNavigate()
+  const [isLikedByUser, setIsLikedByUser] = useState(false);
+  const userId = localStorage.getItem("userId") || 1;
 
   useEffect(() => {
-    //get user info
+    //get post user info
     userService
       .getUserByUserId(+post.userId)
       .then((response) => {
-        console.log("post user id", post.userId)
-        console.log("user", response)
         setPostUser(response.data);
       })
       .catch((error) => {
         console.log("Error", error);
       });
+
     //get comments info
     postService.getCommentsByPostId(+post.id).then((response) => {
-      console.log("comments", response.data);
       setComments(response.data);
-    })
+    }).catch((error) => {
+      console.log("Error", error);
+    });
+
+    //get the likes info of POST
+    postService.getLikesOfPostById(+post.id).then((response) => {
+      setLikes(response.data);
+
+      const currentLikes : LikeModel[] = response.data;
+      const likeIndex = currentLikes.findIndex((like) => +like.userId === +userId)
+      if(likeIndex !== -1 ){
+        setIsLikedByUser(true)
+      }
+
+    }).catch((error) => {
+      console.log("Error", error);
+    });
+
   }, [currentPost]);
 
   const properCase = (name: any) => {
@@ -78,6 +95,32 @@ const PostItem = ({ post, onDelete, fromDetails }: { post: PostModel, onDelete: 
         console.log("Error", error);
       });
   };
+
+  const handleLike = () => {
+    postService.unlikeOrLikePost(+userId, +currentPost.id).then((response) => {
+
+      if(isLikedByUser){
+        const newLikeList = likes.filter((like) => +like.userId !== +userId)
+        setLikes(newLikeList)
+      } else {
+
+        const newLike : LikeModel = {
+          userId : +userId,
+          postId : +currentPost.id,
+          liked : true
+        }
+
+        const newLikeList = [...likes, newLike]
+        setLikes(newLikeList)
+
+      }
+
+      setIsLikedByUser(!isLikedByUser)
+      
+    }).catch((error) => {
+      console.log("Error", error);
+    });
+  }
 
   return (<><div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
       <div className="flex items-center justify-between mb-4">
@@ -143,15 +186,19 @@ const PostItem = ({ post, onDelete, fromDetails }: { post: PostModel, onDelete: 
       {/* <!-- Like and Comment Section --> */}
       <div className="flex items-center justify-between text-gray-500">
         <div className="flex items-center space-x-2">
-          <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-50 rounded-full p-1">
+          <button className="flex justify-center items-center gap-2 px-2 hover:bg-blue-50 rounded-full p-1" onClick={() => handleLike()}>
             <svg
-              className="w-5 h-5 fill-current"
+              className= {(isLikedByUser)? "w-6 h-6 fill-purple-500" : "w-6 h-6 fill-current"}
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
             >
               <path d="M12 21.35l-1.45-1.32C6.11 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-4.11 6.86-8.55 11.54L12 21.35z" />
             </svg>
-            <span>42 Likes</span>
+            <span>
+            {likes.length === 0
+              ? ""
+              : likes.length}
+          </span>
           </button>
         </div>
         {!fromDetails && (

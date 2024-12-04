@@ -54,10 +54,11 @@ const EditComment = ({commentData, onEdit, commentId}:{commentData: CommentData,
       onChange={handleChange}
       className="p-2 h-20 w-full text-sm border border-gray-300 rounded-md mb-6 focus:ring-2 focus:ring-purple-800"
     />
-    <div className="relative">
+    <div className="flex items-center justify-between">
+      <div></div>
       <button
         onClick={() => handleSubmit()}
-        className="absolute right-0 -mt-3 w-20 h-6 text-white bg-violet-500 rounded-xl"
+        className="-mt-3 w-20 h-6 text-white bg-violet-500 rounded-xl"
       >
         Post
       </button>

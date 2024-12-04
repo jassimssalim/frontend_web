@@ -26,6 +26,16 @@ export interface CommentModel {
   postId: number;
 }
 
+
+//like data
+export interface LikeModel {
+  id?: number;
+  userId: number;
+  postId?: number;
+  commentId?:number;
+  liked: boolean
+}
+
 export function getAllPosts() {
   return http.get(`/posts`);
 }
@@ -92,12 +102,40 @@ export function deleteComment(commentId:number, postId:number) {
 }
 
 
-export function getLikesByCommentOrPostId(id: number) {
-  //request param: commentId OR postId
-  return http.get(`/likes`);
+export function getLikesOfCommentById(commentId: number) {
+  return http.get(`/likes`, {
+    params: {
+      commentId: commentId,
+      postId: null,
+    },
+  });
 }
 
-export function unlikeOrLike(id: number) {
+export function getLikesOfPostById(postId: number) {
+  //request param: commentId OR postId
+  return http.get(`/likes`, {
+    params: {
+      commentId: null,
+      postId: postId,
+    },
+  });
+}
+
+export function unlikeOrLikeComment(userId: any, commentId: any) {
   //request param: userId, commentId OR postId
-  return http.get(`/likes`);
+  const requestParam = new FormData();
+  requestParam.append("userId", userId);
+  requestParam.append("commentId", commentId);
+
+  return http.post(`/likes/add`, requestParam);
+}
+
+export function unlikeOrLikePost(userId: any, postId: any) {
+  //request param: userId, commentId OR postId
+  
+  const requestParam = new FormData();
+  requestParam.append("userId", userId);
+  requestParam.append("postId", postId);
+
+  return http.post(`/likes/add`, requestParam);
 }
