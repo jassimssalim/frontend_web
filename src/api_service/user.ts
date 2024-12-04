@@ -179,3 +179,9 @@ export const deleteUser = async (username: string): Promise<{ message: string }>
     throw new Error("Failed to delete user. Please try again.");
   }
 };
+
+export function getUserByUserId(userId: number) {
+  return http.get(`/profiles/userId/${userId}`)
+};
+
+
