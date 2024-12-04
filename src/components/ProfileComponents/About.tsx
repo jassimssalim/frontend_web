@@ -213,7 +213,7 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile }) => {
     <div className="flex items-center justify-between mt-6 space-x-4">
       <button
         onClick={handleSave}
-        className="flex items-center px-8 py-3 bg-green-500 text-white rounded-lg shadow-lg hover:bg-green-600 transition-all duration-300 ease-in-out"
+        className="flex items-center px-8 py-3 bg-violet-800 hover:bg-blue-600  text-white rounded-lg shadow-lg  transition-all duration-300 ease-in-out"
       >
         <FaSave className="mr-2" />
         Save

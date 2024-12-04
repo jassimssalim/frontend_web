@@ -214,3 +214,32 @@ export const deleteUser = async (username: string): Promise<{ message: string }>
     throw new Error("Failed to delete user. Please try again.");
   }
 };
+
+
+// A lightweight version for when only name and image are needed
+export interface UserNameAndImage {
+  name: string;
+  image: {
+    fileName: string;
+    fileData: string; // Base64-encoded image data
+  };
+}
+
+// Adjust the function to match the lightweight interface
+export const getAllUsersExceptCurrent = async (): Promise<UserNameAndImage[]> => {
+  const currentUsername = localStorage.getItem("username");
+  
+  if (!currentUsername) {
+    throw new Error("No logged-in user found.");
+  }
+
+  try {
+    const response = await http.get(`/users/excludeCurrent`, {
+      params: { currentUsername },
+    });
+    return response.data; // The backend returns only name and image
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw new Error("Failed to fetch users. Please try again.");
+  }
+};
