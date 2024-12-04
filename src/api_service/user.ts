@@ -115,7 +115,7 @@ export const loginUser = async (loginDTO: LoginDTO): Promise<number> => {
 };
 //end login user
 
-// reset password start
+// reset password start V1
 export interface ResetPasswordDTO {
   email: string;
   username: string;
@@ -138,7 +138,27 @@ export const resetPassword = async (resetPasswordDTO: ResetPasswordDTO): Promise
   }
 };
 
-//reset end
+//reset end v1
+//reset start v2 
+export interface ResetPasswordDTOv2 {
+  username: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export const updatePassword = async (resetPasswordDTOv2: ResetPasswordDTOv2): Promise<string> => {
+  try {
+    if (resetPasswordDTOv2.newPassword !== resetPasswordDTOv2.confirmPassword) {
+      throw new Error("New password and confirm password do not match.");
+    }
+
+    const response = await http.post(`/update-password`, resetPasswordDTOv2);
+    return response.data; // Return the success message from the server
+  } catch (error: any) {
+    console.error("Error updating password:", error);
+    throw new Error(error.response?.data || "Password update failed. Please try again.");
+  }
+};
 
 
 
