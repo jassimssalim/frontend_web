@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { getProfileByUsername, UserProfile } from "../../api_service/user"; 
-import { useNavigate } from "react-router-dom"; 
-import Posts from "../ProfileComponents/Post"; 
+import { useNavigate } from "react-router-dom";
 import About from "../ProfileComponents/About"; 
 import Settings from "../ProfileComponents/Settings"; 
+import MyPost from "../ProfileComponents/MyPost";
+import NavBar from "../../utility/NavBar";
 
 const Profile = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -65,6 +66,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <NavBar/>
       {/* Back to Home Button */}
       <div className="flex justify-end p-4">
         <button
@@ -129,7 +131,7 @@ const Profile = () => {
           {/* Main Content */}
           <div className="w-3/4">
             <div className="bg-white shadow-md rounded-xl p-6">
-              {activeTab === "posts" && <Posts />}
+              {activeTab === "posts" && <MyPost/>}
               {activeTab === "about" && <About profile={profile} updateProfile={updateProfile} />}
               {activeTab === "settings" && <Settings />}
             </div>
