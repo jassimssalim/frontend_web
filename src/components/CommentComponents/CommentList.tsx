@@ -7,6 +7,7 @@ import { Dropdown, Modal } from "flowbite-react";
 import EditPost from "../PostComponents/EditPost";
 import EditComment from "./EditComment";
 import { flushSync } from "react-dom";
+import ConfirmationModal from "../../utility/ConfirmationModal";
 
 export interface CommentData {
   postId: number;
@@ -32,6 +33,7 @@ const CommentList = ({ postId }: { postId: number }) => {
     userId: +userId,
   });
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [showDeleteModal, setOpenDeleteModal] = useState(false);
 
   useEffect(() => {
     //get comments info
@@ -39,12 +41,14 @@ const CommentList = ({ postId }: { postId: number }) => {
       setComments(response.data);
       const commentsFromResponse: CommentModel[] = response.data;
       if (commentsFromResponse) {
-        const likesData = getDataOfLikesPerCommentId(commentsFromResponse.map((com) => com.id));
+        const likesData = getDataOfLikesPerCommentId(
+          commentsFromResponse.map((com) => com.id)
+        );
       }
     });
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setCommentToAdd({ ...commentToAdd, [name]: value });
   };
@@ -122,6 +126,7 @@ const CommentList = ({ postId }: { postId: number }) => {
           (comment) => +comment.id !== +commentId
         );
         setComments(newComments);
+        setOpenDeleteModal(false)
       })
       .catch((error) => {
         console.log("Error", error);
@@ -149,7 +154,7 @@ const CommentList = ({ postId }: { postId: number }) => {
             newLikeDataListToAdd.push(newLikeData);
 
             if (i === commentIds.length - 1) {
-              setLikes([...likes, ...newLikeDataListToAdd])
+              setLikes([...likes, ...newLikeDataListToAdd]);
             }
           }
         })
@@ -196,6 +201,10 @@ const CommentList = ({ postId }: { postId: number }) => {
       });
   };
 
+  const handleClose = () => {
+    setOpenEditModal(false);
+  };
+
   return (
     <>
       <section className="bg-white dark:bg-gray-900 py-8 lg:py-16 antialiased">
@@ -206,7 +215,7 @@ const CommentList = ({ postId }: { postId: number }) => {
             </h2>
           </div>
           {/* <!-- Add comment --> */}
-          <input
+          {/* <input
             type="text"
             name="content"
             value={commentToAdd.content}
@@ -222,13 +231,35 @@ const CommentList = ({ postId }: { postId: number }) => {
             >
               Post
             </button>
+          </div> */}
+          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <textarea
+              id="content"
+              name="content"
+              className="w-full h-20 p-2 text-sm text-gray-900 bg-white border-1 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+              placeholder="Write a comment..."
+              value={commentToAdd.content}
+              onChange={(event) => handleChange(event)}
+            ></textarea>
+            <div className="flex items-center justify-between px-3 py-2 dark:border-gray-600">
+              <div></div>
+              <div>
+                <button
+                  onClick={handleSubmit}
+                  type="submit"
+                  className="inline-flex items-center py-2 px-6 text-sm font-medium text-center text-white bg-purple-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-purple-900 hover:bg-purple-800"
+                >
+                  Post
+                </button>
+              </div>
+            </div>
           </div>
+
           {comments.map((comment: CommentModel, itemIndex: number) => (
             <div key={itemIndex}>
               {/* <!-- Edit Modal--> */}
               <Modal
                 className="bg-gray-600 bg-opacity-50"
-                dismissible
                 show={openEditModal}
                 onClose={() => setOpenEditModal(false)}
                 position="center"
@@ -248,6 +279,7 @@ const CommentList = ({ postId }: { postId: number }) => {
                     }}
                     onEdit={handleEditComment}
                     commentId={comment.id}
+                    onClose={handleClose}
                   />
                 </Modal.Body>
               </Modal>
@@ -298,8 +330,7 @@ const CommentList = ({ postId }: { postId: number }) => {
                           Edit
                         </Dropdown.Item>
                         <Dropdown.Item
-                          onClick={() =>
-                            handleDeleteComment(comment.id, comment.postId)
+                          onClick={() => setOpenDeleteModal(true)
                           }
                         >
                           Delete
@@ -307,6 +338,13 @@ const CommentList = ({ postId }: { postId: number }) => {
                       </Dropdown>
                     </div>
                   )}
+
+                  <ConfirmationModal
+                    isVisible={showDeleteModal}
+                    message="Are you sure you want to delete the comment?"
+                    onConfirm={() => handleDeleteComment(comment.id, comment.postId)}
+                    onCancel={() => setOpenDeleteModal(false)}
+                  />
                 </footer>
                 <p className="text-gray-500 dark:text-gray-400">
                   {comment.content}
