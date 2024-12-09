@@ -16,10 +16,14 @@ const NewPost = ({
   initialPost,
   onEdit,
   photoData,
+  onAdd,
+  onLoading,
 }: {
   initialPost?: PostData;
   onEdit?: any;
   photoData?: any;
+  onAdd?: any;
+  onLoading?: any;
 }) => {
   const [postUser, setUser] = useState<UserProfile>();
   const username = localStorage.getItem("username");
@@ -111,11 +115,11 @@ const NewPost = ({
       onEdit(postData);
       return;
     }
-
+    onLoading();
     try {
       if (postData.content) {
         await postService.addPost(postData);
-        navigate(0);
+        onAdd();
 
         // Clear form data
         setPostData({
@@ -219,26 +223,26 @@ const NewPost = ({
                 style={{ display: "none" }}
               ></button>
               <label htmlFor="remove-image-file" className="flex">
-                <p className="flex text-gray-500 text-sm">
                 <div className="flex ps-0 space-x-1 rtl:space-x-reverse sm:ps-2">
-                  <svg
-                    className="w-4 h-5 mr-2"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
-                    />
-                  </svg>
-                 Remove Image
-                  </div>
-                </p>
+                  <p className="flex text-gray-500 text-sm">
+                    <svg
+                      className="w-4 h-5 mr-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+                      />
+                    </svg>
+                    Remove Image
+                  </p>
+                </div>
               </label>
             </>
           )}
@@ -252,24 +256,36 @@ const NewPost = ({
           />
           {!photoImage && !imageData && (
             <label htmlFor={uploadIdHTML}>
-              <p className="flex text-gray-500 text-sm">
               <div className="flex ps-0 space-x-1 rtl:space-x-reverse sm:ps-2">
-               <button type="button" className="inline-flex justify-center items-center mr-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
-                   <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                        <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
+                <p className="flex text-gray-500 text-sm">
+                  <button
+                    type="button"
+                    className="inline-flex justify-center items-center mr-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 20 18"
+                    >
+                      <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
                     </svg>
-               </button>
-             Upload Image  
-           </div>
-           </p>
+                  </button>
+                  Upload Image
+                </p>
+              </div>
             </label>
           )}
           {/* Submit button */}
           <div>
-
-          <button onClick={handleSubmit} type="submit" className="inline-flex items-center py-2 px-6 text-sm font-medium text-center text-white bg-purple-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-purple-900 hover:bg-purple-800">
-               Post
-           </button>
+            <button
+              onClick={handleSubmit}
+              type="submit"
+              className="inline-flex items-center py-2 px-6 text-sm font-medium text-center text-white bg-purple-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-purple-900 hover:bg-purple-800"
+            >
+              Post
+            </button>
           </div>
         </div>
       </div>
