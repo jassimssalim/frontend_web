@@ -8,6 +8,7 @@ import EditPost from "./EditPost";
 import { Link, useNavigate } from "react-router-dom";
 import ConfirmationModal from "../../utility/ConfirmationModal";
 import Loading from "../../utility/Loading";
+import { toast } from "react-toastify";
 
 const PostItem = ({
   post,
@@ -108,9 +109,19 @@ const PostItem = ({
         setCurrentPost(response.data);
         setOpenEditModal(false);
         setIsLoading(false)
+        setTimeout(() => {
+          toast.success('Post successfully edited!', {
+            position: 'top-right', 
+            autoClose: 5000,
+          });
+        }, 100);
       })
       .catch((error) => {
         console.log("Error", error);
+        toast.error('Error in editing post!', {
+          position: 'top-right', // Use string value for position
+          autoClose: 3000,
+        });
       });
   };
 

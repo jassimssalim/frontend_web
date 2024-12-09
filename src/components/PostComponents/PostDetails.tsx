@@ -6,6 +6,7 @@ import { PostModel } from "../../api_service/post";
 import * as postService from "../../api_service/post";
 import CommentList from "../CommentComponents/CommentList";
 import { FaArrowLeft} from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const PostDetails = () => {
   const param = useParams();
@@ -38,9 +39,19 @@ const PostDetails = () => {
       .deletePost(+postId)
       .then(() => {
         navigate("/home");
+        setTimeout(() => {
+          toast.success('Post successfully deleted!', {
+            position: 'top-right', 
+            autoClose: 3000,
+          });
+        }, 100);
       })
       .catch((error) => {
         console.log("Error", error);
+        toast.error('Error in deleting post!', {
+          position: 'top-right', // Use string value for position
+          autoClose: 3000,
+        });
       });
   };
 
