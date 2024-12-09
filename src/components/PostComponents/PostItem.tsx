@@ -12,11 +12,11 @@ import Loading from "../../utility/Loading";
 const PostItem = ({
   post,
   onDelete,
-  fromDetails,
+  fromDetails
 }: {
   post: PostModel;
   onDelete: any;
-  fromDetails?: boolean;
+  fromDetails?: boolean
 }) => {
   const [postUser, setPostUser] = useState({
     id: 1,

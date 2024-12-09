@@ -9,6 +9,7 @@ import ProtectedRoute from "./ProtectedRoute";
 //import from micro components
 import Profile from "../components/HomeComponents/Profile";
 import PostDetails from "../components/PostComponents/PostDetails";
+import OtherUserProfile from "../components/OtherUserComponents/OtherUserProfile";
 
 const Path: React.FC = () => {
   return (
@@ -29,6 +30,8 @@ const Path: React.FC = () => {
       {/* Wrong path  */}
       <Route path="*" element={<WrongPath />} />
       <Route path="/post/details/:postId" element={<PostDetails />} />
+      {/* Other User Details  */}
+      <Route path="/profile/:userName" element={<OtherUserProfile />} />
     </Routes>
   );
 };

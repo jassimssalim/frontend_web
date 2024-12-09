@@ -21,7 +21,8 @@ export interface UserProfile {
   links?: string;           
   address?: string;         
   bio?: string;    
-  phone?:string;        
+  phone?:string;   
+  error?:string     
 }
 
 export const getProfileByUsername = async (username: string): Promise<UserProfile> => {
