@@ -4,6 +4,7 @@ import { PostModel } from "../../api_service/post";
 import PostItem from "./PostItem";
 import { useLocation, useNavigate } from "react-router-dom";
 import Loading from "../../utility/Loading";
+import { toast } from "react-toastify";
 
 const PostList = ({
   allPost,
@@ -48,6 +49,10 @@ const PostList = ({
     postService
       .deletePost(+postId)
       .then(() => {
+        toast.success('Post successfully deleted!', {
+          position: 'top-right', 
+          autoClose: 3000,
+        });
         onDelete();
       })
       .catch((error) => {
