@@ -315,7 +315,9 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile,isDarkMode  }) => 
         isVisible={isModalVisible}
         message="Are you sure you want to save the changes?"
         onConfirm={handleConfirmSave}
-        onCancel={() => setIsModalVisible(false)} // Close the modal
+        onCancel={() => setIsModalVisible(false)} 
+        isDarkMode={isDarkMode}  
+
       />
     </div>
 

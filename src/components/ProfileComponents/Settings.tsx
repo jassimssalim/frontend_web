@@ -127,40 +127,41 @@ const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
 
       {/* Change Password Modal */}
       {isChangePasswordModalVisible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className={`bg-white rounded-lg p-4 space-y-4 w-80 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white'}`}>
-            <h2 className="text-xl font-semibold text-center">Change Password</h2>
-            <input
-              type="password"
-              placeholder="New Password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none text-sm ${isDarkMode ? 'bg-gray-700 text-white' : ''}`}
-            />
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none text-sm ${isDarkMode ? 'bg-gray-700 text-white' : ''}`}
-            />
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={() => setIsChangePasswordModalVisible(false)}
-                className="px-3 py-1.5 bg-gray-400 text-white rounded-lg hover:bg-gray-500 text-sm"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleChangePassword}
-                className="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className={`rounded-lg p-4 space-y-4 w-80 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white'}`}>
+          <h2 className="text-xl font-semibold text-center">Change Password</h2>
+      <input
+        type="password"
+        placeholder="New Password"
+        value={newPassword}
+        onChange={(e) => setNewPassword(e.target.value)}
+        className={`w-full px-4 py-2 border rounded-lg focus:outline-none text-sm ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
+      />
+      <input
+        type="password"
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        className={`w-full px-4 py-2 border rounded-lg focus:outline-none text-sm ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
+      />
+      <div className="flex justify-end space-x-3">
+        <button
+          onClick={() => setIsChangePasswordModalVisible(false)}
+          className="px-3 py-1.5 bg-gray-400 text-white rounded-lg hover:bg-gray-500 text-sm"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleChangePassword}
+          className="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+        >
+          Save
+            </button>
+           </div>
+           </div>
+           </div>
       )}
+
 
       {/* Toaster Component */}
       <ToastContainer
@@ -181,6 +182,8 @@ const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
         message="Are you sure you want to delete your account? This action cannot be undone."
         onConfirm={handleConfirm}
         onCancel={handleCancel}
+        isDarkMode={isDarkMode}  // Pass the dark mode state
+
       />
 
       {/* Confirmation Modal for Logout */}
@@ -189,6 +192,8 @@ const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
         message="Are you sure you want to log out?"
         onConfirm={handleLogoutConfirm}
         onCancel={handleLogoutCancel}
+        isDarkMode={isDarkMode}  // Pass the dark mode state
+
       />
     </div>
   );
