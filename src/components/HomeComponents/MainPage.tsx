@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
-
 import { Link, useNavigate } from "react-router-dom";
+import NavBar from "../../utility/NavBar";
+import Loading from "../../utility/Loading";
+import NewPost from "../PostComponents/NewPost";
+import PostList from "../PostComponents/PostList";
+import * as postService from "../../api_service/post";
+import { PostModel } from "../../api_service/post";
 import ConfirmationModal from "../../utility/ConfirmationModal";
 import { getProfileByUsername, UserProfile } from "../../api_service/user";
 import UserList from "../ProfileComponents/UserList";
@@ -9,7 +14,25 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDarkMode } from "../../utility/ThemeContext"; // Import the context
 
 const MainPage = () => {
+  
   const navigate = useNavigate();
+  const [isDataChange, setIsDataChange] = useState(false);
+  const [posts, setPosts] = useState<PostModel[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    postService
+      .getAllPosts()
+      .then((response) => {
+        setPosts(response.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
+  }, [isDataChange]);
+
+
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
@@ -49,7 +72,6 @@ const MainPage = () => {
     localStorage.removeItem("darkMode");
     localStorage.removeItem("theme");
 
-
     toast.success("Logged out successfully!");
     setTimeout(() => {
       navigate("/Entry");
@@ -57,53 +79,35 @@ const MainPage = () => {
   };
 
   const handleLogoutClick = () => {
-    setShowLogoutModal(true);
+    setShowLogoutModal(true);}
+
+
+  const handleAdd = () => {
+    setIsDataChange(!isDataChange);
   };
+
+  const handleDelete = () => {
+    setIsDataChange(!isDataChange);
+  };
+
+  const handleLoading = () => {
+    setIsLoading(true);}
 
   const handleCancelLogout = () => {
     setShowLogoutModal(false);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 dark:text-white">
-      {/* Navbar Section */}
-      <header className={`text-white ${isDarkMode ? "bg-black" : "bg-violet-600"}`}>
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-lg font-bold">MoodSnap.</h1>
-          <nav>
-            <ul className="flex space-x-6 items-center">
-              <li>
-                <Link to="/home" className="hover:underline">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link to="/profile" className="hover:underline">
-                  Profile
-                </Link>
-              </li>
-              <li>
-                <button onClick={handleLogoutClick} className="hover:underline">
-                  Logout
-                </button>
-              </li>
-              <li>
-                {/* Dark Mode Toggle */}
-                <button
-                  onClick={toggleDarkMode}
-                  className="p-2 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-500 transition"
-                  aria-label="Toggle Dark Mode"
-                >
-                  {isDarkMode ? "🌙" : "☀️"}
-                </button>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
-
+    <>
+      <div className="relative">
+        <NavBar />
+        {/* Main Content Section */}
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div>
       {/* Main Content Section */}
-      <main className="max-w-7xl mx-auto px-6 py-8 flex space-x-6">
+      <main className="max-w-7xl mx-auto px-6 py-8 flex space-x-6 mt-20">
         {/* Left Side: Profile Info */}
         <aside className="w-1/4 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
           {userProfile ? (
@@ -132,49 +136,17 @@ const MainPage = () => {
             <p>Loading...</p>
           )}
         </aside>
-
-        {/* Middle: Posts Section */}
-        <section className="flex-1 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
-          {/* New Post */}
-          <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gray-300 dark:bg-gray-500 rounded-full"></div>
-              <input
-                type="text"
-                placeholder="What's on your mind?"
-                className="flex-1 p-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-300"
-              />
-            </div>
-            <div className="flex space-x-4 mt-3">
-              <button className="text-blue-500 hover:underline">
-                Photo/Video
-              </button>
-              <button className="text-green-500 hover:underline">
-                Feeling/Activity
-              </button>
-            </div>
-          </div>
-
-          {/* Example Post */}
-          <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg border border-gray-200 dark:border-gray-600">
-            <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-gray-300 dark:bg-gray-500 rounded-full"></div>
-              <div>
-                <h3 className="text-sm font-bold dark:text-white">John Doe</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-300">2 hours ago</p>
-              </div>
-            </div>
-            <p className="mt-4 text-gray-800 dark:text-gray-100">
-              Feeling great today!
-            </p>
-            <div className="flex justify-between mt-4 text-sm text-gray-500 dark:text-gray-300">
-              <button className="hover:text-blue-500">Like</button>
-              <button className="hover:text-blue-500">Comment</button>
-              <button className="hover:text-blue-500">Share</button>
-            </div>
-          </div>
-        </section>
-
+              {/* Middle: Posts Section */}
+              <section className="flex-1 bg-white rounded-lg shadow-md p-6 space-y-6">
+                {/* New Post */}
+                <NewPost onAdd={handleAdd} onLoading={handleLoading} />
+                {/* Post */}
+                <PostList
+                  allPost={posts}
+                  onDelete={handleDelete}
+                  onLoading={handleLoading}
+                />
+              </section>
         {/* Right Side: Suggestions */}
         <aside className="w-1/4 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
           <h2 className="text-lg font-bold text-gray-800 dark:text-white">
@@ -207,7 +179,7 @@ const MainPage = () => {
 
       />
     </div>
-  );
+  )} </div> </>)
 };
 
 export default MainPage;

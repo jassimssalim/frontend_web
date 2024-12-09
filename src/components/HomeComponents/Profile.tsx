@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { getProfileByUsername, UserProfile } from "../../api_service/user";
 import { useNavigate } from "react-router-dom";
 import { FaHome, FaCog, FaUser, FaStickyNote } from "react-icons/fa";
-import Posts from "../ProfileComponents/Post";
 import About from "../ProfileComponents/About";
 import Settings from "../ProfileComponents/Settings";
 import UserList from "../ProfileComponents/UserList";
 import { useDarkMode } from "../../utility/ThemeContext"; // Import the hook
+import MyPost from "../ProfileComponents/MyPost";
 
 const Profile = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -141,7 +141,7 @@ const Profile = () => {
 
           {/* Main Content */}
           <div className={`w-3/4 shadow-md rounded-xl p-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-            {activeTab === "posts" && <Posts />}
+            {activeTab === "posts" && <MyPost/>}
             {activeTab === "about" && <About profile={profile} updateProfile={updateProfile} isDarkMode={isDarkMode}/>}
             {activeTab === "settings" && <Settings isDarkMode={isDarkMode} />}
           </div>
