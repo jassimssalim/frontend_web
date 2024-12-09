@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CommentModel, LikeModel } from "../../api_service/post";
 import * as postService from "../../api_service/post";
 import Joi from "joi";
 import { Dropdown, Modal } from "flowbite-react";
-import EditPost from "../PostComponents/EditPost";
 import EditComment from "./EditComment";
-import { flushSync } from "react-dom";
 import ConfirmationModal from "../../utility/ConfirmationModal";
+import * as userService from "../../api_service/user";
 
 export interface CommentData {
   postId: number;
@@ -126,7 +125,7 @@ const CommentList = ({ postId }: { postId: number }) => {
           (comment) => +comment.id !== +commentId
         );
         setComments(newComments);
-        setOpenDeleteModal(false)
+        setOpenDeleteModal(false);
       })
       .catch((error) => {
         console.log("Error", error);
@@ -203,6 +202,18 @@ const CommentList = ({ postId }: { postId: number }) => {
 
   const handleClose = () => {
     setOpenEditModal(false);
+  };
+
+  const handleToProfile = (userId: number) => {
+    userService
+      .getUserByUserId(+userId)
+      .then((response) => {
+        let userName = response.data.username;
+        window.open(`/profile/${userName}`);
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
   };
 
   return (
@@ -287,13 +298,13 @@ const CommentList = ({ postId }: { postId: number }) => {
               <article className="mt-5 p-6 text-base bg-white rounded-lg dark:bg-gray-900">
                 <footer className="flex justify-between items-center mb-2">
                   <div className="flex items-center">
-                    <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold">
+                    <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold hover:text-blue-800" onClick={() => handleToProfile(comment.userId)}>
                       <img
                         className="mr-2 w-6 h-6 rounded-full"
                         src={`data:image/png;base64,${comment.photo.fileData}`}
                         alt={comment.name}
                       />
-                      {comment.name}
+                        {comment.name}
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       {new Date(comment.datePosted)
@@ -329,10 +340,7 @@ const CommentList = ({ postId }: { postId: number }) => {
                         <Dropdown.Item onClick={() => setOpenEditModal(true)}>
                           Edit
                         </Dropdown.Item>
-                        <Dropdown.Item
-                          onClick={() => setOpenDeleteModal(true)
-                          }
-                        >
+                        <Dropdown.Item onClick={() => setOpenDeleteModal(true)}>
                           Delete
                         </Dropdown.Item>
                       </Dropdown>
@@ -342,7 +350,9 @@ const CommentList = ({ postId }: { postId: number }) => {
                   <ConfirmationModal
                     isVisible={showDeleteModal}
                     message="Are you sure you want to delete the comment?"
-                    onConfirm={() => handleDeleteComment(comment.id, comment.postId)}
+                    onConfirm={() =>
+                      handleDeleteComment(comment.id, comment.postId)
+                    }
                     onCancel={() => setOpenDeleteModal(false)}
                   />
                 </footer>

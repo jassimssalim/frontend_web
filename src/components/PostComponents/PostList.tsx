@@ -11,8 +11,8 @@ const PostList = ({
   onLoading,
 }: {
   allPost: PostModel[];
-  onDelete: any;
-  onLoading: any;
+  onDelete?: any;
+  onLoading?: any;
 }) => {
   const [posts, setPosts] = useState<PostModel[]>(allPost);
   const username = localStorage.getItem("username");
@@ -57,19 +57,12 @@ const PostList = ({
 
   return (
     <>
-      {/* {isLoading? <Loading/> : <div>
-      {posts.map((post: PostModel, itemIndex: number) => (
-        <div key={itemIndex} style={{marginBottom: "5px"}}>
-          <PostItem post={post} onDelete ={handleDelete} />
-        </div>
-      ))} </div>
-      } */}
-
+      {posts.length>0 ? <div>
       {posts.map((post: PostModel, itemIndex: number) => (
         <div key={itemIndex} style={{ marginBottom: "5px" }}>
           <PostItem post={post} onDelete={handleDelete} />
         </div>
-      ))}
+      ))} </div>: <div className="text-center text-gray-500 dark:text-gray-400"><h2>No Posts</h2></div>}
     </>
   );
 };
