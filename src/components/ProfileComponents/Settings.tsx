@@ -113,6 +113,18 @@ const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
           </button>
         </div>
 
+                {/* Deactivate Account */}
+
+        <div className={`flex items-center justify-between p-3 border-b rounded-lg ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+          <span className="text-default font-semibold">Deactivate Account</span>
+          <button
+            onClick={showDeleteConfirmationModal}
+            className={`px-3 py-1.5 rounded-lg bg-violet-800 hover:bg-blue-600 text-white text-sm`}
+          >
+            Deactivate
+          </button>
+        </div>
+
         {/* Delete Account */}
         <div className={`flex items-center justify-between p-3 border-b rounded-lg ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
           <span className="text-default font-semibold">Delete Account</span>
@@ -123,7 +135,15 @@ const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
             Delete
           </button>
         </div>
+
+
+
+      
       </div>
+
+  
+
+      
 
       {/* Change Password Modal */}
       {isChangePasswordModalVisible && (

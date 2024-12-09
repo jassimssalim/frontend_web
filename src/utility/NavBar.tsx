@@ -1,35 +1,35 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import ConfirmationModal from './ConfirmationModal'
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import ConfirmationModal from './ConfirmationModal';
 import { useDarkMode } from './ThemeContext';
 
 const NavBar = () => {
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const navigate = useNavigate();
 
-    const [showLogoutModal, setShowLogoutModal] = useState(false);
-    const navigate = useNavigate()
-    // Access global dark mode state and toggle function
+  // Access global dark mode state and toggle function
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
-    const handleLogout = () => {
-      console.log("Logging out...");
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("userLoggedIn");
-      localStorage.removeItem("username"); 
-  
-      navigate("/entry");
-    };
-  
-    const handleLogoutClick = () => {
-      setShowLogoutModal(true); // Show the modal
-    };
-  
-    const handleCancelLogout = () => {
-      setShowLogoutModal(false); // Close the modal
-    };
-    
+  const handleLogout = () => {
+    console.log("Logging out...");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("userLoggedIn");
+    localStorage.removeItem("username"); 
+
+    navigate("/entry");
+  };
+
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true); // Show the modal
+  };
+
+  const handleCancelLogout = () => {
+    setShowLogoutModal(false); // Close the modal
+  };
+
   return (
-    <div className="fixed top-0 left-0 right-0">
-   <header className={`text-white ${isDarkMode ? "bg-black" : "bg-violet-600"}` }>
+    <div className="fixed top-0 left-0 right-0 w-full z-10">
+      <header className={`w-full border-0 shadow-none text-white box-border ${isDarkMode ? "bg-black" : "bg-violet-600"}`}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <h1 className="text-lg font-bold">MoodSnap.</h1>
           <nav>
@@ -63,17 +63,17 @@ const NavBar = () => {
           </nav>
         </div>
       </header>
-  {/* Reusable Confirmation Modal */}
-  <ConfirmationModal
+
+      {/* Reusable Confirmation Modal */}
+      <ConfirmationModal
         isVisible={showLogoutModal}
         message="Are you sure you want to logout?"
         onConfirm={handleLogout}
         onCancel={handleCancelLogout}
         isDarkMode={isDarkMode}  // Pass the dark mode state
-
       />
-  </div>
-  )
-}
+    </div>
+  );
+};
 
-export default NavBar
+export default NavBar;
