@@ -1,8 +1,13 @@
+// UserList.tsx
 import React, { useEffect, useState } from "react";
 import { getAllUsersExceptCurrent, UserNameAndImage } from "../../api_service/user";
 import { FaUserPlus } from "react-icons/fa";  // Add an icon for "Add as friend"
 
-const UserList = () => {
+interface UserListProps {
+  isDarkMode: boolean;
+}
+
+const UserList: React.FC<UserListProps> = ({ isDarkMode }) => {
   const [users, setUsers] = useState<UserNameAndImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -39,16 +44,19 @@ const UserList = () => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className={`space-y-4 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
       {users.map((user, index) => (
-        <div key={index} className="flex items-center justify-between space-x-4 p-2 border-b border-gray-100 hover:bg-gray-50 rounded-md">
+        <div
+          key={index}
+          className={`flex items-center justify-between space-x-4 p-2 border-b hover:bg-gray-50 rounded-md ${isDarkMode ? 'border-gray-700' : 'border-gray-100'}`}
+        >
           <div className="flex items-center space-x-2">
             <img
               className="w-10 h-10 rounded-full border-2 border-indigo-500"
               src={`data:image/png;base64,${user.image.fileData}`}
               alt={`${user.name}'s profile`}
             />
-            <span className="text-sm font-medium text-gray-900 truncate max-w-[200px]">
+            <span className="text-sm font-medium truncate max-w-[200px]">
               {user.name}
             </span>
           </div>
