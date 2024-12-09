@@ -20,7 +20,8 @@ export interface UserProfile {
   sex?: string;             
   links?: string;           
   address?: string;         
-  bio?: string;            
+  bio?: string;    
+  phone?:string;        
 }
 
 export const getProfileByUsername = async (username: string): Promise<UserProfile> => {
@@ -115,7 +116,7 @@ export const loginUser = async (loginDTO: LoginDTO): Promise<number> => {
 };
 //end login user
 
-// reset password start
+// reset password start V1
 export interface ResetPasswordDTO {
   email: string;
   username: string;
@@ -138,7 +139,27 @@ export const resetPassword = async (resetPasswordDTO: ResetPasswordDTO): Promise
   }
 };
 
-//reset end
+//reset end v1
+//reset start v2 
+export interface ResetPasswordDTOv2 {
+  username: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export const updatePassword = async (resetPasswordDTOv2: ResetPasswordDTOv2): Promise<string> => {
+  try {
+    if (resetPasswordDTOv2.newPassword !== resetPasswordDTOv2.confirmPassword) {
+      throw new Error("New password and confirm password do not match.");
+    }
+
+    const response = await http.post(`/update-password`, resetPasswordDTOv2);
+    return response.data; // Return the success message from the server
+  } catch (error: any) {
+    console.error("Error updating password:", error);
+    throw new Error(error.response?.data || "Password update failed. Please try again.");
+  }
+};
 
 
 
@@ -153,8 +174,8 @@ export interface UpdateUserProfile {
   links?: string;
   address?: string;
   bio?: string;
+  phone?:string;
 }
-
 export const updateProfileByUsername = async (
   username: string,
   updatedUser: UpdateUserProfile
@@ -162,11 +183,25 @@ export const updateProfileByUsername = async (
   try {
     const response = await http.put(`/update/${username}`, updatedUser);
     return response.data; // Backend response, expected to contain a success message
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error updating profile:", error);
-    throw new Error("Failed to update profile. Please try again.");
+
+    if (error.response && error.response.status === 409) {
+      const errorData = error.response.data;
+      const emailError = errorData.emailError;
+
+      // Handle specific email error
+      if (emailError) {
+        throw new Error(emailError);
+      } else {
+        throw new Error("Error updating profile. Please try again.");
+      }
+    } else {
+      throw new Error("Failed to update profile. Please try again.");
+    }
   }
 };
+
 
 
 
@@ -186,3 +221,32 @@ export function getUserByUserId(userId: number) {
 };
 
 
+
+
+// A lightweight version for when only name and image are needed
+export interface UserNameAndImage {
+  name: string;
+  image: {
+    fileName: string;
+    fileData: string; // Base64-encoded image data
+  };
+}
+
+// Adjust the function to match the lightweight interface
+export const getAllUsersExceptCurrent = async (): Promise<UserNameAndImage[]> => {
+  const currentUsername = localStorage.getItem("username");
+  
+  if (!currentUsername) {
+    throw new Error("No logged-in user found.");
+  }
+
+  try {
+    const response = await http.get(`/users/excludeCurrent`, {
+      params: { currentUsername },
+    });
+    return response.data; // The backend returns only name and image
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw new Error("Failed to fetch users. Please try again.");
+  }
+};
