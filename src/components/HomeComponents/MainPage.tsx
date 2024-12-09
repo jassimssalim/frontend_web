@@ -46,6 +46,10 @@ const MainPage = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("userLoggedIn");
     localStorage.removeItem("username");
+    localStorage.removeItem("darkMode");
+    localStorage.removeItem("theme");
+
+
     toast.success("Logged out successfully!");
     setTimeout(() => {
       navigate("/Entry");
