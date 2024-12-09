@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { PostModel } from "../../api_service/post";
 import * as postService from "../../api_service/post";
 import CommentList from "../CommentComponents/CommentList";
+import { useDarkMode } from "../../utility/ThemeContext";
 
 const PostDetails = () => {
   const param = useParams();
@@ -19,6 +20,7 @@ const PostDetails = () => {
     },
   });
   const navigate = useNavigate();
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   useEffect(() => {
     window.scrollTo(0, 0);

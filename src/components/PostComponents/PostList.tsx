@@ -4,6 +4,7 @@ import { PostModel } from "../../api_service/post";
 import PostItem from "./PostItem";
 import { useLocation, useNavigate } from "react-router-dom";
 import Loading from "../../utility/Loading";
+import { useDarkMode } from "../../utility/ThemeContext";
 
 const PostList = ({
   allPost,
@@ -17,6 +18,8 @@ const PostList = ({
   const [posts, setPosts] = useState<PostModel[]>(allPost);
   const username = localStorage.getItem("username");
   const navigate = useNavigate();
+
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   // useEffect(() => {
   //   if (isAllPost) {

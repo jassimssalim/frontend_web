@@ -4,6 +4,7 @@ import * as userService from "../../api_service/user";
 import { UserProfile } from "../../api_service/user";
 import Joi from "joi";
 import { useNavigate } from "react-router-dom";
+import { useDarkMode } from "../../utility/ThemeContext";
 
 export interface PostData {
   userId: number;
@@ -43,6 +44,7 @@ const NewPost = ({
   const [imageData, setImageData] = useState("");
   const [uploadIdHTML, setUploadIdHTML] = useState("icon-button-file");
   const navigate = useNavigate();
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   useEffect(() => {
     //get user info

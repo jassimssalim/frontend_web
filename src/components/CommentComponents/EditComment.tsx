@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { CommentData } from './CommentList'
 import Joi from 'joi';
+import { useDarkMode } from '../../utility/ThemeContext';
 
 const EditComment = ({commentData, onEdit, commentId, onClose}:{commentData: CommentData, onEdit: any, commentId:number, onClose:any}) => {
 
@@ -12,6 +13,8 @@ const EditComment = ({commentData, onEdit, commentId, onClose}:{commentData: Com
     const newComment = { ...commentToEdit, [name]: value }
     setCommentToEdit(newComment)
   };
+
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
 
   // Joi validation schema

@@ -8,6 +8,7 @@ import EditPost from "./EditPost";
 import { useNavigate } from "react-router-dom";
 import ConfirmationModal from "../../utility/ConfirmationModal";
 import Loading from "../../utility/Loading";
+import { useDarkMode } from "../../utility/ThemeContext";
 
 const PostItem = ({
   post,
@@ -25,6 +26,8 @@ const PostItem = ({
     name: "",
     username: "",
   });
+
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   const [isEnabledForEditing, setCanBeEdited] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);

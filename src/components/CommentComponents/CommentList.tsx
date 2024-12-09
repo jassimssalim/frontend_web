@@ -8,6 +8,7 @@ import EditPost from "../PostComponents/EditPost";
 import EditComment from "./EditComment";
 import { flushSync } from "react-dom";
 import ConfirmationModal from "../../utility/ConfirmationModal";
+import { useDarkMode } from "../../utility/ThemeContext";
 
 export interface CommentData {
   postId: number;
@@ -34,6 +35,7 @@ const CommentList = ({ postId }: { postId: number }) => {
   });
   const [openEditModal, setOpenEditModal] = useState(false);
   const [showDeleteModal, setOpenDeleteModal] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   useEffect(() => {
     //get comments info
