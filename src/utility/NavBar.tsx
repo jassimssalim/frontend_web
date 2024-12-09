@@ -69,6 +69,8 @@ const NavBar = () => {
         message="Are you sure you want to logout?"
         onConfirm={handleLogout}
         onCancel={handleCancelLogout}
+        isDarkMode={isDarkMode}  // Pass the dark mode state
+
       />
   </div>
   )

@@ -13,6 +13,7 @@ const PostItem = ({
   post,
   onDelete,
   fromDetails,
+  
 }: {
   post: PostModel;
   onDelete: any;
@@ -288,6 +289,8 @@ const PostItem = ({
         message="Are you sure you want to delete the comment?"
         onConfirm={() => onDelete(+currentPost.id)}
         onCancel={() => setOpenDeleteModal(false)}
+        isDarkMode={isDarkMode}  // Pass the dark mode state
+
       />
       </div>
       }

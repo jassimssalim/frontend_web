@@ -344,6 +344,8 @@ const CommentList = ({ postId }: { postId: number }) => {
                     message="Are you sure you want to delete the comment?"
                     onConfirm={() => handleDeleteComment(comment.id, comment.postId)}
                     onCancel={() => setOpenDeleteModal(false)}
+                    isDarkMode={isDarkMode}  // Pass the dark mode state
+
                   />
                 </footer>
                 <p className="text-gray-500 dark:text-gray-400">
