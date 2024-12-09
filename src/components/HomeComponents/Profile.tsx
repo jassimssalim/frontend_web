@@ -6,6 +6,7 @@ import Posts from "../ProfileComponents/Post";
 import About from "../ProfileComponents/About";
 import Settings from "../ProfileComponents/Settings";
 import UserList from "../ProfileComponents/UserList";
+import { useDarkMode } from "../../utility/ThemeContext"; // Import the hook
 
 const Profile = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -13,6 +14,7 @@ const Profile = () => {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>("posts");
   const navigate = useNavigate();
+  const { isDarkMode } = useDarkMode(); // Use dark mode state from context
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -66,10 +68,10 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
       {/* Profile Header */}
       <div className="relative">
-        <div className="h-40 bg-violet-100"></div>
+        <div className={`${isDarkMode ? 'bg-black' : 'bg-violet-200'} h-40`}></div>
         <div className="relative -mt-16 flex items-center space-x-6 px-8">
           <img
             className="w-32 h-32 rounded-full border-4 border-white shadow-md"
@@ -77,9 +79,9 @@ const Profile = () => {
             alt="Profile"
           />
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{profile.name}</h1>
-            <p className="text-sm text-gray-800">{profile.email}</p>
-            <p className="text-sm text-gray-800">{profile.bio}</p>
+            <h1 className={`${isDarkMode ? 'text-white' : 'text-gray-900'} text-3xl font-bold`}>{profile.name}</h1>
+            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-800'} text-sm`}>{profile.email}</p>
+            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-800'} text-sm`}>{profile.bio}</p>
           </div>
         </div>
       </div>
@@ -88,33 +90,33 @@ const Profile = () => {
       <div className="flex justify-center mt-8">
         <div className="flex space-x-4">
           <button
-            className={`flex items-center space-x-2 px-6 py-2 rounded-full ${
-              activeTab === "posts"
-                ? "bg-purple-600 text-white"
-                : "bg-gray-200 text-gray-600"
-            }`}
+            className={`flex items-center space-x-2 px-6 py-2 rounded-full ${activeTab === "posts"
+              ? "bg-purple-600 text-white"
+              : isDarkMode
+              ? "bg-gray-700 text-gray-300"
+              : "bg-gray-200 text-gray-600"}`}
             onClick={() => setActiveTab("posts")}
           >
             <FaStickyNote />
             <span>Posts</span>
           </button>
           <button
-            className={`flex items-center space-x-2 px-6 py-2 rounded-full ${
-              activeTab === "about"
-                ? "bg-purple-600 text-white"
-                : "bg-gray-200 text-gray-600"
-            }`}
+            className={`flex items-center space-x-2 px-6 py-2 rounded-full ${activeTab === "about"
+              ? "bg-purple-600 text-white"
+              : isDarkMode
+              ? "bg-gray-700 text-gray-300"
+              : "bg-gray-200 text-gray-600"}`}
             onClick={() => setActiveTab("about")}
           >
             <FaUser />
             <span>About</span>
           </button>
           <button
-            className={`flex items-center space-x-2 px-6 py-2 rounded-full ${
-              activeTab === "settings"
-                ? "bg-purple-600 text-white"
-                : "bg-gray-200 text-gray-600"
-            }`}
+            className={`flex items-center space-x-2 px-6 py-2 rounded-full ${activeTab === "settings"
+              ? "bg-purple-600 text-white"
+              : isDarkMode
+              ? "bg-gray-700 text-gray-300"
+              : "bg-gray-200 text-gray-600"}`}
             onClick={() => setActiveTab("settings")}
           >
             <FaCog />
@@ -127,25 +129,21 @@ const Profile = () => {
       <div className="flex justify-center mt-8 px-6">
         <div className="flex flex-row space-x-8 max-w-7xl w-full">
           {/* Sidebar */}
-          <div className="w-1/4 bg-white shadow-md rounded-xl p-6 flex flex-col h-[24rem]">
-            <h2 className="text-default font-semibold text-gray-900 mb-4">
+          <div className={`w-1/4 shadow-md rounded-xl p-6 flex flex-col h-[24rem] ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <h2 className={`${isDarkMode ? 'text-gray-300' : 'text-gray-900'} font-semibold mb-4`}>
               Interact with the people you know.
             </h2>
-            <>
-            </>
             <div className="overflow-y-auto flex-1">
-              <UserList />
-
-
+              {/* Pass the dark mode state to UserList */}
+              <UserList isDarkMode={isDarkMode} />
             </div>
-            
           </div>
 
           {/* Main Content */}
-          <div className="w-3/4 bg-white shadow-md rounded-xl p-6">
+          <div className={`w-3/4 shadow-md rounded-xl p-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
             {activeTab === "posts" && <Posts />}
-            {activeTab === "about" && <About profile={profile} updateProfile={updateProfile} />}
-            {activeTab === "settings" && <Settings />}
+            {activeTab === "about" && <About profile={profile} updateProfile={updateProfile} isDarkMode={isDarkMode}/>}
+            {activeTab === "settings" && <Settings isDarkMode={isDarkMode} />}
           </div>
         </div>
       </div>

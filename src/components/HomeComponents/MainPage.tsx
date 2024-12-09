@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
+
 import { Link, useNavigate } from "react-router-dom";
 import ConfirmationModal from "../../utility/ConfirmationModal";
 import { getProfileByUsername, UserProfile } from "../../api_service/user";
 import UserList from "../ProfileComponents/UserList";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDarkMode } from "../../utility/ThemeContext"; // Import the context
 
 const MainPage = () => {
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [isDarkMode, setIsDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
+
+  // Access global dark mode state and toggle function
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -30,13 +32,12 @@ const MainPage = () => {
     fetchUserProfile();
   }, []);
 
+  // Apply the dark mode class globally to the document element
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
     }
   }, [isDarkMode]);
 
@@ -62,8 +63,8 @@ const MainPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 dark:text-white">
       {/* Navbar Section */}
-      <header className="bg-violet-600 text-white dark:bg-violet-700">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <header className={`text-white ${isDarkMode ? "bg-black" : "bg-violet-600"}`}>
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <h1 className="text-lg font-bold">MoodSnap.</h1>
           <nav>
             <ul className="flex space-x-6 items-center">
@@ -78,17 +79,14 @@ const MainPage = () => {
                 </Link>
               </li>
               <li>
-                <button
-                  onClick={handleLogoutClick}
-                  className="hover:underline"
-                >
+                <button onClick={handleLogoutClick} className="hover:underline">
                   Logout
                 </button>
               </li>
               <li>
                 {/* Dark Mode Toggle */}
                 <button
-                  onClick={() => setIsDarkMode((prev) => !prev)}
+                  onClick={toggleDarkMode}
                   className="p-2 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-500 transition"
                   aria-label="Toggle Dark Mode"
                 >

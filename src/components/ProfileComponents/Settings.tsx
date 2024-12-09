@@ -6,8 +6,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, updatePassword } from '../../api_service/user';
 import ConfirmationModal from '../../utility/ConfirmationModal';
 
-const Settings = () => {
-  const [darkMode, setDarkMode] = useState(false);
+
+interface SettingsProps {
+  isDarkMode: boolean;
+}
+
+const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
   const [isChangePasswordModalVisible, setIsChangePasswordModalVisible] = useState(false);
@@ -55,7 +59,7 @@ const Settings = () => {
 
     setTimeout(() => {
       setIsLogoutModalVisible(false);
-      navigate("/");
+      navigate("/"); 
     }, 1000);
   };
 
@@ -83,53 +87,38 @@ const Settings = () => {
   };
 
   return (
-    <div className="min-h bg-gray-50 p-6 rounded-xl shadow-2xl max-w-4xl mx-auto transition-all duration-300 ease-in-out">
+    <div className={`p-10 rounded-xl shadow-2xl max-w-4xl mx-auto transition-all duration-300 ease-in-out ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
       <div className="space-y-6">
         <h1 className="text-2xl font-semibold text-center">Account Settings</h1>
 
-        {/* Dark Mode Setting */}
-        <div className="flex items-center justify-between p-3 border-b border-gray-200 rounded-lg">
-          <span className="text-default font-semibold text-gray-900">Dark Mode</span>
-          <select
-            value={darkMode ? 'enabled' : 'disabled'}
-            onChange={(e) => setDarkMode(e.target.value === 'enabled')}
-            className="px-3 py-1.5 rounded-lg bg-gray-200 text-gray-800 text-sm"
-          >
-            <option value="disabled">Disabled</option>
-            <option value="enabled">Enabled</option>
-          </select>
-        </div>
-
         {/* Change Password Section */}
-        <div className="flex items-center justify-between p-3 border-b border-gray-200 rounded-lg">
-          <span className="text-default font-semibold text-gray-900">Change Password</span>
+        <div className={`flex items-center justify-between p-3 border-b rounded-lg ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+          <span className="text-default font-semibold">Change Password</span>
           <button
             onClick={showChangePasswordModal}
-            className="px-3 py-1.5 rounded-lg  bg-violet-800 hover:bg-blue-600 text-white text-sm "
+            className={`px-3 py-1.5 rounded-lg bg-violet-800 hover:bg-blue-600 text-white text-sm`}
           >
             Change
           </button>
         </div>
 
-        
-
         {/* Logout Section */}
-        <div className="flex items-center justify-between p-3 border-b border-gray-200 rounded-lg">
-          <span className="text-default font-semibold text-gray-900 ">Logout</span>
+        <div className={`flex items-center justify-between p-3 border-b rounded-lg ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+          <span className="text-default font-semibold">Logout</span>
           <button
             onClick={showLogoutConfirmationModal}
-            className="px-3 py-1.5 rounded-lg  bg-violet-800 hover:bg-blue-600 text-white text-sm " 
+            className={`px-3 py-1.5 rounded-lg bg-violet-800 hover:bg-blue-600 text-white text-sm`}
           >
             Logout
           </button>
         </div>
 
         {/* Delete Account */}
-        <div className="flex items-center justify-between p-3 border-b border-gray-200 rounded-lg">
-          <span className="text-default font-semibold text-gray-900 ">Delete Account</span>
+        <div className={`flex items-center justify-between p-3 border-b rounded-lg ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+          <span className="text-default font-semibold">Delete Account</span>
           <button
             onClick={showDeleteConfirmationModal}
-            className="px-3 py-1.5 rounded-lg  bg-violet-800 hover:bg-blue-600 text-white text-sm "
+            className={`px-3 py-1.5 rounded-lg bg-violet-800 hover:bg-blue-600 text-white text-sm`}
           >
             Delete
           </button>
@@ -139,21 +128,21 @@ const Settings = () => {
       {/* Change Password Modal */}
       {isChangePasswordModalVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg p-4 space-y-4 w-80">
+          <div className={`bg-white rounded-lg p-4 space-y-4 w-80 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white'}`}>
             <h2 className="text-xl font-semibold text-center">Change Password</h2>
             <input
               type="password"
               placeholder="New Password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none text-sm"
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none text-sm ${isDarkMode ? 'bg-gray-700 text-white' : ''}`}
             />
             <input
               type="password"
               placeholder="Confirm Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none text-sm"
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none text-sm ${isDarkMode ? 'bg-gray-700 text-white' : ''}`}
             />
             <div className="flex justify-end space-x-3">
               <button

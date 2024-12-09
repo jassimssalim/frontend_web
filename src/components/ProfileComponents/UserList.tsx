@@ -1,4 +1,3 @@
-// UserList.tsx
 import React, { useEffect, useState } from "react";
 import { getAllUsersExceptCurrent, UserNameAndImage } from "../../api_service/user";
 import { FaUserPlus } from "react-icons/fa";  // Add an icon for "Add as friend"
@@ -48,7 +47,7 @@ const UserList: React.FC<UserListProps> = ({ isDarkMode }) => {
       {users.map((user, index) => (
         <div
           key={index}
-          className={`flex items-center justify-between space-x-4 p-2 border-b hover:bg-gray-50 rounded-md ${isDarkMode ? 'border-gray-700' : 'border-gray-100'}`}
+          className={`flex items-center justify-between space-x-4 p-2 border-b hover:${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-800'} rounded-md ${isDarkMode ? 'border-gray-700' : 'border-gray-100'}`}
         >
           <div className="flex items-center space-x-2">
             <img
