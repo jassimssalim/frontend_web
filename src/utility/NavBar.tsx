@@ -29,7 +29,7 @@ const NavBar = () => {
     
   return (
     <div className="fixed top-0 left-0 right-0">
-   <header className={`text-white ${isDarkMode ? "bg-black" : "bg-violet-600"}`}>
+   <header className={`text-white ${isDarkMode ? "bg-black" : "bg-violet-600"}` }>
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <h1 className="text-lg font-bold">MoodSnap.</h1>
           <nav>

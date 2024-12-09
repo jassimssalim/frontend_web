@@ -107,7 +107,7 @@ const MainPage = () => {
         ) : (
           <div>
       {/* Main Content Section */}
-      <main className="max-w-7xl mx-auto px-6 py-8 flex space-x-6">
+      <main className="max-w-7xl mx-auto px-6 py-8 flex space-x-6 mt-20">
         {/* Left Side: Profile Info */}
         <aside className="w-1/4 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
           {userProfile ? (
