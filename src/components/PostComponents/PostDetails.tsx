@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { PostModel } from "../../api_service/post";
 import * as postService from "../../api_service/post";
 import CommentList from "../CommentComponents/CommentList";
+import { FaArrowLeft} from "react-icons/fa";
 
 const PostDetails = () => {
   const param = useParams();
@@ -68,6 +69,19 @@ const PostDetails = () => {
         {/* Right Side: Suggestions */}
         <aside className="w-1/4 bg-transparent p-6 space-y-6"></aside>
       </main>
+      {/* Back to Home Button */}
+      <div className="fixed bottom-6 right-6 z-50 group">
+        <button
+          onClick={() => navigate(-1)}
+          className="text-white bg-violet-800 hover:bg-blue-600 p-5 rounded-full shadow-lg transform hover:scale-100 transition-all"
+        >
+          <FaArrowLeft className="text-4xl" />
+        </button>
+        <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 text-white bg-black rounded-md py-1 px-3 opacity-0 group-hover:opacity-100 transition-opacity">
+          Back
+        </div>
+      </div>
+
     </div>
   );
 };

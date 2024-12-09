@@ -5,7 +5,7 @@ import * as postService from "../../api_service/post";
 import { Dropdown, Modal, Button } from "flowbite-react";
 import NewPost, { PostData } from "./NewPost";
 import EditPost from "./EditPost";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ConfirmationModal from "../../utility/ConfirmationModal";
 import Loading from "../../utility/Loading";
 
@@ -150,11 +150,11 @@ const PostItem = ({
               alt={postUser.username}
               className="w-8 h-8 rounded-full"
             />
-            <div>
-              <p className="text-gray-800 font-semibold">
+            <div><Link to={`/profile/${postUser.username}`} target="_blank">
+              <p className="text-gray-800 font-semibold hover:text-blue-800">
                 {properCase(postUser.name)}{" "}
-                <i className="text-gray-500">@{postUser.username}</i>
-              </p>
+                <i className="text-gray-500 hover:text-blue-800">@{postUser.username}</i>
+              </p></Link>
               <p className="text-gray-500 text-sm">
                 {new Date(currentPost.datePosted)
                   .toLocaleString("en-PH")

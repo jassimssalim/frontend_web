@@ -3,7 +3,6 @@ import { FaStickyNote, FaUser, FaCog, FaHome } from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom';
 import { UserProfile, getProfileByUsername } from '../../api_service/user';
 import { useDarkMode } from '../../utility/ThemeContext';
-import About from '../ProfileComponents/About';
 import OtherPost from './OtherPost';
 import OtherAbout from './OtherAbout';
 
