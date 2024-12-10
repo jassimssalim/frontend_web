@@ -1,5 +1,5 @@
-// MoodModal.tsx
 import React, { useState, useEffect } from 'react';
+import { AiOutlineReload } from 'react-icons/ai'; // Import reload icon from react-icons
 
 interface MoodModalProps {
   isOpen: boolean;
@@ -9,8 +9,8 @@ interface MoodModalProps {
 
 const MoodModal: React.FC<MoodModalProps> = ({ isOpen, onClose, darkMode }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>(''); // Default to an empty string
-  const [quote, setQuote] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [quote, setQuote] = useState<string>(''); // To store the fetched quote
+  const [loading, setLoading] = useState<boolean>(false); // To handle loading state
 
   const categories = ['success', 'courage', 'alone', 'best', 'happiness', 'freedom'];
 
@@ -48,6 +48,12 @@ const MoodModal: React.FC<MoodModalProps> = ({ isOpen, onClose, darkMode }) => {
     }
   }, [isOpen, selectedCategory]);
 
+  // Function to handle category reset
+  const resetCategory = () => {
+    setSelectedCategory('');
+    setQuote('');
+  };
+
   if (!isOpen) return null; // Return nothing if modal is not open
 
   return (
@@ -55,24 +61,37 @@ const MoodModal: React.FC<MoodModalProps> = ({ isOpen, onClose, darkMode }) => {
       <div
         className={`p-6 rounded-lg shadow-lg w-[80vw] md:w-[60vw] lg:w-[40vw] ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}
       >
-        <h2 className="text-xl font-bold mb-4">Select  according how you feel</h2>
+        <h2 className="text-xl font-bold mb-4">Select according to how you feel</h2>
 
-        {/* Category Selection */}
-        <div className="mb-4">
-          <label htmlFor="category" className="block mb-2">Select Category:</label>
-          <select
-            id="category"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white"
-          >
-            <option value="" disabled>- Select here -</option> {/* Default option */}
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </option>
-            ))}
-          </select>
+        {/* Category Selection and Reload Button */}
+        <div className="mb-4 flex items-center space-x-4">
+          {/* Category Dropdown */}
+          <div className="w-1/2">
+            <label htmlFor="category" className="block mb-2">Select Category:</label>
+            <select
+              id="category"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white"
+            >
+              <option value="" >- Select here -</option> {/* Default option */}
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Reload Quote Button */}
+          {selectedCategory && !loading && (
+            <button
+              onClick={fetchQuote}
+              className="text-blue-500 hover:text-blue-700 flex items-center space-x-2"
+            >
+              <AiOutlineReload size={20} /> <span>Reload Quote</span>
+            </button>
+          )}
         </div>
 
         {/* Display Quote */}
