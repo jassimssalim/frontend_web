@@ -82,15 +82,31 @@ const MainPage = () => {
   };
 
   const handleLogoutClick = () => {
-    setShowLogoutModal(true);
-  };
+    setShowLogoutModal(true);}
 
+  const handleToast = () => {
+
+  }
   const handleAdd = () => {
     setIsDataChange(!isDataChange);
+    setTimeout(() => {
+      toast.success('Post successfully added!', {
+        position: 'top-right', 
+        autoClose: 5000,
+      });
+    }, 100);
+    
   };
+
 
   const handleDelete = () => {
     setIsDataChange(!isDataChange);
+    setTimeout(() => {
+      toast.success('Post successfully deleted!', {
+        position: 'top-right', 
+        autoClose: 5000,
+      });
+    }, 100);
   };
 
   const handleLoading = () => {

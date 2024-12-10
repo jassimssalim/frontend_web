@@ -21,7 +21,7 @@ const Profile = () => {
       const username = localStorage.getItem("username");
 
       if (!username) {
-        navigate("/Entry");
+        navigate("/entry");
         setLoading(false);
         return;
       }

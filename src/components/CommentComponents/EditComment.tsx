@@ -41,7 +41,7 @@ const EditComment = ({commentData, onEdit, commentId, onClose}:{commentData: Com
 
     try {
       if (commentToEdit.content) {
-        onEdit(commentToEdit, commentId)
+        onEdit(commentToEdit)
       }
     } catch (error) {
       setErrors({ general: "Error in editing" });
