@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import { CommentData } from './CommentList'
 import * as postService from "../../api_service/post";
 import * as userService from "../../api_service/user";
+import { useDarkMode } from "../../utility/ThemeContext"; // Import the context
 
 const CommentItem = ({comment, currentUserId, onDelete, onLoading} :{comment: CommentModel, currentUserId: number, onDelete: any, onLoading:any}) => {
     
@@ -15,6 +16,7 @@ const CommentItem = ({comment, currentUserId, onDelete, onLoading} :{comment: Co
   const [currentComment, setCurrentComment] = useState(comment)
   const [likes, setLikes] = useState<LikeModel[]>([]);
   const [isLikedByUser, setIsLikedByUser] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   useEffect(() => {
   
@@ -197,6 +199,8 @@ const CommentItem = ({comment, currentUserId, onDelete, onLoading} :{comment: Co
 
                   <ConfirmationModal
                     isVisible={showDeleteModal}
+                    isDarkMode={isDarkMode} // Pass the dark mode state
+
                     message="Are you sure you want to delete the comment?"
                     onConfirm={() =>
                       handleDelete()
