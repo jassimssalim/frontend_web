@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { getAllUsersExceptCurrent, UserNameAndImage } from "../../api_service/user";
 import { FaUserPlus } from "react-icons/fa";  // Add an icon for "Add as friend"
+import { Link } from "react-router-dom";
 
 interface UserListProps {
   isDarkMode: boolean;
+  userList?: UserNameAndImage[]
 }
 
-const UserList: React.FC<UserListProps> = ({ isDarkMode }) => {
-  const [users, setUsers] = useState<UserNameAndImage[]>([]);
+const UserList: React.FC<UserListProps> = ({ isDarkMode, userList }) => {
+  const [users, setUsers] = useState<UserNameAndImage[]>(userList ?? []);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -15,6 +17,7 @@ const UserList: React.FC<UserListProps> = ({ isDarkMode }) => {
     const fetchUserList = async () => {
       try {
         const userList = await getAllUsersExceptCurrent();
+        console.log(userList)
         setUsers(userList);
       } catch (err: any) {
         setError(err.message || "Failed to load user list");
@@ -22,8 +25,9 @@ const UserList: React.FC<UserListProps> = ({ isDarkMode }) => {
         setLoading(false);
       }
     };
-
-    fetchUserList();
+    if(userList){
+      setLoading(false)
+      } else fetchUserList()
   }, []);
 
   if (loading) {
@@ -43,7 +47,7 @@ const UserList: React.FC<UserListProps> = ({ isDarkMode }) => {
   }
 
   return (
-    <div className={`space-y-4 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} overflow-hidden`}>
+    <div className={`space-y-4  } overflow-hidden`}>
       {users.map((user, index) => (
         <div
           key={index}
@@ -55,9 +59,11 @@ const UserList: React.FC<UserListProps> = ({ isDarkMode }) => {
               src={`data:image/png;base64,${user.image.fileData}`}
               alt={`${user.name}'s profile`}
             />
-            <span className="text-sm font-medium truncate max-w-[200px] overflow-hidden">
+            <Link to={`/profile/${user.userName}`} target="_blank">
+            <span className="text-sm font-medium truncate max-w-[200px] overflow-hidden hover:text-blue-800 ">
               {user.name}
             </span>
+            </Link>
           </div>
 
           <button

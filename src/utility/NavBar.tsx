@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ConfirmationModal from './ConfirmationModal';
 import { useDarkMode } from './ThemeContext';
+import SearchBar from './SearchBar';
 
 const NavBar = () => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -32,6 +33,8 @@ const NavBar = () => {
       <header className={`w-full border-0 shadow-none text-white box-border ${isDarkMode ? "bg-black" : "bg-violet-600"}`}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <h1 className="text-lg font-bold">MoodSnap.</h1>
+          <div></div>
+          <SearchBar/>
           <nav>
             <ul className="flex space-x-6 items-center">
               <li>
