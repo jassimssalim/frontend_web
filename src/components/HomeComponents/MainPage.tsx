@@ -196,6 +196,8 @@ const MainPage = () => {
           pauseOnFocusLoss
           draggable
           pauseOnHover
+          className={isDarkMode ? 'toast-dark' : 'toast-light'} 
+
         />
 
         {/* Reusable Confirmation Modal */}
