@@ -156,7 +156,7 @@ const PostItem = ({
   return (
     <>
     {isLoading ? <Loading/> :
-      <div><div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+      <div><div className={`${isDarkMode ? 'bg-black-50' : 'bg-gray-50'} p-6 rounded-lg border border-gray-200`}>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-2">
             <img
@@ -165,7 +165,7 @@ const PostItem = ({
               className="w-8 h-8 rounded-full"
             />
             <div><Link to={`/profile/${postUser.username}`} target="_blank">
-              <p className="text-gray-800 font-semibold hover:text-blue-800">
+              <p className={`${isDarkMode ? 'text-white' : 'text-gray-800'} font-semibold hover:text-blue-800`}>
                 {properCase(postUser.name)}{" "}
                 <i className="text-gray-500 hover:text-blue-800">@{postUser.username}</i>
               </p></Link>
@@ -180,6 +180,7 @@ const PostItem = ({
             <div className="text-gray-500 cursor-pointer">
               {/* <!-- Three-dot menu icon --> */}
               <Dropdown
+              className= {`${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}
                 label=""
                 renderTrigger={() => (
                   <button className="hover:bg-gray-50 rounded-full p-1">
@@ -200,10 +201,10 @@ const PostItem = ({
                   </button>
                 )}
               >
-                <Dropdown.Item onClick={() => setOpenEditModal(true)}>
+                <Dropdown.Item className = {`font-semibold hover:text-blue-800 ${isDarkMode ? 'text-white' : 'text-black'}`} onClick={() => setOpenEditModal(true)}>
                   Edit
                 </Dropdown.Item>
-                <Dropdown.Item onClick={() => setOpenDeleteModal(true)}>
+                <Dropdown.Item className = {`font-semibold hover:text-blue-800 ${isDarkMode ? 'text-white' : 'text-black'}`} onClick={() => setOpenDeleteModal(true)}>
                   Delete
                 </Dropdown.Item>
               </Dropdown>
@@ -212,7 +213,7 @@ const PostItem = ({
         </div>
         {/* <!-- Message --> */}
         <div className="mb-4">
-          <p className="text-gray-800">{currentPost.content}</p>
+          <p className={`${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{currentPost.content}</p>
         </div>
         {/* <!-- Image --> */}
         {currentPost.postImage.fileData !== "" && (

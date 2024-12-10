@@ -127,18 +127,18 @@ const CommentList = ({ postId }: { postId: number }) => {
   return (
     <>
     {isLoading? <Loading /> : <div>
-        <section className="bg-white dark:bg-gray-900 py-8 lg:py-16 antialiased">
+        <section className={`${isDarkMode? "bg-gray-900" : "bg-white"}  py-8 lg:py-16 antialiased`}>
           <div className="max-w-2xl mx-auto px-4">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-sm font-bold text-gray-900 dark:text-white">
+              <h2 className={`text-sm font-bold ${isDarkMode? "text-white" : "text-gray-900"}`}>
                 {`Comments (${comments.length})`}
               </h2>
             </div>
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <div className={`${isDarkMode ? 'bg-black-50' : 'bg-gray-50'} p-4 rounded-lg border border-gray-200`}>
               <textarea
                 id="content"
                 name="content"
-                className="w-full h-20 p-2 text-sm text-gray-900 bg-white border-1 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                className={`w-full h-20 p-2 text-sm focus:ring-0  ${isDarkMode? "bg-gray-800 text-white placeholder-gray-400" : "text-gray-900 bg-white"}  border-1`}
                 placeholder="Write a comment..."
                 value={commentToAdd.content}
                 onChange={(event) => handleChange(event)}

@@ -6,7 +6,7 @@ import PostList from "../PostComponents/PostList";
 
 import * as postService from "../../api_service/post";
 import { PostModel } from "../../api_service/post";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const MyPost = () => {
   const username = localStorage.getItem("username");
@@ -52,7 +52,7 @@ const MyPost = () => {
   }
 
   return (
-    <>
+    <><ToastContainer/>
       {isLoading ? (
         <Loading />
       ) : (
