@@ -67,6 +67,7 @@ const NewPost = ({
     if (initialPost) {
       setUploadIdHTML("icon-button-for-edit");
     }
+    console.log("darkmode", isDarkMode)
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -165,7 +166,7 @@ const NewPost = ({
 
   return (
     <div>
-      <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+      <div className={`${isDarkMode ? 'bg-black-50' : 'bg-gray-50'} p-4 rounded-lg border border-gray-200`}>
         <div className="flex w-full  space-x-3">
           <div className="flex justify-center items-left h-20">
             <img
@@ -177,7 +178,7 @@ const NewPost = ({
           <textarea
             id="content"
             name="content"
-            className="w-full p-2 text-sm text-gray-900 bg-white border-1 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+            className={`w-full p-2 text-sm ${isDarkMode? "bg-gray-800 text-white placeholder-gray-400" : "text-gray-900 bg-white"} border-1 focus:ring-0`}
             placeholder="What's on your mind?"
             value={postData.content}
             onChange={(event) => handleChange(event)}

@@ -20,6 +20,7 @@ const OtherUserProfile = () => {
       const fetchUserProfile = async () => {
         const currentUser = localStorage.getItem("username")
 
+        console.log("darkmode in others", isDarkMode)
         if (!userNameParam) {
           navigate("/entry");
           setLoading(false);

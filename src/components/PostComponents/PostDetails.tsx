@@ -58,7 +58,7 @@ const PostDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 mt-20">
+    <div className={`min-h-screen ${isDarkMode ? "bg-gray-900" : "bg-gray-50"} mt-12`}>
       <ToastContainer/>
       <NavBar />
       {/* Main Content Section */}
@@ -67,7 +67,7 @@ const PostDetails = () => {
         <aside className="w-1/4 bg-transparent p-6 space-y-6"></aside>
 
         {/* Middle: Posts Section */}
-        <section className="w-1/2 bg-white rounded-lg shadow-md p-6 space-y-6">
+        <section className={`w-1/2 ${isDarkMode? "bg-black-50" :"bg-white"} rounded-lg shadow-md p-6 space-y-6`}>
           {post.content && (
             <div>
               <PostItem
