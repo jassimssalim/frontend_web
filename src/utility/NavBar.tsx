@@ -50,7 +50,7 @@ const NavBar = () => {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-lg font-bold">MoodSnap.</h1>
+          <h1 className="text-lg font-bold"> <Link to = "/home"> MoodSnap  </Link></h1>
           <nav>
             <ul className="flex space-x-6 items-center">
               <li>
