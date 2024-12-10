@@ -6,6 +6,7 @@ import PostList from "../PostComponents/PostList";
 
 import * as postService from "../../api_service/post";
 import { PostModel } from "../../api_service/post";
+import { toast } from "react-toastify";
 
 const MyPost = () => {
   const username = localStorage.getItem("username");
@@ -28,10 +29,22 @@ const MyPost = () => {
 
   const handleAdd = () => {
     setIsDataChange(!isDataChange);
+    setTimeout(() => {
+      toast.success('Post successfully added!', {
+        position: 'top-right', 
+        autoClose: 5000,
+      });
+    }, 100);
   };
 
   const handleDelete = () => {
     setIsDataChange(!isDataChange);
+    setTimeout(() => {
+      toast.success('Post successfully deleted!', {
+        position: 'top-right', 
+        autoClose: 5000,
+      });
+    }, 100);
   };
 
   const handleLoading = () => {
