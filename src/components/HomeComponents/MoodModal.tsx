@@ -55,7 +55,7 @@ const MoodModal: React.FC<MoodModalProps> = ({ isOpen, onClose, darkMode }) => {
       <div
         className={`p-6 rounded-lg shadow-lg w-[80vw] md:w-[60vw] lg:w-[40vw] ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}
       >
-        <h2 className="text-xl font-bold mb-4">Select what according to your mood</h2>
+        <h2 className="text-xl font-bold mb-4">Select  according how you feel</h2>
 
         {/* Category Selection */}
         <div className="mb-4">

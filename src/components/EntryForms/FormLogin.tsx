@@ -27,32 +27,38 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSignUp, onForgotPassword }) => 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     try {
-      const message = await loginUser(loginData); // Call the login API function
-
-      if (message === 200) {
+      const statusCode = await loginUser(loginData); // Call the login API function
+  
+      if (statusCode === 200) {
+        // Display success toast
         toast.success('Login successful!', {
-          position: 'top-right', // Use string value for position
+          position: 'top-right',
           autoClose: 3000,
         });
-
+  
+        // Navigate to the home page after a delay
         setTimeout(() => {
           navigate("/home");
         }, 2000);
       } else {
-        toast.error('Login failed!', {
-          position: 'top-right', // Use string value for position
+        // Handle unexpected successful status codes (unlikely)
+        toast.error(`Unexpected status: ${statusCode}`, {
+          position: 'top-right',
           autoClose: 3000,
         });
       }
-    } catch (err) {
-      toast.error('Username or Password is wrong.', {
-        position: 'top-right', // Use string value for position
+    } catch (err: any) {
+      // Extract and display error message
+      const errorMessage = err.message || 'An unexpected error occurred.';
+      toast.error(errorMessage, {
+        position: 'top-right',
         autoClose: 3000,
       });
     }
   };
+  
 
   return (
     <div className="bg-white px-24 py-20 rounded-3xl border-2 border-gray-200 max-w-2xl mx-auto">
