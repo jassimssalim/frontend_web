@@ -7,7 +7,7 @@ import * as postService from "../../api_service/post";
 import CommentList from "../CommentComponents/CommentList";
 import { useDarkMode } from "../../utility/ThemeContext";
 import { FaArrowLeft} from "react-icons/fa";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const PostDetails = () => {
   const param = useParams();
@@ -59,6 +59,7 @@ const PostDetails = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 mt-20">
+      <ToastContainer/>
       <NavBar />
       {/* Main Content Section */}
       <main className="max-w-7xl mx-auto px-6 py-8 flex space-x-6">

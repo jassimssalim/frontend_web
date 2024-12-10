@@ -52,10 +52,6 @@ const PostList = ({
     postService
       .deletePost(+postId)
       .then(() => {
-        toast.success('Post successfully deleted!', {
-          position: 'top-right', 
-          autoClose: 3000,
-        });
         onDelete();
       })
       .catch((error) => {

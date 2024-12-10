@@ -81,12 +81,6 @@ const MainPage = () => {
     }, 1000);
   };
 
-  const handleLogoutClick = () => {
-    setShowLogoutModal(true);}
-
-  const handleToast = () => {
-
-  }
   const handleAdd = () => {
     setIsDataChange(!isDataChange);
     setTimeout(() => {
