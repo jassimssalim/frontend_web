@@ -133,8 +133,8 @@ const Profile = () => {
             <h2 className={`${isDarkMode ? 'text-gray-300' : 'text-gray-900'} font-semibold mb-4`}>
               Interact with the people you know.
             </h2>
-            <div className="overflow-y-auto flex-1">
-              {/* Pass the dark mode state to UserList */}
+            <div className="overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-gray-200 scroll-smooth">
+            {/* Pass the dark mode state to UserList */}
               <UserList isDarkMode={isDarkMode} />
             </div>
           </div>

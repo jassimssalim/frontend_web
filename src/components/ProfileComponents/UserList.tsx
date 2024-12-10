@@ -28,7 +28,7 @@ const UserList: React.FC<UserListProps> = ({ isDarkMode }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-gray-50">
+      <div className="min-h-screen flex justify-center items-center bg-gray-50 overflow-hidden">
         <p className="text-gray-600">Loading users...</p>
       </div>
     );
@@ -36,18 +36,18 @@ const UserList: React.FC<UserListProps> = ({ isDarkMode }) => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-gray-50">
+      <div className="min-h-screen flex justify-center items-center bg-gray-50 overflow-hidden">
         <p className="text-red-500">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className={`space-y-4 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
+    <div className={`space-y-4 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} overflow-hidden`}>
       {users.map((user, index) => (
         <div
           key={index}
-          className={`flex items-center justify-between space-x-4 p-2 border-b hover:${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-800'} rounded-md ${isDarkMode ? 'border-gray-700' : 'border-gray-100'}`}
+          className={`flex items-center justify-between space-x-4 p-2 border-b hover:${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-800'} rounded-md ${isDarkMode ? 'border-gray-700' : 'border-gray-100'} overflow-hidden`}
         >
           <div className="flex items-center space-x-2">
             <img
@@ -55,7 +55,7 @@ const UserList: React.FC<UserListProps> = ({ isDarkMode }) => {
               src={`data:image/png;base64,${user.image.fileData}`}
               alt={`${user.name}'s profile`}
             />
-            <span className="text-sm font-medium truncate max-w-[200px]">
+            <span className="text-sm font-medium truncate max-w-[200px] overflow-hidden">
               {user.name}
             </span>
           </div>
