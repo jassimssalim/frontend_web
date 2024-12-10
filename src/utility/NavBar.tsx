@@ -19,6 +19,7 @@ const NavBar = () => {
     localStorage.removeItem("userLoggedIn");
     localStorage.removeItem("username");
     localStorage.removeItem("isDarkMode");
+    localStorage.removeItem("userId")
 
 
     navigate("/entry");

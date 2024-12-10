@@ -18,8 +18,8 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onBackToLogin }) => {
 
   // Joi validation schema for the new password
   const schema = Joi.object({
-    newPassword: Joi.string().min(7).required().messages({
-      "string.min": "New password must be at least 7 characters",
+    newPassword: Joi.string().min(6).required().messages({
+      "string.min": "New password must be at least 6 characters",
       "any.required": "New password is required",
     }),
   });

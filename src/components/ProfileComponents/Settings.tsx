@@ -33,6 +33,8 @@ const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("userLoggedIn");
       localStorage.removeItem("username");
+      localStorage.removeItem("userId");
+
 
       setTimeout(() => {
         navigate("/"); 
@@ -55,6 +57,7 @@ const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("userLoggedIn");
       localStorage.removeItem("username");
+      localStorage.removeItem("userId");
   
       setTimeout(() => {
         navigate("/"); // Redirect after deactivation

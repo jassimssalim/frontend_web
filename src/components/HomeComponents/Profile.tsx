@@ -81,11 +81,12 @@ const Profile = () => {
       <div className="relative">
         <div className={`${isDarkMode ? 'bg-black' : 'bg-violet-200'} h-40`}></div>
         <div className="relative -mt-16 flex items-center space-x-6 px-8">
-          <img
-            className="w-32 h-32 rounded-full border-4 border-white shadow-md"
-            src={`data:image/png;base64,${profile.image.fileData}`}
-            alt="Profile"
-          />
+        <img
+            className="w-32 h-32 rounded-full border-4 border-white shadow-md object-cover"
+           src={`data:image/png;base64,${profile.image.fileData}`}
+           alt="Profile"
+            />
+
           <div>
             <h1 className={`${isDarkMode ? 'text-white' : 'text-gray-900'} text-3xl font-bold`}>{profile.name}</h1>
             <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-800'} text-sm`}>{profile.email}</p>
@@ -137,11 +138,11 @@ const Profile = () => {
       <div className="flex justify-center mt-8 px-6">
         <div className="flex flex-row space-x-8 max-w-7xl w-full">
           {/* Sidebar */}
-          <div className={`w-1/4 shadow-md rounded-xl p-6 flex flex-col h-[24rem] ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+          <div className={`w-1/4 shadow-md rounded-xl p-6 flex flex-col h-[26rem] ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
             <h2 className={`${isDarkMode ? 'text-gray-300' : 'text-gray-900'} font-semibold mb-4`}>
               Interact with the people you know.
             </h2>
-            <div className="overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-gray-200 scroll-smooth">
+            <div className="overflow-hidden flex-1 scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-gray-200 scroll-smooth">
               {/* Pass the dark mode state to UserList */}
               <UserList isDarkMode={isDarkMode} />
             </div>

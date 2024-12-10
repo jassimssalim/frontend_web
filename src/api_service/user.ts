@@ -116,22 +116,16 @@ export const loginUser = async (loginDTO: LoginDTO): Promise<number> => {
     return response.status || 500; // Return 500 as a fallback
   } catch (error: any) {
     // Extract error message from the response if available
+
     const backendErrorMessage = error.response?.data?.error;
-
-    if (error.response?.status === 403) {
-      throw new Error(backendErrorMessage || "Your account is inactive. Reset your password to become active again.");
+  
+    
+    if (error.response?.status === 423  ) {
+      throw new Error(backendErrorMessage || "Your account is inactive you can activate it by resetting your password.");
     }
 
-    if (error.response?.status === 404) {
-      throw new Error(backendErrorMessage || "User not found.");
-    }
 
-    if (error.response?.status === 401) {
-      throw new Error(backendErrorMessage || "Invalid username or password.");
-    }
-
-    // Generic error message for other cases
-    throw new Error(backendErrorMessage || "Login failed. Please try again.");
+    throw new Error(backendErrorMessage || "Invalid username or password.");
   }
 };
 
