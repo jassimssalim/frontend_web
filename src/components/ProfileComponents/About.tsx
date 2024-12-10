@@ -244,7 +244,7 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile,isDarkMode  }) => 
                 <FaCalendarAlt className={`text-gray-600 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
                 <h3 className="text-lg font-medium">Age</h3>
               </div>
-              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'}`}>{profile.age}</p>
+              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'}`}>{profile.age || "N/A"}</p>
             </div>
   
             {/* Phone */}
@@ -253,7 +253,7 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile,isDarkMode  }) => 
                 <FaPhone className={`text-gray-600 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
                 <h3 className="text-lg font-medium">Phone Number</h3>
               </div>
-              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'}`}>{profile.phone}</p>
+              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'}`}>{profile.phone || "N/A" }</p>
             </div>
   
             {/* Sex */}
@@ -262,7 +262,7 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile,isDarkMode  }) => 
                 <FaVenusMars className={`text-gray-600 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
                 <h3 className="text-lg font-medium">Sex</h3>
               </div>
-              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'}`}>{profile.sex}</p>
+              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'}`}>{profile.sex || "N/A"}</p>
             </div>
   
             {/* Graduate School */}
@@ -271,7 +271,7 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile,isDarkMode  }) => 
                 <FaUniversity className={`text-gray-600 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
                 <h3 className="text-lg font-medium">Graduate School</h3>
               </div>
-              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'}`}>{profile.graduateSchool}</p>
+              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'}`}>{profile.graduateSchool|| "N/A"}</p>
             </div>
   
             {/* Address */}
@@ -280,7 +280,7 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile,isDarkMode  }) => 
                 <FaMapMarkerAlt className={`text-gray-600 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
                 <h3 className="text-lg font-medium">Address</h3>
               </div>
-              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'}`}>{profile.address}</p>
+              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'}`}>{profile.address || "N/A"}</p>
             </div>
   
             {/* Links */}
@@ -289,7 +289,7 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile,isDarkMode  }) => 
                 <FaLink className={`text-gray-600 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
                 <h3 className="text-lg font-medium">Links</h3>
               </div>
-              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'}`}>{profile.links}</p>
+              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'}`}>{profile.links || "N/A"}</p>
             </div>
           </div>
         </div>

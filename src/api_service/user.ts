@@ -241,6 +241,19 @@ export function getUserByUserId(userId: number) {
 };
 
 
+// deactivate user by username
+export const userDeactivate = async (username: string): Promise<{ message: string }> => {
+  try {
+    const response = await http.put(`/deactivate/${username}`);
+    return response.data; // Backend response containing the success message
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw new Error("Failed to delete user. Please try again.");
+  }
+};
+
+
+
 
 
 // A lightweight version for when only name and image are needed

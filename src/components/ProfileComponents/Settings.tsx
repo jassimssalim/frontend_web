@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { deleteUser, updatePassword } from '../../api_service/user';
+import { deleteUser, updatePassword, userDeactivate } from '../../api_service/user';
 import ConfirmationModal from '../../utility/ConfirmationModal';
 
 
@@ -38,6 +38,28 @@ const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
       }, 2000);
     } catch (error) {
       toast.error("Failed to delete account. Please try again.");
+    }
+  };
+
+  const handleDeactivateUser = async () => {
+    const username = localStorage.getItem("username");
+    if (!username) {
+      toast.error("Username not found in local storage.");
+      return;
+    }
+  
+    try {
+      const response = await userDeactivate(username); // Change to userDeactivate
+      toast.success("Account deactivated successfully!");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("userLoggedIn");
+      localStorage.removeItem("username");
+  
+      setTimeout(() => {
+        navigate("/"); // Redirect after deactivation
+      }, 2000);
+    } catch (error) {
+      toast.error("Failed to deactivate account. Please try again.");
     }
   };
 
@@ -205,6 +227,16 @@ const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
         isDarkMode={isDarkMode}  // Pass the dark mode state
 
       />
+      {/* Deactivate Modal for Logout */}
+
+      <ConfirmationModal
+           isVisible={isModalVisible}
+           message="Are you sure you want to deactivate your account? This action can be reversed by resetting your account."
+          onConfirm={handleDeactivateUser} // Call handleDeactivateUser
+         onCancel={handleCancel}
+          isDarkMode={isDarkMode}
+        />
+
 
       {/* Confirmation Modal for Logout */}
       <ConfirmationModal
