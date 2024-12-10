@@ -260,8 +260,8 @@ const NewPost = ({
           {!photoImage && !imageData && (
             <label htmlFor={uploadIdHTML}>
               <div className="flex ps-0 space-x-1 rtl:space-x-reverse sm:ps-2">
-                <p className="flex text-gray-500 text-sm">
-                  <button
+              <p className={`flex text-sm ${isDarkMode ? 'text-white' : 'text-gray-500'} hover:text-violet-600`}>
+              <button
                     type="button"
                     className="inline-flex justify-center items-center mr-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
                   >
