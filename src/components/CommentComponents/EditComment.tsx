@@ -51,11 +51,11 @@ const EditComment = ({commentData, onEdit, commentId, onClose}:{commentData: Com
   return (
 
     <div>
-      <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+      <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-gray-50'} p-4 rounded-lg border border-gray-200`}>
           <textarea
             id="content"
             name="content"
-            className="w-full h-20 p-2 text-sm text-gray-900 bg-white border-1 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+            className={`w-full h-20 p-2 text-sm focus:ring-0  ${isDarkMode? "bg-gray-700 text-white placeholder-gray-400" : "text-gray-900 bg-white"}  border-1`}
             placeholder="What's on your mind?"
             value={commentToEdit.content}
             onChange={(event) => handleChange(event)}

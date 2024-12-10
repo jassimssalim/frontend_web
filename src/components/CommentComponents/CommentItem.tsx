@@ -118,10 +118,10 @@ const CommentItem = ({comment, currentUserId, onDelete, onLoading} :{comment: Co
 
   return (
     <div>
-    <article className="mt-5 p-6 text-base bg-white rounded-lg dark:bg-gray-900">
+    <article className={`mt-5 p-6 text-base rounded-lg ${isDarkMode?"bg-gray-900" :"bg-white" }` }>
                 <footer className="flex justify-between items-center mb-2">
                   <div className="flex items-center">
-                    <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold hover:text-blue-800" onClick={() => handleToProfile(currentComment.userId)}>
+                    <p className={`inline-flex items-center mr-3 text-sm font-semibold hover:text-blue-800 ${isDarkMode?"text-white" :"text-gray-900" }`} onClick={() => handleToProfile(currentComment.userId)}>
                       <img
                         className="mr-2 w-6 h-6 rounded-full"
                         src={`data:image/png;base64,${currentComment.photo.fileData}`}
@@ -129,7 +129,7 @@ const CommentItem = ({comment, currentUserId, onDelete, onLoading} :{comment: Co
                       />
                         {currentComment.name}
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className={`text-sm ${isDarkMode?"text-gray-400 " :"text-gray-600" }`}>
                       {new Date(currentComment.datePosted)
                         .toLocaleString("en-PH")
                         .replace(",", "")}
@@ -139,12 +139,13 @@ const CommentItem = ({comment, currentUserId, onDelete, onLoading} :{comment: Co
                     <div className="text-gray-500 cursor-pointer">
                       {/* <!-- Three-dot menu icon --> */}
                       <Dropdown
+                      className= {`${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}
                         label=""
                         renderTrigger={() => (
                           <button
                             id="dropdownComment1Button"
                             data-dropdown-toggle="dropdownComment1"
-                            className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 dark:text-gray-400 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                            className={`inline-flex items-center p-2 text-sm font-medium text-center rounded-lg ${isDarkMode? "text-gray-400 bg-gray-900 hover:bg-gray-700 focus:ring-gray-600" :"text-gray-500 bg-white hover:bg-gray-100 focus:ring-gray-50"}  focus:ring-4 focus:outline-none`}
                             type="button"
                           >
                             <svg
@@ -160,10 +161,10 @@ const CommentItem = ({comment, currentUserId, onDelete, onLoading} :{comment: Co
                           </button>
                         )}
                       >
-                        <Dropdown.Item onClick={() => setOpenEditModal(true)}>
+                        <Dropdown.Item className = {`${isDarkMode ? 'text-white' : 'text-black'} font-semibold hover:text-blue-800`} onClick={() => setOpenEditModal(true)}>
                           Edit
-                        </Dropdown.Item>
-                        <Dropdown.Item onClick={() => setOpenDeleteModal(true)}>
+                        </Dropdown.Item >
+                        <Dropdown.Item className = {`font-semibold hover:text-blue-800 ${isDarkMode ? 'text-white' : 'text-black'}`} onClick={() => setOpenDeleteModal(true)}>
                           Delete
                         </Dropdown.Item>
                       </Dropdown>
@@ -208,7 +209,7 @@ const CommentItem = ({comment, currentUserId, onDelete, onLoading} :{comment: Co
                     onCancel={() => setOpenDeleteModal(false)}
                   />
                 </footer>
-                <p className="text-gray-500 dark:text-gray-400">
+                <p className={`${isDarkMode? "text-white" :"text-gray-500"}`}>
                   {currentComment.content}
                 </p>
                 <div className="flex items-center mt-4 space-x-4 text-gray-500 text-sm">
