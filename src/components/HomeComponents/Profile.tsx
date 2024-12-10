@@ -136,17 +136,19 @@ const Profile = () => {
 
       {/* Content */}
       <div className="flex justify-center mt-8 px-6">
-        <div className="flex flex-row space-x-8 max-w-7xl w-full">
-          {/* Sidebar */}
-          <div className={`w-1/4 shadow-md rounded-xl p-6 flex flex-col h-[26rem] ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-            <h2 className={`${isDarkMode ? 'text-gray-300' : 'text-gray-900'} font-semibold mb-4`}>
-              Interact with the people you know.
-            </h2>
-            <div className="overflow-hidden flex-1 scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-gray-200 scroll-smooth">
-              {/* Pass the dark mode state to UserList */}
+         <div className="flex flex-row space-x-8 max-w-7xl w-full">
+           {/* Sidebar */}
+       <div className={`w-1/4 shadow-md rounded-xl p-6 flex flex-col ${isDarkMode ? 'bg-gray-800' : 'bg-white'} h-96`}>
+         <h2 className={`${isDarkMode ? 'text-gray-300' : 'text-gray-900'} font-semibold mb-4`}>
+             Interact with the people you know.
+         </h2>
+          <div className="overflow-auto flex-1 scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-gray-200">
               <UserList isDarkMode={isDarkMode} />
-            </div>
-          </div>
+         </div>
+        </div>
+
+
+
 
           {/* Main Content */}
           <div className={`w-3/4 shadow-md rounded-xl p-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>

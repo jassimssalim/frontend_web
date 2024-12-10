@@ -162,7 +162,7 @@ const MainPage = () => {
                    </button>
                   </div>
                 ) : (
-                  <p>Loading...</p>
+                  <p></p>
                 )}
               </aside>
 
