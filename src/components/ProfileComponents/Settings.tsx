@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { deleteUser, updatePassword, userDeactivate } from '../../api_service/user';
 import ConfirmationModal from '../../utility/ConfirmationModal';
 
+import '../../utility/Mode.css';
 
 interface SettingsProps {
   isDarkMode: boolean;
@@ -216,6 +217,8 @@ const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
+        className={isDarkMode ? 'toast-dark' : 'toast-light'} 
+
       />
 
       {/* Confirmation Modal for Deleting Account */}

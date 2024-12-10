@@ -13,6 +13,7 @@ const MyPost = () => {
   const [isDataChange, setIsDataChange] = useState(false);
   const [posts, setPosts] = useState<PostModel[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const darkMode = localStorage.getItem("isDarkMode") === "true";
 
   useEffect(() => {
     postService
@@ -52,7 +53,11 @@ const MyPost = () => {
   }
 
   return (
-    <><ToastContainer/>
+    <><ToastContainer
+    className={darkMode ? 'toast-dark' : 'toast-light'}
+
+    
+    />
       {isLoading ? (
         <Loading />
       ) : (

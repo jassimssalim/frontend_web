@@ -67,7 +67,7 @@ const UserList: React.FC<UserListProps> = ({ isDarkMode, userList }) => {
           </div>
 
           <button
-            className="flex items-center justify-center text-indigo-500 text-sm hover:text-indigo-600 transition duration-150 ease-in-out"
+            className="flex items-center justify-center text-indigo-500 text-sm hover:text-blue-800 transition duration-150 ease-in-out"
           >
             <FaUserPlus className="mr-1 text-lg" />
             <span className="hidden sm:inline">Add as friend</span>

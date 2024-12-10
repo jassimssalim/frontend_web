@@ -79,9 +79,9 @@ const OtherUserProfile = () => {
               alt="Profile"
             />
             <div>
-              <h1 className={`${isDarkMode ? 'text-white' : 'text-gray-900'} text-3xl font-bold`}>{profile?.name}</h1>
+              <h1 className={`${isDarkMode ? 'text-white' : 'text-gray-900'} text-3xl font-bold`}>{profile?.name }</h1>
               <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-800'} text-sm`}>{profile?.email}</p>
-              <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-800'} text-sm`}>{profile?.bio}</p>
+              <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-800'} text-sm`}>{profile?.bio || "No bio"}</p>
             </div>
           </div>
         </div>

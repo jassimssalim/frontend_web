@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaEdit, FaSave, FaTimes, FaUser, FaCalendarAlt, FaVenusMars, FaUniversity, FaMapMarkerAlt, FaLink, FaPhone } from "react-icons/fa";
 import { UserProfile, updateProfileByUsername } from "../../api_service/user";
 import ConfirmationModal from '../../utility/ConfirmationModal'; 
+import '../../utility/Mode.css';
 
 
 import { toast, ToastContainer } from "react-toastify"; 
@@ -309,6 +310,7 @@ const About: React.FC<AboutProps> = ({ profile, updateProfile,isDarkMode  }) => 
         pauseOnFocusLoss
         draggable
         pauseOnHover
+        className={isDarkMode ? 'toast-dark' : 'toast-light'} 
       />
       {/* Confirmation Modal */}
       <ConfirmationModal

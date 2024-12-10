@@ -7,10 +7,12 @@ import Settings from "../ProfileComponents/Settings";
 import UserList from "../ProfileComponents/UserList";
 import { useDarkMode } from "../../utility/ThemeContext"; // Import the hook
 import MyPost from "../ProfileComponents/MyPost";
+import Loading from "../../utility/Loading";
 
 const Profile = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [buttonLoading, setButtonLoading] = useState(false); // For button-specific loading
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>("posts");
   const navigate = useNavigate();
@@ -43,12 +45,16 @@ const Profile = () => {
     setProfile(updatedProfile);
   };
 
+  const handleHomeNavigation = () => {
+    setButtonLoading(true); 
+    setTimeout(() => {
+      setButtonLoading(false); 
+      navigate("/home"); 
+    }, 1000); 
+  };
+
   if (loading) {
-    return (
-      <div className="min-h-screen flex justify-center items-center bg-gray-50">
-        <p className="text-gray-600">Loading profile...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {
@@ -69,6 +75,8 @@ const Profile = () => {
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+      {buttonLoading && <Loading />} {/* Display the loading spinner when navigating */}
+
       {/* Profile Header */}
       <div className="relative">
         <div className={`${isDarkMode ? 'bg-black' : 'bg-violet-200'} h-40`}></div>
@@ -134,15 +142,15 @@ const Profile = () => {
               Interact with the people you know.
             </h2>
             <div className="overflow-y-auto flex-1 scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-gray-200 scroll-smooth">
-            {/* Pass the dark mode state to UserList */}
+              {/* Pass the dark mode state to UserList */}
               <UserList isDarkMode={isDarkMode} />
             </div>
           </div>
 
           {/* Main Content */}
           <div className={`w-3/4 shadow-md rounded-xl p-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-            {activeTab === "posts" && <MyPost/>}
-            {activeTab === "about" && <About profile={profile} updateProfile={updateProfile} isDarkMode={isDarkMode}/>}
+            {activeTab === "posts" && <MyPost />}
+            {activeTab === "about" && <About profile={profile} updateProfile={updateProfile} isDarkMode={isDarkMode} />}
             {activeTab === "settings" && <Settings isDarkMode={isDarkMode} />}
           </div>
         </div>
@@ -151,7 +159,7 @@ const Profile = () => {
       {/* Back to Home Button */}
       <div className="fixed bottom-6 right-6 z-50 group">
         <button
-          onClick={() => navigate("/home")}
+          onClick={handleHomeNavigation} // Add the new function for home navigation
           className="text-white bg-violet-800 hover:bg-blue-600 p-5 rounded-full shadow-lg transform hover:scale-100 transition-all"
         >
           <FaHome className="text-4xl" />

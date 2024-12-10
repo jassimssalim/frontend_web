@@ -1,0 +1,13 @@
+/* Dark Mode Toast */
+.toast-dark .Toastify__toast {
+  background-color: #333; /* Dark background */
+  color: white; /* White text */
+  border: 1px solid #444;
+}
+
+/* Light Mode Toast */
+.toast-light .Toastify__toast {
+  background-color: #fff; /* Light background */
+  color: black; /* Black text */
+  border: 1px solid #ccc;
+}

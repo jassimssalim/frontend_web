@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import ConfirmationModal from './ConfirmationModal';
-import { useDarkMode } from './ThemeContext';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import ConfirmationModal from "./ConfirmationModal";
+import { useDarkMode } from "./ThemeContext";
+import Loading from "../utility/Loading";
 import SearchBar from './SearchBar';
 
 const NavBar = () => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // State to control loading spinner
   const navigate = useNavigate();
 
   // Access global dark mode state and toggle function
@@ -15,24 +17,41 @@ const NavBar = () => {
     console.log("Logging out...");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("userLoggedIn");
-    localStorage.removeItem("username"); 
+    localStorage.removeItem("username");
+    localStorage.removeItem("isDarkMode");
+
 
     navigate("/entry");
   };
 
   const handleLogoutClick = () => {
-    setShowLogoutModal(true); // Show the modal
+    setShowLogoutModal(true); 
   };
 
   const handleCancelLogout = () => {
-    setShowLogoutModal(false); // Close the modal
+    setShowLogoutModal(false); 
+  };
+
+  const handleProfileNavigation = () => {
+    setIsLoading(true); 
+    setTimeout(() => {
+      setIsLoading(false); 
+      navigate("/profile"); 
+    }, 1000); 
   };
 
   return (
     <div className="fixed top-0 left-0 right-0 w-full z-10">
-      <header className={`w-full border-0 shadow-none text-white box-border ${isDarkMode ? "bg-black" : "bg-violet-600"}`}>
+      {/* Display Loading Spinner */}
+      {isLoading && <Loading />}
+
+      <header
+        className={`w-full border-0 shadow-none text-white box-border ${
+          isDarkMode ? "bg-black" : "bg-violet-600"
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-lg font-bold">MoodSnap.</h1>
+          <h1 className="text-lg font-bold"> <Link to = "/home"> MoodSnap  </Link></h1>
           <div></div>
           <SearchBar/>
           <nav>
@@ -43,12 +62,19 @@ const NavBar = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/profile" className="hover:underline">
+                {/* Replace direct navigation with a click handler */}
+                <button
+                  onClick={handleProfileNavigation}
+                  className="hover:underline"
+                >
                   Profile
-                </Link>
+                </button>
               </li>
               <li>
-                <button onClick={handleLogoutClick} className="hover:underline">
+                <button
+                  onClick={handleLogoutClick}
+                  className="hover:underline"
+                >
                   Logout
                 </button>
               </li>
@@ -73,7 +99,7 @@ const NavBar = () => {
         message="Are you sure you want to logout?"
         onConfirm={handleLogout}
         onCancel={handleCancelLogout}
-        isDarkMode={isDarkMode}  // Pass the dark mode state
+        isDarkMode={isDarkMode} // Pass the dark mode state
       />
     </div>
   );
