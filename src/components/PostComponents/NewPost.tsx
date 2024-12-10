@@ -67,7 +67,6 @@ const NewPost = ({
     if (initialPost) {
       setUploadIdHTML("icon-button-for-edit");
     }
-    console.log("darkmode", isDarkMode)
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

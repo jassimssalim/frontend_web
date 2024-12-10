@@ -264,6 +264,7 @@ export interface UserNameAndImage {
     fileName: string;
     fileData: string; // Base64-encoded image data
   };
+  userName: string
 }
 
 // Adjust the function to match the lightweight interface
@@ -284,3 +285,11 @@ export const getAllUsersExceptCurrent = async (): Promise<UserNameAndImage[]> =>
     throw new Error("Failed to fetch users. Please try again.");
   }
 };
+
+export function getUserBySearchParam(searchParam: string) {
+  return http.get(`/profiles/`, {
+    params: {
+      searchParam: searchParam
+    },
+  });
+}
