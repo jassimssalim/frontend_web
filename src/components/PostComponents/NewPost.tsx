@@ -178,7 +178,7 @@ const NewPost = ({
           <textarea
             id="content"
             name="content"
-            className={`w-full p-2 text-sm ${isDarkMode? "bg-gray-800 text-white placeholder-gray-400" : "text-gray-900 bg-white"} border-1 focus:ring-0`}
+            className={`w-full p-2 text-sm ${isDarkMode? "bg-gray-700 text-white placeholder-gray-400" : "text-gray-900 bg-white"} border-1 focus:ring-0`}
             placeholder="What's on your mind?"
             value={postData.content}
             onChange={(event) => handleChange(event)}

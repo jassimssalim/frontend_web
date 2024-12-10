@@ -14,7 +14,7 @@ const EditPost = ({initialPost, onEdit} : {initialPost: PostModel, onEdit: any})
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   return (
-    <div className={`${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} rounded-lg border border-gray-200`}>
+    <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-gray-50'} rounded-lg border border-gray-200`}>
     <NewPost initialPost = {{userId: userId, content: content, photo: null, isPhotoDeleted:false}} onEdit={onEdit} photoData={postImage}></NewPost>
     </div>
   );
