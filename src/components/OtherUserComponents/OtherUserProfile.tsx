@@ -14,8 +14,7 @@ const OtherUserProfile = () => {
     const [error, setError] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<string>("posts");
     const navigate = useNavigate();
-    const { isDarkMode } = useDarkMode(); // Use dark mode state from context
-  
+    const { isDarkMode } = useDarkMode();;
     useEffect(() => {
       const fetchUserProfile = async () => {
         const currentUser = localStorage.getItem("username")
