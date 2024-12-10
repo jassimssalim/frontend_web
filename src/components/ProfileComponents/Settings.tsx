@@ -13,7 +13,9 @@ interface SettingsProps {
 }
 
 const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalDeactivateVisible, setIsModalDeactivatelVisible] = useState(false);
+  const [isModalDeleteVisible, setIsModalDeleteVisible] = useState(false);
+
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
   const [isChangePasswordModalVisible, setIsChangePasswordModalVisible] = useState(false);
   const [newPassword, setNewPassword] = useState('');
@@ -67,12 +69,22 @@ const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
     }
   };
 
-  const showDeleteConfirmationModal = () => setIsModalVisible(true);
-  const handleCancel = () => setIsModalVisible(false);
-  const handleConfirm = () => {
+
+  //for delete of users
+  const showDeleteConfirmationModal = () => setIsModalDeleteVisible(true);
+  const handleDeleteCancel = () => setIsModalDeleteVisible(false);
+  const handleDeleteConfirm = () => {
     handleDeleteUser();
-    setIsModalVisible(false);
+    setIsModalDeleteVisible(false);
   };
+
+//for deactivation of users
+const showDeactConfirmationModal = () => setIsModalDeactivatelVisible(true);
+const handleDeacCancel = () => setIsModalDeactivatelVisible(false);
+const handleDeacConfirm = () => {
+  handleDeactivateUser();
+  setIsModalDeactivatelVisible(false);
+};
 
   const showLogoutConfirmationModal = () => setIsLogoutModalVisible(true);
   const handleLogoutCancel = () => setIsLogoutModalVisible(false);
@@ -144,7 +156,7 @@ const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
         <div className={`flex items-center justify-between p-3 border-b rounded-lg ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
           <span className="text-default font-semibold">Deactivate Account</span>
           <button
-            onClick={showDeleteConfirmationModal}
+            onClick={showDeactConfirmationModal}
             className={`px-3 py-1.5 rounded-lg bg-violet-800 hover:bg-blue-600 text-white text-sm`}
           >
             Deactivate
@@ -226,20 +238,20 @@ const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
 
       {/* Confirmation Modal for Deleting Account */}
       <ConfirmationModal
-        isVisible={isModalVisible}
+        isVisible={isModalDeleteVisible}
         message="Are you sure you want to delete your account? This action cannot be undone."
-        onConfirm={handleConfirm}
-        onCancel={handleCancel}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
         isDarkMode={isDarkMode}  // Pass the dark mode state
 
       />
       {/* Deactivate Modal for Logout */}
 
       <ConfirmationModal
-           isVisible={isModalVisible}
+           isVisible={isModalDeactivateVisible}
            message="Are you sure you want to deactivate your account? This action can be reversed by resetting your account."
-          onConfirm={handleDeactivateUser} // Call handleDeactivateUser
-         onCancel={handleCancel}
+          onConfirm={handleDeacConfirm} // Call handleDeactivateUser
+         onCancel={handleDeacCancel}
           isDarkMode={isDarkMode}
         />
 
