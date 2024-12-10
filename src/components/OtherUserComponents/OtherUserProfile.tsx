@@ -73,11 +73,12 @@ const OtherUserProfile = () => {
         <div className="relative">
           <div className={`${isDarkMode ? 'bg-black' : 'bg-violet-200'} h-40`}></div>
           <div className="relative -mt-16 flex items-center space-x-6 px-8">
-            <img
-              className="w-32 h-32 rounded-full border-4 border-white shadow-md"
-              src={`data:image/png;base64,${profile?.image.fileData}`}
-              alt="Profile"
+          <img
+                className="w-32 h-32 rounded-full border-4 border-white shadow-md object-cover"
+                src={`data:image/png;base64,${profile?.image.fileData}`}
+                 alt="Profile"
             />
+
             <div>
               <h1 className={`${isDarkMode ? 'text-white' : 'text-gray-900'} text-3xl font-bold`}>{profile?.name }</h1>
               <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-800'} text-sm`}>{profile?.email}</p>
