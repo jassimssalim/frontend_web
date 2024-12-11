@@ -25,12 +25,7 @@ const PostDetails = () => {
   const navigate = useNavigate();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
-  const {userLoggedIn} = useGuardSecurity();
-
   useEffect(() => {
-    if (!userLoggedIn) {
-      navigate("/")
-    }
     window.scrollTo(0, 0);
     postService
       .getPostById(+postId)
