@@ -7,6 +7,7 @@ import { deleteUser, updatePassword, userDeactivate } from '../../api_service/us
 import ConfirmationModal from '../../utility/ConfirmationModal';
 
 import '../../utility/Mode.css';
+import { useGuardSecurity } from '../../utility/GuardContext';
 
 interface SettingsProps {
   isDarkMode: boolean;
@@ -21,6 +22,7 @@ const Settings: React.FC<SettingsProps> = ({ isDarkMode }) => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
+  const guard = useGuardSecurity()
 
   const handleDeleteUser = async () => {
     const username = localStorage.getItem("username");
@@ -92,6 +94,9 @@ const handleDeacConfirm = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("userLoggedIn");
     localStorage.removeItem("username");
+    localStorage.removeItem("isDarkMode");
+    localStorage.removeItem("userId")
+    guard.changeLoggedIn()
 
     toast.success("Logged out successfully!");
 

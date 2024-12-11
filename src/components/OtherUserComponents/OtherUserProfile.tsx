@@ -5,6 +5,7 @@ import { UserProfile, getProfileByUsername } from '../../api_service/user';
 import { useDarkMode } from '../../utility/ThemeContext';
 import OtherPost from './OtherPost';
 import OtherAbout from './OtherAbout';
+import { useGuardSecurity } from '../../utility/GuardContext';
 
 const OtherUserProfile = () => {
     const param = useParams();
@@ -14,8 +15,15 @@ const OtherUserProfile = () => {
     const [error, setError] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<string>("posts");
     const navigate = useNavigate();
-    const { isDarkMode } = useDarkMode();;
+    const { isDarkMode } = useDarkMode();
+    const {userLoggedIn} = useGuardSecurity();
+
     useEffect(() => {
+      
+      if (!userLoggedIn) {
+        navigate("/");
+      }
+      
       const fetchUserProfile = async () => {
         const currentUser = localStorage.getItem("username")
 
@@ -63,6 +71,18 @@ const OtherUserProfile = () => {
       return (
         <div className="min-h-screen flex justify-center items-center bg-gray-50">
           <p className="text-gray-600">No profile found.</p>
+          {/* Back to Home Button */}
+        <div className="fixed bottom-6 right-6 z-50 group">
+          <button
+            onClick={() => navigate("/home")}
+            className="text-white bg-violet-800 hover:bg-blue-600 p-5 rounded-full shadow-lg transform hover:scale-100 transition-all"
+          >
+            <FaHome className="text-4xl" />
+          </button>
+          <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 text-white bg-black rounded-md py-1 px-3 opacity-0 group-hover:opacity-100 transition-opacity">
+            Home
+          </div>
+        </div>
         </div>
       );
     }

@@ -2,12 +2,18 @@ import React, { useState, useEffect } from 'react';
 import FormLogin from '../components/EntryForms/FormLogin';
 import FormRegister from '../components/EntryForms/FormRegister';
 import ResetPassword from '../components/EntryForms/ResetPassword'; // Import ResetPassword component
+import { useGuardSecurity } from '../utility/GuardContext';
+import { useNavigate } from 'react-router-dom';
+import Home from './Home';
 
 const Login: React.FC = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [isResettingPassword, setIsResettingPassword] = useState(false); // New state for password reset
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0); // State to track the current message
- 
+  const navigate = useNavigate()
+
+  const {userLoggedIn} = useGuardSecurity();
+
 
   // Function to toggle between login and register forms
   const toggleForm = () => {
@@ -25,6 +31,10 @@ const Login: React.FC = () => {
     setIsResettingPassword(false);
   };
 
+  if (userLoggedIn) {
+    navigate("/home")
+    return <><Home/></>
+  }
   return (
     <div className="flex w-full h-screen">
       <div className="w-full flex items-center justify-center lg:w-1/2">

@@ -4,6 +4,7 @@ import ConfirmationModal from "./ConfirmationModal";
 import { useDarkMode } from "./ThemeContext";
 import Loading from "../utility/Loading";
 import SearchBar from './SearchBar';
+import { useGuardSecurity } from "./GuardContext";
 
 const NavBar = () => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -13,6 +14,8 @@ const NavBar = () => {
   // Access global dark mode state and toggle function
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
+ const guard = useGuardSecurity()
+
   const handleLogout = () => {
     console.log("Logging out...");
     localStorage.removeItem("accessToken");
@@ -20,9 +23,12 @@ const NavBar = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("isDarkMode");
     localStorage.removeItem("userId")
+    guard.changeLoggedIn()
 
+    setTimeout(() => {
 
-    navigate("/entry");
+      navigate("/"); 
+    }, 1000);
   };
 
   const handleLogoutClick = () => {
@@ -107,3 +113,4 @@ const NavBar = () => {
 };
 
 export default NavBar;
+

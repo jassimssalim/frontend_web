@@ -8,6 +8,7 @@ import CommentList from "../CommentComponents/CommentList";
 import { useDarkMode } from "../../utility/ThemeContext";
 import { FaArrowLeft} from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
+import { useGuardSecurity } from "../../utility/GuardContext";
 
 const PostDetails = () => {
   const param = useParams();
@@ -24,7 +25,19 @@ const PostDetails = () => {
   const navigate = useNavigate();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
+  const {userLoggedIn} = useGuardSecurity();
+
+
+    if (!userLoggedIn) {
+      navigate("/")
+    }
+
   useEffect(() => {
+
+    if (!userLoggedIn) {
+      navigate("/")
+    }
+
     window.scrollTo(0, 0);
     postService
       .getPostById(+postId)
