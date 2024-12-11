@@ -221,7 +221,7 @@ const PostItem = ({
             <img
               src={`data:image/png;base64,${currentPost.postImage.fileData}`}
               alt="Post Image"
-              className="w-50 h-50 object-contain rounded-md"
+              className="max-h-25 max-w-25 object-contain rounded-md"
             />
           </div>
         )}

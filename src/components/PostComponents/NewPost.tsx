@@ -67,6 +67,7 @@ const NewPost = ({
     if (initialPost) {
       setUploadIdHTML("icon-button-for-edit");
     }
+    console.log("darkmode", isDarkMode)
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -204,7 +205,7 @@ const NewPost = ({
             <img
               src={`data:image/png;base64,${imageData}`}
               alt="Image Data"
-              className="mb-2 w-full h-full max-h-100 max-w-100 object-contain rounded-md"
+              className="mb-2 max-h-25 max-w-25 object-contain rounded-md"
             />
           )}
           {photoImage && (
