@@ -5,6 +5,7 @@ import { useDarkMode } from "./ThemeContext";
 import Loading from "../utility/Loading";
 import SearchBar from './SearchBar';
 import { useGuardSecurity } from "./GuardContext";
+import { toast, ToastContainer } from 'react-toastify';
 
 const NavBar = () => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -24,6 +25,9 @@ const NavBar = () => {
     localStorage.removeItem("isDarkMode");
     localStorage.removeItem("userId")
     guard.changeLoggedIn()
+
+
+    toast.success("Logged out successfully!");
 
     setTimeout(() => {
 
@@ -108,6 +112,23 @@ const NavBar = () => {
         onCancel={handleCancelLogout}
         isDarkMode={isDarkMode} // Pass the dark mode state
       />
+
+
+         {/* Toaster Component */}
+         <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        className={isDarkMode ? 'toast-dark' : 'toast-light'} 
+
+      />
+
     </div>
   );
 };
