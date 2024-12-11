@@ -27,17 +27,10 @@ const PostDetails = () => {
 
   const {userLoggedIn} = useGuardSecurity();
 
-
-    if (!userLoggedIn) {
-      navigate("/")
-    }
-
   useEffect(() => {
-
     if (!userLoggedIn) {
       navigate("/")
     }
-
     window.scrollTo(0, 0);
     postService
       .getPostById(+postId)
