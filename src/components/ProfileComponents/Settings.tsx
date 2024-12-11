@@ -239,7 +239,7 @@ const handleDeacConfirm = () => {
       {/* Confirmation Modal for Deleting Account */}
       <ConfirmationModal
         isVisible={isModalDeleteVisible}
-        message="Are you sure you want to delete your account? This action cannot be undone."
+        message="This action will delete all your account history such as posts, comments and likes. This action cannot be undone. Are you sure you want to delete your account? "
         onConfirm={handleDeleteConfirm}
         onCancel={handleDeleteCancel}
         isDarkMode={isDarkMode}  // Pass the dark mode state

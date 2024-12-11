@@ -59,7 +59,18 @@ const PostDetails = () => {
 
   return (
     <div className={`min-h-screen ${isDarkMode ? "bg-gray-900" : "bg-gray-50"} mt-12`}>
-      <ToastContainer/>
+      <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          className={isDarkMode ? 'toast-dark' : 'toast-light'} 
+        />
       <NavBar />
       {/* Main Content Section */}
       <main className="max-w-7xl mx-auto px-6 py-8 flex space-x-6">

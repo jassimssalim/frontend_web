@@ -134,7 +134,7 @@ const CommentList = ({ postId }: { postId: number }) => {
                 {`Comments (${comments.length})`}
               </h2>
             </div>
-            <div className={`${isDarkMode ? 'bg-black-50' : 'bg-gray-50'} p-4 rounded-lg border border-gray-200`}>
+            <div className={`${isDarkMode ? 'bg-black-50 border-b boredr-white' : 'bg-gray-50 rounded-lg border border-gray-200'} p-4`}>
               <textarea
                 id="content"
                 name="content"
