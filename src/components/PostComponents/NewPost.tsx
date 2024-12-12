@@ -93,7 +93,7 @@ const NewPost = ({
 
   // Joi validation schema
   const validationSchema = Joi.object({
-    content: Joi.string().required().label("Content"),
+    content: Joi.string().required().label("Content").max(255),
     userId: Joi.number().allow().label("UserId"),
     photo: Joi.any().allow().label("Photo"),
     isPhotoDeleted: Joi.boolean().allow().label("IsPhotoDeleted"),
@@ -181,7 +181,8 @@ const NewPost = ({
             className={`w-full p-2 text-sm ${isDarkMode? "bg-gray-700 text-white placeholder-gray-400" : "text-gray-900 bg-white"} border-1 focus:ring-0`}
             placeholder="What's on your mind?"
             value={postData.content}
-            onChange={(event) => handleChange(event)}
+            onChange={(event) => handleChange(event)
+            }
           ></textarea>
           {/*
    <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"> 

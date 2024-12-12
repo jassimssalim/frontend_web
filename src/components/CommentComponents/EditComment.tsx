@@ -19,7 +19,7 @@ const EditComment = ({commentData, onEdit, commentId, onClose}:{commentData: Com
 
   // Joi validation schema
   const validationSchema = Joi.object({
-    content: Joi.string().required().label("Content"),
+    content: Joi.string().required().label("Content").max(255),
     postId: Joi.number().allow().label("postId"),
     userId: Joi.number().allow().label("userId"),
   });

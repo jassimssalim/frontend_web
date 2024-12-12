@@ -23,7 +23,7 @@ const PostDetails = () => {
     },
   });
   const navigate = useNavigate();
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { isDarkMode} = useDarkMode();
 
   useEffect(() => {
     window.scrollTo(0, 0);
