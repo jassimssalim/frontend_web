@@ -12,7 +12,7 @@ const Login: React.FC = () => {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0); // State to track the current message
   const navigate = useNavigate()
 
-  const {userLoggedIn} = useGuardSecurity();
+  // const {userLoggedIn} = useGuardSecurity();
 
 
   // Function to toggle between login and register forms
@@ -31,10 +31,10 @@ const Login: React.FC = () => {
     setIsResettingPassword(false);
   };
 
-  if (userLoggedIn) {
-    navigate("/home")
-    return <><Home/></>
-  }
+  // if (userLoggedIn) {
+  //   navigate("/home")
+  //   return <><Home/></>
+  // }
   return (
     <div className="flex w-full h-screen">
       <div className="w-full flex items-center justify-center lg:w-1/2">
